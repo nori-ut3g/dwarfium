@@ -7,7 +7,7 @@ export default function About() {
 
   return (
     <div>
-      <section className="daily-horp d-inline-block w-100">
+      <section className="d-inline-block w-100">
         <br />
         <br />
         <br />

@@ -32,7 +32,7 @@ export default function AstroCalendar() {
         <div className="comon-heading text-center">
           <h2 className="comon-heading mt-2 mb-3">{t("pCalendarTitle")}</h2>
           <h1 className="text-green sub-heading mt-2 mb-3">
-            {t("pCalendarYear")} 2024
+            {t("pCalendarYear")} 2025
           </h1>
         </div>
 

@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+﻿/* eslint-disable no-unused-vars */
 import React, { useState, useRef, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import { fabric } from "fabric";

@@ -1,17 +1,49 @@
 .datepicker {
     margin-top: 10px;
 }
-.chart-container {
-    /* padding: 20px; */
-    border: 1px solid black;
-    border-radius: 5px;
-    
-    max-width: 1500px;
-    margin: 20px auto;
-    background-color: rgba(51, 58, 83, 0.7);
-    box-shadow: 1px 1px 5px black;
-    height:500px;
+.chart-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 10px;
 }
+
+.chart-container {
+    position: relative;
+    width: 100%;
+    max-width: 850px;
+    min-width: 200px; /* Minimale breedte voor kleine schermen */
+    height: 450px;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+}
+    .chart-container canvas {
+        border-radius: 8px;
+    }
+/* Tooltips Stijl */
+.chartjs-tooltip {
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    border-radius: 5px;
+    padding: 8px;
+}
+
+/* Hover Effect */
+.chart-container .chartjs-line:hover {
+    stroke-width: 3px;
+    opacity: 0.8;
+}
+
+/* Maak de labels beter leesbaar */
+.chart-container .chartjs-legend {
+    font-size: 16px;
+    color: white;
+}
+
 .col-api-clouds {
     width: 10%; /* Adjust column width for search and save API key buttons */
 }
@@ -138,4 +170,9 @@
 
 
 
-
+@media (max-width: 768px) {
+    .chart-container {
+        height: 300px; /* Kleinere hoogte op mobiele schermen */
+        width: 475px;
+    }
+}
