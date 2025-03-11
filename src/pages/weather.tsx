@@ -1,29 +1,22 @@
-import React from "react";
+﻿import React from "react";
 import Weather from "@/components/Weather";
 
+
 export default function WeatherForeCast() {
-  return (
-    <section className="d-inline-block w-100">
-      <div className="container">
-        <br />
-        <br />
-        <br />
-        <br />
-
-        <Weather />
-
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-      </div>
-    </section>
-  );
+    return (
+        <section className="d-inline-block w-100">
+            <div className="container">
+                <br />
+                <br />
+                <br />
+                <br />
+                <Weather />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+            </div>
+        </section>
+    );
 }
