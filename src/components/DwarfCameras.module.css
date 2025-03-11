@@ -18,16 +18,17 @@
 }
 
 .wideangle {
-  width: 35%;
-  height: 35%;
-  position: absolute;
-  top: 0;
-  border: 1px solid white;
-  z-index : 300;
+    width: 35%;
+    height: 36%;
+    position: absolute;
+    top: 10px;
+    border: 1px solid white;
+    z-index: 300;
+   
 }
 
 .wideangle iframe {
-  width: 100%;
+  width: 50%;
   height: auto;
   overflow: hidden;
   border: none;

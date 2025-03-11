@@ -15,10 +15,6 @@ body {
     -o-background-size: cover;
 }
 
-/*#__next div {
-    background: linear-gradient(rgb(0 0 0 / 20%), rgb(0 0 0 / 40%));
-   
-}*/
 .container p {
     margin-bottom: 20px; /* Add margin-bottom to create space between paragraphs */
 }
@@ -44,8 +40,8 @@ body {
     display: flex;
     margin-left: 0px;
     margin-top: 10px;
-    height: 34px;
-    margin-bottom: 8px;
+    /*height: 34px;*/
+    margin-bottom: -10px;
 }
 
 .battery-meter {
@@ -53,22 +49,21 @@ body {
     display: flex;
     flex-direction: row;
     margin-left: 16px;
-    width: 180px;
-    margin: -31px 0px 1px 435px;
+    width: 70px;
+    margin: -75px 0px 1px -33px;
 }
-
 .temperature-info {
     display: flex;
     width: 160px;
     margin-top: -40px;
     height: auto;
-    margin-left:2px;
+    margin-left: 325px;
 }
 
 .container-battery {
     display: flex;
-    margin-left: 20px;
-    margin-top: -10px;
+    margin-left: 15px;
+    margin-top: 10px;
     height: auto;
 }
 
@@ -126,15 +121,23 @@ body {
   margin-left: -80px;
 }
 
-@media (max-width: 768px) { 
+@media (max-width: 768px) {
+ 
   .battery-meter {
     margin: -31px 0px 1px 135px;
   }
-  .temperature-info {
-    margin-left:2px;
-  }
   .container-battery {
-    margin-top: -10px;
+     margin-top: 12px;
+     margin-right: 39px;
+  }
+  .temperature-info {
+     width: auto;
+     margin: 0px auto 0px auto;
+     margin-top: -20px;
+     display: flex;
+     flex-direction: row;
+     align-items: center;
+     justify-content: center;
   }
   .no_temp_uid {
     margin-left: -220px;
@@ -148,7 +151,6 @@ body {
     margin-left: -80px;
   }
 }
-
 
 .lightning-bolt {
     animation: lightning-bold-reveal 0.3s forwards;
@@ -196,6 +198,7 @@ body {
   display: flex;
   align-items: center;
   flex-wrap: wrap; /* Allows wrapping on small screens */
+  margin-top: -5px;
 }
 
 /* Float-end buttons (aligned right on large screens, full row on small screens) */
@@ -1080,30 +1083,60 @@ img {
         flex-direction: column; /* Stack items vertically on small screens */
         align-items: stretch; /* Stretch items to fill the width of the container */
     }
-}
-
-@media (max-width: 1200px) {
     .connect-dwarf {
-        flex-direction: column; /* Stack items vertically on smaller screens */
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        float: right !important;
+        height: -moz-fit-content;
+        height: fit-content;
+        margin-top: -40px;
+        gap: 1rem;
+    }
+        .connect-dwarf button {
+            margin-left: 0; /* Remove left margin for the button on smaller screens */
+            margin-top: 10px; /* Add spacing between status and button on smaller screens */
+        }
+    .connect-dwarf-status {
+        margin-right: 36px;
+        margin-top: -32px;
+        display: flex;
+        align-items: flex-start;
+        gap: 3rem;
+    }
+    .text-danger-connect {
+        color: #A62508 !important;
+        margin-right: -10px;
+        margin-top: 5px;
+        display: flex;
+        align-items: flex-start;
+        font-size: 20px;
+        font-weight: bold;
+        gap: 3rem;
+    }
+}
+/*@media (max-width: 1200px) {
+    .connect-dwarf {
+        flex-direction: column;  Stack items vertically on smaller screens 
         align-items: flex-end;
         margin-right: 5%;
         margin-top: -45px;
     }
     .connect-dwarf button {
-        margin-left: 0; /* Remove left margin for the button on smaller screens */
-        margin-top: 10px; /* Add spacing between status and button on smaller screens */
+        margin-left: 0; /* Remove left margin for the button on smaller screens *
+        margin-top: 10px; /* Add spacing between status and button on smaller screens 
     }
-}
+}*/
 
-@media (max-width: 992px) {
+/*@media (max-width: 992px) {
     .connect-dwarf {
-        flex-direction: column; /* Stack items vertically on smaller screens */
+        flex-direction: column; /* Stack items vertically on smaller screens 
         align-items: flex-end;
         margin-right: 5%;
         margin-top: -75px;
     }
 }
-
+*/
 @media (max-width: 1400px) {
     .sethostmode-dwarf {
         justify-content: flex-end;

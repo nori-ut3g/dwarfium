@@ -23,7 +23,7 @@ const WeatherForecastDay: React.FC<WeatherForecastDayProps> = (props) => {
   }
 
   return (
-    <div>
+    <div className="WeatherForecast-container">
       <div className="WeatherForecast-day">{day()}</div>
       <WeatherIcon icon={props.data.weather[0].icon} size={36} />
       <div className="WeatherForecast-temperatures">

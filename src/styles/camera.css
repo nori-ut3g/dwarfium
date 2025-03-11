@@ -29,6 +29,47 @@
     .stop-button:hover {
         background-color: darkred;
     }
+
 .dropdown-wrapper {
     width: auto; /* Set width to match dropdown */
+    margin-top: 5px;
+}
+.w-100 {
+    width: 100% !important;
+}
+
+@media (max-width: 768px) {
+    .w-100 {
+        width: auto !important;
+        max-width: none !important;
+    }
+    .dropdown-wrapper {
+        width: auto; /* Set width to match dropdown */
+        margin-top: -160px;
+    }
+    .nav {
+        flex-direction: row !important;
+    }
+    .ImagingMenu_box__LmUky {
+        width: 50px !important;
+        height: 50px !important;
+    }
+
+}
+
+@media (max-width: 1024px) {
+    .w-100 {
+        width: auto !important;
+        max-width: none !important;
+    }
+
+    .dropdown-wrapper {
+        width: auto; /* Set width to match dropdown */
+        margin-top: -160px;
+    }
+
+    .nav {
+        flex-direction: row !important;
+    }
+    
 }
