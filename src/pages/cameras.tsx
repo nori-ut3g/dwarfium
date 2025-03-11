@@ -110,7 +110,7 @@ export default function AstroPhoto() {
     return (
       <>
         {" "}
-        <section className="d-inline-block w-100">
+        <section className="d-inline-block w-100 w-100-small">
           <div className="container">
             <br />
             <br />
@@ -143,7 +143,7 @@ export default function AstroPhoto() {
   return (
     <>
       {" "}
-      <section className="d-inline-block w-100">
+      <section className="d-inline-block w-100 w-100-small">
         <div className="container">
           <br />
           <br />

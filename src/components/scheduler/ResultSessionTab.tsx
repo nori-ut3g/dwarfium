@@ -166,7 +166,8 @@ const ResultSessionTab: React.FC = () => {
         </select>
         <button onClick={refreshObservationList}>Update Results</button>
       </div>
-      <div className="tables">
+
+      <div className="table-wrapper">
         <div className="table-container">
           <h3>Sessions OK</h3>
           <table>
@@ -188,6 +189,9 @@ const ResultSessionTab: React.FC = () => {
             </tbody>
           </table>
         </div>
+      </div>
+
+      <div className="table-wrapper">
         <div className="table-container">
           <h3>Error Sessions</h3>
           <table>

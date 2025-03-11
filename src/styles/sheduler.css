@@ -1,4 +1,5 @@
 /* Algemene opmaak */
+
 .app {
     font-family: Arial, sans-serif;
     padding: 20px;
@@ -230,7 +231,7 @@
         outline: none;
         box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
     }
-/*++ResultsSessionTab++*/
+
 .overview-session-container {
     display: flex;
     flex-direction: column;
@@ -301,8 +302,90 @@
     .overview-session-btn:hover {
         background-color: #357abd;
     }
+/* Algemene container voor de resultaten */
+.result-session-tab {
+    padding: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+}
 
+/* Bovenste balk */
+.top-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1rem;
+}
 
+/* Wrapper die ervoor zorgt dat de tabellen horizontaal scrollen als ze breder zijn dan het scherm */
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto !important; /* Forceer de horizontale scrollbar altijd */
+    -webkit-overflow-scrolling: touch; /* Voor vloeiende scroll op iOS */
+    margin-bottom: 1rem;
+    border: 1px solid #ccc; /* Optioneel: geeft een visuele grens */
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+    /* WebKit scrollbars */
+    .table-wrapper::-webkit-scrollbar {
+        height: 12px;
+    }
+
+    .table-wrapper::-webkit-scrollbar-thumb {
+        background: #00b07f;
+        border-radius: 6px;
+    }
+    .table-wrapper::-webkit-scrollbar-thumb:hover {
+        background: #a0a0a0; /* Iets donkerder bij hover, maar nog steeds zacht */
+    }
+    .table-wrapper::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+/* Zorg dat de container van de tabel een minimale breedte heeft zodat er scroll nodig is als het scherm kleiner is */
+.table-container {
+    width: auto; /* Pas dit aan als je kolommen groter of kleiner moeten zijn */
+    box-sizing: border-box;
+}
+
+/* Tabel styling */
+table {
+    width: auto;
+    border-collapse: collapse;
+    table-layout: auto;
+}
+
+th, td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: left;
+    white-space: normal; /* Voorkomt dat tekst op meerdere regels wordt afgebroken */
+    font-size: 1.2rem;
+}
+
+th {
+    /*background-color: #004080;*/
+    color: white;
+}
+/* Responsief voor mobiele schermen (indien nodig) */
+@media (max-width: 768px) {
+    .table-wrapper {
+        overflow-x: auto !important;
+    }
+
+    table {
+        width: auto;
+    }
+    th, td {
+        padding: 8px;
+        border: 1px solid #ddd;
+        text-align: left;
+        white-space: normal; /* Voorkomt dat tekst op meerdere regels wordt afgebroken */
+        font-size: 1.2rem;
+    }
+}
 /* SessionForm.css */
 
 .session-form {
