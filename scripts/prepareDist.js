@@ -54,6 +54,7 @@ const tools = {
     { src: "./install/windows/createSSLcert.exe", dest: "createSSLcert.exe" },
     { src: "./src-tauri/bin/mediamtx-x86_64-pc-windows-msvc.exe", dest: "mediamtx.exe" },
     { src: "./install/config/mediamtx.yml", dest: "mediamtx.yml" },
+    { src: "./install/config/mediamtx-https.yml", dest: "mediamtx-https.yml" },
     { src: "./install/start_dwarfium.py", dest: "start_dwarfium.py" },
     { src: "./install/windows/extern/extern.zip", dest: "./extern" },
     { src: "./install/extern/config.ini", dest: "./extern/config.ini" },
@@ -65,6 +66,7 @@ const tools = {
     { src: "./install/linux/createSSLcert", dest: "createSSLcert" },
     { src: "./src-tauri/bin/mediamtx-x86_64-unknown-linux-gnu", dest: "mediamtx" },
     { src: "./install/config/mediamtx.yml", dest: "mediamtx.yml" },
+    { src: "./install/config/mediamtx-https.yml", dest: "mediamtx-https.yml" },
     { src: "./install/start_dwarfium.py", dest: "start_dwarfium.py" },
     { src: "./install/extern/config.ini", dest: "./extern/config.ini" },
     { src: "./install/extern/config.py", dest: "./extern/config.py" }
@@ -74,6 +76,7 @@ const tools = {
     { src: "./src-tauri/bin/mediamtx-x86_64-apple-darwin", dest: "mediamtx" },
     { src: "./install/macos/createSSLcert", dest: "createSSLcert" },
     { src: "./install/config/mediamtx.yml", dest: "mediamtx.yml" },
+    { src: "./install/config/mediamtx-https.yml", dest: "mediamtx-https.yml" },
     { src: "./install/start_dwarfium.py", dest: "start_dwarfium.py" },
     { src: "./install/extern/config.ini", dest: "./extern/config.ini" },
     { src: "./install/extern/config.py", dest: "./extern/config.py" }
@@ -105,11 +108,25 @@ tools.forEach(({ src, dest }) => {
 console.log("Copying configuration...");
 const launcherScriptWindows = `
 @echo off
-rem Start MediaMTX minimized
-start "" /Min mediamtx.exe mediamtx.yml
 
 rem Start DwarfiumProxy minimized
 start "" /Min DwarfiumProxy.exe
+
+rem Check if HTTPS is running by trying to connect to proxy on the HTTPS port
+setlocal enabledelayedexpansion
+
+rem Try to request https://localhost:9443 and capture response
+for /f "tokens=*" %%i in ('curl -k --silent --max-time 3 https://localhost:9443') do set RESPONSE=%%i
+
+rem Check if the response contains "error"
+echo %RESPONSE% | find /i "error" >nul
+if %ERRORLEVEL% equ 0 (
+    echo HTTPS detected, using mediamtx-https.yml
+    start "" /Min mediamtx.exe mediamtx-https.yml
+) else (
+    echo HTTPS not detected, using mediamtx.yml
+    start "" /Min mediamtx.exe mediamtx.yml
+)
 
 rem Check if Python is installed
 where python >nul 2>&1
@@ -132,11 +149,19 @@ const launcherScriptLinuxMac = `
 # Ensure script exits on error
 set -e
 
-# Start MediaMTX
-nohup ./mediamtx mediamtx.yml > mediamtx.log 2>&1 &
-
 # Start DwarfiumProxy
 nohup ./DwarfiumProxy > DwarfiumProxy.log 2>&1 &
+
+# Check if HTTPS is running on port 9443
+RESPONSE=$(curl -k --silent --max-time 3 https://localhost:9443)
+
+if echo "$RESPONSE" | grep -qi "error"; then
+    echo "HTTPS detected, using mediamtx-https.yml"
+    nohup ./mediamtx mediamtx.yml > mediamtx-https.log 2>&1 &
+else
+    echo "HTTPS not detected, using mediamtx.yml"
+    nohup ./mediamtx mediamtx.yml > mediamtx.log 2>&1 &
+fi
 
 # Check if Python is installed
 if ! command -v python3 &> /dev/null; then

@@ -24,6 +24,15 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ProxyResponse | string>
 ) {
+
+  const controller = new AbortController();
+  const timeout = 30000; 
+
+  // Set up the timeout manually
+  const timeoutSignal = setTimeout(() => {
+    controller.abort(); // Abort the request after timeout
+  }, timeout);
+
   try {
     console.log("API is running");
     const { target } = req.query;
@@ -78,7 +87,7 @@ export default async function handler(
 
     // Prepare the fetchOptions
     const fetchOptions: FetchOptions = {
-      signal: AbortSignal.timeout(30000),
+      signal: controller.signal,
       method: req.method ?? "GET", // Fallback to "GET" if req.method is undefined
       headers: sanitizedHeaders,
     };
@@ -95,16 +104,33 @@ export default async function handler(
     const response = await fetch(lastTarget, fetchOptions);
     //console.debug("response:", response);
 
-    // Handle the response and return it to the client
-    const contentType = response.headers.get("content-type");
+    let contentType = response.headers.get("content-type");
     console.debug("contentType:", contentType);
-    res.setHeader("Content-Type", contentType || "application/octet-stream");
 
-    if (contentType?.includes("image")) {
-      if (!response.body) {
-        return res.status(500).json({ error: "Failed to fetch image data" });
+    if (typeof contentType === "string" && contentType.includes("multipart")) {
+      // Cancel the timeout signal for multipart responses
+      clearTimeout(timeoutSignal);
+      res.setHeader("Content-Type", contentType);
+    } else if (contentType) {
+      res.setHeader("Content-Type", contentType.split(";")[0].trim());
+    } else {
+      res.setHeader("Content-Type", "application/octet-stream");
+    }
+
+    // Handle multipart streaming (if applicable)
+    if (typeof contentType === "string" && contentType.includes("multipart")) {
+      if (response.body) {
+        return Readable.fromWeb(response.body as any).pipe(res);
+      } else {
+        return res.status(500).json({ error: "Multipart response body is missing." });
       }
+    }
 
+    // Handle images and binary data
+    if (contentType?.includes("image") || contentType?.includes("octet-stream")) {
+      if (!response.body) {
+        return res.status(500).json({ error: "Failed to fetch binary data." });
+      }
       // Convert the ReadableStream to a Node.js stream
       const stream = Readable.fromWeb(response.body as any);
 
@@ -123,5 +149,7 @@ export default async function handler(
     res
       .status(500)
       .json({ error: "Proxy request failed", details: errorMessage });
+  } finally {
+    clearTimeout(timeoutSignal);
   }
 }
