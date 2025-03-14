@@ -104,71 +104,125 @@ const wss = new WebSocket.Server({ noServer: true });
 
 // Handle WebSocket connections
 wss.on("connection", (clientSocket, req) => {
-  const targetUrl = new URL(
-    req.url,
-    `ws://${req.headers.host}`
-  ).searchParams.get("target");
+  try {
+    const urlParams = new URL(req.url, `ws://${req.headers.host}`).searchParams;
+    const targetUrl = urlParams.get("target");
+    const authToken = urlParams.get("token");
 
-  if (!targetUrl) {
-    clientSocket.close(1008, "Missing target parameter");
-    return;
+    if (!targetUrl) {
+      clientSocket.close(3008, "Missing target parameter");
+      return;
+    }
+
+    console.log(`WebSocket proxying to target: ${targetUrl}`);
+
+    const targetSocket = new WebSocket(targetUrl);
+
+    targetSocket.on("open", () => {
+      console.log(`Connected to target: ${targetUrl}`);
+
+      // If a token is provided, send it to the target server
+      if (authToken) {
+        console.log(`Sending auth token: ${authToken}`);
+        targetSocket.send(authToken);
+      }
+    });
+
+    clientSocket.on("message", (data) => {
+      if (targetSocket.readyState === WebSocket.OPEN) {
+        // Check if the received message is a ping
+        if (data instanceof Buffer) {
+          const message = data.toString();
+          try {
+            // Try parsing as JSON
+            const jsonData = JSON.parse(message);
+            console.log("Received JSON data:", jsonData);
+
+            // Send JSON as a string
+            targetSocket.send(JSON.stringify(jsonData));
+          } catch (error) {
+            if (message === "ping") {
+              // If it's a ping, resend it as text
+              console.log("Received ping as binary, sending as text...");
+              targetSocket.send("ping"); // Send ping back as text
+            } else {
+              // Otherwise, forward it as is
+              console.log(
+                "Forwarding message from client to target:",
+                data.toString("hex")
+              );
+              targetSocket.send(data); // Forward data to client
+            }
+          }
+        }
+      }
+    });
+
+    targetSocket.on("message", (data) => {
+      if (clientSocket.readyState === WebSocket.OPEN) {
+        if (data instanceof Buffer) {
+          const message = data.toString();
+
+          try {
+            // Try parsing as JSON
+            const jsonData = JSON.parse(message);
+            console.log("Received JSON data:", jsonData);
+
+            // Send JSON as a string
+            clientSocket.send(JSON.stringify(jsonData));
+          } catch (error) {
+            if (message === "pong") {
+              // If it's a pong, resend it as text
+              console.log("Received pong as binary, sending as text...");
+              clientSocket.send("pong"); // Send pong back as text
+            } else {
+              // Otherwise, forward it as is
+              console.log(
+                "Forwarding message from target to client:",
+                data.toString("hex")
+              );
+              clientSocket.send(data); // Forward data to client
+            }
+          }
+        }
+      }
+    });
+
+    clientSocket.on("close", () => {
+      try {
+        targetSocket.close(1000, "Normal closure");
+      } catch (error: any) {
+        console.error("Proxy WebSocket Close error:", error);
+      }
+    });
+
+    targetSocket.on("close", () => {
+      try {
+        clientSocket.close(1000, "Normal closure");
+      } catch (error: any) {
+        console.error("Proxy WebSocket Close error:", error);
+      }
+    });
+
+    targetSocket.on("error", (err) => {
+      try {
+        console.error("Target WebSocket error:", err);
+        clientSocket.close(3000, "Target WebSocket error");
+      } catch (error: any) {
+        console.error("Proxy WebSocket error:", error);
+      }
+    });
+    clientSocket.on("error", (err) => {
+      try {
+        console.error("Client WebSocket error:", err);
+        clientSocket.close(3000, "Client WebSocket error");
+      } catch (error: any) {
+        console.error("Proxy WebSocket error:", error);
+      }
+    });
+  } catch (error: any) {
+    console.error("Proxy WebSocket error:", error);
   }
-
-  console.log(`WebSocket proxying to target: ${targetUrl}`);
-
-  const targetSocket = new WebSocket(targetUrl);
-
-  clientSocket.on("message", (data) => {
-    if (targetSocket.readyState === WebSocket.OPEN) {
-      // Check if the received message is a ping
-      if (data instanceof Buffer) {
-        const message = data.toString();
-        if (message === "ping") {
-          // If it's a ping, resend it as text
-          console.log("Received ping as binary, sending as text...");
-          targetSocket.send("ping"); // Send ping back as text
-        } else {
-          // Otherwise, forward it as is
-          console.log(
-            "Forwarding message from client to target:",
-            data.toString("hex")
-          );
-          targetSocket.send(data); // Forward data to client
-        }
-      }
-    }
-  });
-
-  targetSocket.on("message", (data) => {
-    if (clientSocket.readyState === WebSocket.OPEN) {
-      if (data instanceof Buffer) {
-        const message = data.toString();
-        if (message === "pong") {
-          // If it's a pong, resend it as text
-          console.log("Received pong as binary, sending as text...");
-          clientSocket.send("pong"); // Send pong back as text
-        } else {
-          // Otherwise, forward it as is
-          console.log(
-            "Forwarding message from target to client:",
-            data.toString("hex")
-          );
-          clientSocket.send(data); // Forward data to client
-        }
-      }
-    }
-  });
-
-  clientSocket.on("close", () => targetSocket.close());
-  targetSocket.on("close", () => clientSocket.close());
-
-  targetSocket.on("error", (err) => {
-    console.error("Target WebSocket error:", err);
-    clientSocket.close(1006, "Target WebSocket error");
-  });
-  clientSocket.on("error", (err) => {
-    console.error("Client WebSocket error:", err);
-  });
 });
 
 // Upgrade HTTP to WebSocket
@@ -179,7 +233,16 @@ httpServer.on("upgrade", (req, socket, head) => {
   }
 
   wss.handleUpgrade(req, socket, head, (ws) => {
-    wss.emit("connection", ws, req);
+    try {
+      wss.emit("connection", ws, req);
+    } catch (error: any) {
+      console.error("Proxy error:", error);
+      const err = error as Error; // Cast error to Error
+      console.error(
+        "Client WebSocket details:",
+        err.message || "An unknown error occurred"
+      );
+    }
   });
 });
 
@@ -192,7 +255,16 @@ if (httpsServer) {
     }
 
     wss.handleUpgrade(req, socket, head, (ws) => {
-      wss.emit("connection", ws, req);
+      try {
+        wss.emit("connection", ws, req);
+      } catch (error: any) {
+        console.error("Proxy error:", error);
+        const err = error as Error; // Cast error to Error
+        console.error(
+          "Client WebSocket details:",
+          err.message || "An unknown error occurred"
+        );
+      }
     });
   });
 }

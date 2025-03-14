@@ -11,6 +11,8 @@ import StatusBar from "@/components/shared/StatusBar";
 import DwarfCameras from "@/components/DwarfCameras";
 import ImagingMenu from "@/components/imaging/ImagingMenu";
 import OBSWebSocket from "obs-websocket-js";
+import { getProxyUrl, isModeHttps } from "@/lib/get_proxy_url";
+
 export default function AstroPhoto() {
   const { t } = useTranslation();
   // eslint-disable-next-line no-unused-vars
@@ -50,7 +52,20 @@ export default function AstroPhoto() {
 
     const checkConnection = async () => {
       try {
-        await obsInstance.connect("ws://localhost:4455", "ZesqL9dGu2Uv3XlE");
+        const urlSocketOBS = "ws://localhost:4455";
+        console.log("urlSocketOBS: ", urlSocketOBS);
+
+        if (!isModeHttps())
+          await obsInstance.connect(urlSocketOBS, "ZesqL9dGu2Uv3XlE");
+        else {
+          const urlProxySocketOBS = `${getProxyUrl(
+            connectionCtx
+          )}?target=${urlSocketOBS}&token=ZesqL9dGu2Uv3XlE`;
+          console.log("urlSocketOBS: ", urlProxySocketOBS);
+          const wssProxySocketOBS = urlProxySocketOBS.replace("http", "ws");
+          console.log("wssProxySocketOBS: ", wssProxySocketOBS);
+          await obsInstance.connect(wssProxySocketOBS);
+        }
         setIsObsConnected(true);
         setObsError(null);
         console.log("Verbonden met OBS WebSocket!");

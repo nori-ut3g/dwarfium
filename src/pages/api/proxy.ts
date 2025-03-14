@@ -24,9 +24,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ProxyResponse | string>
 ) {
-
   const controller = new AbortController();
-  const timeout = 30000; 
+  const timeout = 30000;
 
   // Set up the timeout manually
   const timeoutSignal = setTimeout(() => {
@@ -122,12 +121,17 @@ export default async function handler(
       if (response.body) {
         return Readable.fromWeb(response.body as any).pipe(res);
       } else {
-        return res.status(500).json({ error: "Multipart response body is missing." });
+        return res
+          .status(500)
+          .json({ error: "Multipart response body is missing." });
       }
     }
 
     // Handle images and binary data
-    if (contentType?.includes("image") || contentType?.includes("octet-stream")) {
+    if (
+      contentType?.includes("image") ||
+      contentType?.includes("octet-stream")
+    ) {
       if (!response.body) {
         return res.status(500).json({ error: "Failed to fetch binary data." });
       }
