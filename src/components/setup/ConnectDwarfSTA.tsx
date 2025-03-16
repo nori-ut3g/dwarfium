@@ -547,7 +547,10 @@ export default function ConnectDwarfSTA() {
 
           if (statusProxy) {
             const serverIp = getServerIp();
-            if (serverIp) connectionCtx.setProxyInLan(isLocalIp(serverIp));
+            if (serverIp) {
+              connectionCtx.setProxyInLan(isLocalIp(serverIp));
+              console.log("ProxyInLan:", isLocalIp(serverIp));
+            }
             await getProxyLocalIP(proxyUrl, signal);
           }
 
@@ -582,11 +585,13 @@ export default function ConnectDwarfSTA() {
                 connectionCtx.proxyIP,
                 connectionCtx.proxyLocalIP
               );
+              console.log("proxyLocalUrl:", proxyLocalUrl);
               let statusLocalProxy = await checkHealth(
                 proxyLocalUrl + "/health",
                 3000,
                 signal
               );
+              console.log("statusLocalProxy:", statusLocalProxy);
               connectionCtx.setProxyInLan(statusLocalProxy);
             }
             await getProxyLocalIP(proxyUrl, signal);
