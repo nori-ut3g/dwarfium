@@ -268,10 +268,9 @@ export function getTransfomProxyImageUrl(
     return imageUrl.replace("http:", "https:");
   } else {
     if (!proxyUrl) proxyUrl = getProxyUrl(connectionCtx);
-    let targetUrl = `${encodeURIComponent(imageUrl)}`;
     if (connectionCtx && connectionCtx.useHttps && forceHttps) {
-      targetUrl = targetUrl.replace("http:", "https:");
+      imageUrl = imageUrl.replace("http:", "https:");
     }
-    return `${proxyUrl}?target=${targetUrl}`;
+    return `${proxyUrl}?target=${encodeURIComponent(imageUrl)}`;
   }
 }
