@@ -137,7 +137,8 @@ async function ensureSSLCertificates(): Promise<{ key: string; cert: string }> {
     console.log("Certificate before signing:", cert);
 
     // Sign the certificate with the private key
-    cert.sign(keys.privateKey);
+    const md = forge.md.sha256.create(); // Force SHA-256
+    cert.sign(keys.privateKey, md);
 
     console.log("Certificate after signing:", cert);
 
