@@ -99,6 +99,22 @@ const httpsServer = httpsOptions
   ? https.createServer(httpsOptions, app)
   : false;
 
+// Function to determine the correct agent dynamically
+function getAgentForUrl(url: string) {
+  const targetUrl = new URL(url);
+  if (targetUrl.protocol === "https:") {
+    return httpsOptions
+      ? new https.Agent({
+          ca: httpsOptions.cert,
+          rejectUnauthorized: false, // Allows self-signed certificates
+        })
+      : undefined;
+  } else if (targetUrl.protocol === "http:") {
+    return new http.Agent(); // Use a regular HTTP agent for HTTP requests
+  }
+  return undefined;
+}
+
 // WebSocket Server
 const wss = new WebSocket.Server({ noServer: true });
 
@@ -449,6 +465,8 @@ app.all("*", async (req, res) => {
     const { target } = req.query;
     console.log("target: ", target);
     if (!target) {
+      // Log the full query object to see all parameters
+      console.log("Request error:", req.originalUrl);
       return res.status(400).json({ error: "Target URL is required" });
     }
 
@@ -492,10 +510,14 @@ app.all("*", async (req, res) => {
       signal?: AbortSignal; // Ensure signal is part of the type
     }
 
+    // Assign the correct agent based on `lastTarget`
+    const agent = getAgentForUrl(lastTarget);
+
     const fetchOptions: FetchOptions = {
       signal: req.signal ?? controller.signal,
       method: req.method ?? "GET", // Fallback to "GET" if req.method is undefined
       headers: sanitizedHeaders,
+      ...(agent ? { agent } : {}), // Add `agent` only when using HTTPS
     };
     console.log(fetchOptions.signal);
     console.log(fetchOptions);
