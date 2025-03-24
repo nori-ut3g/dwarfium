@@ -332,7 +332,7 @@ app.get("/run-exe-health", async (req, res) => {
 });
 
 // Run EXE Route
-app.get("/run-exe", async (req, res) => {
+app.post("/run-exe", async (req, res) => {
   try {
     let clientIp = req.ip.replace(/^::ffff:/, ""); // Normalize IPv6-mapped IPv4 addresses
     if (clientIp === "::1") clientIp = "127.0.0.1";
@@ -352,7 +352,7 @@ app.get("/run-exe", async (req, res) => {
       ble_psd = "DWARF_12345678",
       ble_STA_ssid = "",
       ble_STA_pwd = "",
-      auto_select = 0,
+      auto_select = "0",
     } = req.body;
 
     // Ensure the executable exists
