@@ -150,6 +150,7 @@
   "cCameraAddOnPhoto": "Photo",
   "cCameraAddOnVideo": "Video",
   "cCameraAddOnPanorama": "Panorama",
+  "cCameraAddOnBurst": "Burst Photo",
   "cCameraAddOnTimeLapse": "Time Lapse",
   "cCameraBurstSettingsCount": "Count",
   "cCameraBurstSettingsinterval": "Interval",

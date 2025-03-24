@@ -51,9 +51,20 @@ export default function ImagingMenu(props: PropType) {
   const [showSettingsMenu, setShowSettingsMenu] = useState(false);
   const [validSettings, setValidSettings] = useState(isValid());
   const [showModal, setShowModal] = useState(false);
+  const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
 
   let timerSession: ReturnType<typeof setInterval>;
   let timerSessionInit: boolean = connectionCtx.timerGlobal !== undefined;
+
+  // Track screen resize
+  useEffect(() => {
+    const handleResize = () => setScreenWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Dynamic placement
+  const popoverPlacement = screenWidth < 1024 ? "auto" : "left";
 
   useEffect(() => {
     let testTimer: string | any = "";
@@ -842,11 +853,11 @@ export default function ImagingMenu(props: PropType) {
         <Link href="#" className="" title="Show Settings">
           <OverlayTrigger
             trigger="click"
-            placement={"left"}
+            placement={popoverPlacement}
             show={showSettingsMenu}
             onToggle={() => setShowSettingsMenu((p) => !p)}
             overlay={
-              <Popover id="popover-positioned-left">
+              <Popover id="popover-positioned" className="custom-popover">
                 <Popover.Body>
                   <ImagingAstroSettings
                     setValidSettings={setValidSettings}

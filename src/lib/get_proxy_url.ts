@@ -233,6 +233,9 @@ export async function checkMediaMtxStreamUrls(
 
 export function compareURLsIgnoringPort(url1, url2) {
   try {
+    if (url1.includes("api") || url2.includes("api")) return false;
+    console.log("url1 URL:", url1);
+    console.log("url2 URL:", url2);
     const hostname1 = new URL(url1).hostname;
     const hostname2 = new URL(url2).hostname;
     return hostname1 === hostname2;

@@ -33,24 +33,34 @@ export default function ConnectStellarium(props: PropType) {
   const [showInfoTxtData, setShowInfoTxtData] = useState(true);
   const [url_plugin, setUrl_plugin] = useState("");
   const abortControllerRef = useRef<AbortController | null>(null);
+  const [portStellarium, setPortStellarium] = useState(
+    connectionCtx.portStellarium || "8090"
+  );
+
+  const handlePortChange = (e) => {
+    setPortStellarium(e.target.value);
+  };
 
   function checkConnection(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
-    const formIP = formData.get("stellarium_ip");
+    const formIP = formData.get("stellarium_ip")?.toString().trim();
     const formPort = formData.get("port");
+    const port = formPort ? Number(formPort) : 8090;
 
-    if (formIP && formPort) {
+    if (formIP && !isNaN(port) && port > 0) {
       setConnecting(true);
-      let url = `http://${formIP}:${formPort}`;
+      let url = `http://${formIP}:${port}`;
+
+      setPortStellarium(port);
+      connectionCtx.setPortStellarium(port);
+      savePortStellariumDB(port);
 
       connectionCtx.setIPStellarium(formIP.toString());
-      connectionCtx.setPortStellarium(Number(formPort));
       connectionCtx.setUrlStellarium(url);
 
       saveIPStellariumDB(formIP.toString());
-      savePortStellariumDB(Number(formPort));
       saveUrlStellariumDB(url);
 
       if (connectionCtx.proxyIP && getProxyUrl(connectionCtx)) {
@@ -96,6 +106,12 @@ export default function ConnectStellarium(props: PropType) {
   const { t } = useTranslation();
   // eslint-disable-next-line no-unused-vars
   const [selectedLanguage, setSelectedLanguage] = useState<string>("en");
+
+  useEffect(() => {
+    if (connectionCtx.portStellarium) {
+      setPortStellarium(connectionCtx.portStellarium);
+    }
+  }, [connectionCtx.portStellarium]);
 
   useEffect(() => {
     console.log("Effect triggered, aborting previous request if exists...");
@@ -165,7 +181,8 @@ export default function ConnectStellarium(props: PropType) {
               }
             }
           }
-          if (urlStellariumConfig) setUrl_plugin(urlStellariumConfig);
+          if (urlStellariumConfig)
+            setUrl_plugin(urlStellariumConfig + `?port=${portStellarium}`);
         } catch (error: unknown) {
           if (error instanceof Error) {
             if (signal.aborted) {
@@ -184,7 +201,7 @@ export default function ConnectStellarium(props: PropType) {
       console.log("Cancel previous request when effect re-runs");
       abortControllerRef.current?.abort();
     };
-  }, []);
+  }, [portStellarium]);
 
   useEffect(() => {
     const storedLanguage = localStorage.getItem("language");
@@ -193,6 +210,11 @@ export default function ConnectStellarium(props: PropType) {
       i18n.changeLanguage(storedLanguage);
     }
   }, []);
+
+  function savePortStellarium() {
+    connectionCtx.setPortStellarium(Number(portStellarium));
+    savePortStellariumDB(Number(portStellarium));
+  }
 
   function renderDetails() {
     if (showInfoTxtData)
@@ -223,6 +245,9 @@ export default function ConnectStellarium(props: PropType) {
                     target="_blank"
                     rel="noopener
                     noreferrer"
+                    onClick={() => {
+                      savePortStellarium();
+                    }}
                   >
                     Stellarium_auto_config
                   </a>{" "}
@@ -274,7 +299,8 @@ export default function ConnectStellarium(props: PropType) {
               name="port"
               placeholder="8090"
               required
-              defaultValue={connectionCtx.portStellarium}
+              value={portStellarium}
+              onChange={handlePortChange}
             />
           </div>
         </div>

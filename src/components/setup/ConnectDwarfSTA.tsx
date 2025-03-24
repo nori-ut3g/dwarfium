@@ -64,6 +64,8 @@ export default function ConnectDwarfSTA() {
   const [stateMediaMtx, setStateMediaMtx] = useState(false);
   const [isProxyOnServer, setIsProxyOnServer] = useState(false);
   const [debouncedValue, setDebouncedValue] = useState(""); // Debounced value
+  const [devices, setDevices] = useState<string[]>([]);
+  const [selectedDevice, setSelectedDevice] = useState<string>("");
 
   const handleInputPWDChange = (event) => {
     setBluetoothPWD(event.target.value);
@@ -117,11 +119,6 @@ export default function ConnectDwarfSTA() {
     e.preventDefault();
 
     IsFirstStepOK = false;
-    console.debug("Get BluetoothPWD:", BluetoothPWD);
-    console.debug("Get Wifi_SSID:", Wifi_SSID);
-    console.debug("Get Wifi_PWD:", Wifi_PWD);
-    console.debug("saved DB BluetoothSTA_SSID:", connectionCtx.BleSTASSIDDwarf);
-    console.debug("saved DB BluetoothSTA_PWD:", connectionCtx.BleSTAPWDDwarf);
     connectionCtx.setTypeIdDwarf(undefined);
     connectionCtx.setTypeNameDwarf("Dwarf");
 
@@ -418,16 +415,6 @@ export default function ConnectDwarfSTA() {
     if (connecting) {
       return <span>{t("pConnecting")}</span>;
     }
-    if (connectionStatus === undefined) {
-      return <></>;
-    }
-    if (connectionStatus === false) {
-      return (
-        <span className="text-danger-connect">
-          {t("pConnectingFailed")} {errorTxt}
-        </span>
-      );
-    }
     if (findDwarfBluetooth && !connectionStatus) {
       return (
         <span className="text-warning-connect">
@@ -441,6 +428,19 @@ export default function ConnectDwarfSTA() {
         <span className="text-warning-connect">
           Connected to Dwarf Device
           {errorTxt}.
+        </span>
+      );
+    }
+    if (devices?.length > 0) {
+      return <span className="text-warning-connect">{errorTxt}.</span>;
+    }
+    if (connectionStatus === undefined) {
+      return <></>;
+    }
+    if (connectionStatus === false) {
+      return (
+        <span className="text-danger-connect">
+          {t("pConnectingFailed")} {errorTxt}
         </span>
       );
     }
@@ -756,10 +756,26 @@ export default function ConnectDwarfSTA() {
   const runExecutable = async () => {
     button_progress();
     // Get the Bluetooth password from the input field
-    const pwd_data = encodeURIComponent(BluetoothPWD);
-    const ssid_data = encodeURIComponent(Wifi_SSID);
-    const wifipwd_data = encodeURIComponent(Wifi_PWD);
-    const requestCmd = `/run-exe?ble_psd=${pwd_data}&ble_STA_ssid=${ssid_data}&ble_STA_pwd=${wifipwd_data}`;
+    // Old Get
+    //const pwd_data = encodeURIComponent(BluetoothPWD);
+    //const ssid_data = encodeURIComponent(Wifi_SSID);
+    //const wifipwd_data = encodeURIComponent(Wifi_PWD);
+    //const auto_select = selectedDevice
+    //  ? `&auto_select=${selectedDevice}`
+    //  : "&auto_select=0";
+    //const requestCmdGet =
+    //  `/run-exe?ble_psd=${pwd_data}&ble_STA_ssid=${ssid_data}&ble_STA_pwd=${wifipwd_data}` +
+    //  auto_select;
+
+    const auto_select_value = selectedDevice ? selectedDevice : "0";
+    setSelectedDevice(""); // Reset Device
+    const requestCmd = `/run-exe`;
+    const requestBody = {
+      ble_psd: BluetoothPWD,
+      ble_STA_ssid: Wifi_SSID,
+      ble_STA_pwd: Wifi_PWD,
+      auto_select: auto_select_value,
+    };
     let proxyUrl = savedProxyUrl;
     let directProxyUrl = "";
     console.log("savedProxyUrl:", proxyUrl);
@@ -772,6 +788,13 @@ export default function ConnectDwarfSTA() {
       return;
     } else if (proxyUrl?.includes("api")) {
       proxyUrl = "/api" + requestCmd;
+    } else if (
+      connectionCtx.useDirectBluetoothServer &&
+      getServerUrl().includes("api")
+    ) {
+      proxyUrl = getServerUrl() + requestCmd;
+    } else if (connectionCtx.useDirectBluetoothServer && isProxyOnServer) {
+      proxyUrl = getServerUrl() + requestCmd;
     } else {
       const requestAddr = getServerUrl() + requestCmd;
       proxyUrl = `${savedProxyUrl}?target=${encodeURIComponent(requestAddr)}`;
@@ -783,61 +806,111 @@ export default function ConnectDwarfSTA() {
       if (!connectionCtx.useDirectBluetoothServer) proxyUrl = directProxyUrl;
       console.log("Call Bluetooth Url:", proxyUrl);
     }
+    setConnecting(true);
 
-    const response = await fetch(proxyUrl, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json", // Use 'application/json' for JSON
-      },
-      signal: AbortSignal.timeout(120000),
-      redirect: "follow",
-    });
+    try {
+      const response = await fetch(proxyUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", // Use 'application/json' for JSON
+        },
+        body: JSON.stringify(requestBody),
+        signal: AbortSignal.timeout(120000),
+        redirect: "follow",
+      });
 
-    // Check if the response has data
-    if (response.ok) {
-      console.log(`runExecutable: status ${response.status}`);
-      if (response.ok && response.status === 200) {
-        console.log(`runExecutable: waitdata`);
-        const result = await response.json();
-        console.log(`runExecutable: getdata ${JSON.stringify(result)}`);
+      // Check if the response has data
+      if (response.ok) {
+        console.log(`runExecutable: status ${response.status}`);
+        if (response.ok && response.status === 200) {
+          console.log(`runExecutable: waitdata`);
+          const result = await response.json();
+          console.log(`runExecutable: getdata ${JSON.stringify(result)}`);
 
-        if (result.error) console.error(`runExecutable: ${result.error}`);
+          if (result.error) console.error(`runExecutable: ${result.error}`);
 
-        if (result && result.dwarfIp) {
-          console.log(`runExecutable: data ${result.dwarfId}`);
-          if (result.dwarfIp && result.dwarfIp != "None") {
-            if (result.dwarfId == "1") {
-              deviceDwarfID = result.dwarfId;
-              deviceDwarfName = "Dwarf II";
-            } else if (result.dwarfId == "2") {
-              deviceDwarfID = 2;
-              deviceDwarfName = "Dwarf3";
-            }
-            console.log("Connected with IP: ", result.dwarfIp);
-            setErrorTxt(" IP: " + result.dwarfIp);
-
-            if (connectionCtx.IPDwarf != result.dwarfIp) {
-              if (connectionCtx.socketIPDwarf) {
-                connectionCtx.socketIPDwarf.close();
+          if (result && result.dwarfIp) {
+            console.log(`runExecutable: data ${result.dwarfId}`);
+            if (result.dwarfIp && result.dwarfIp != "None") {
+              if (result.dwarfId == "1") {
+                deviceDwarfID = result.dwarfId;
+                deviceDwarfName = "Dwarf II";
+              } else if (result.dwarfId == "2") {
+                deviceDwarfID = 2;
+                deviceDwarfName = "Dwarf3";
               }
+              console.log("Connected with IP: ", result.dwarfIp);
+              setErrorTxt(" IP: " + result.dwarfIp);
+
+              if (connectionCtx.IPDwarf != result.dwarfIp) {
+                if (connectionCtx.socketIPDwarf) {
+                  connectionCtx.socketIPDwarf.close();
+                }
+              }
+              connectionCtx.setIPDwarf(result.dwarfIp);
+              saveIPDwarfDB(result.dwarfIp);
+              connectionCtx.setBlePWDDwarf(BluetoothPWD);
+              saveBlePWDDwarfDB(BluetoothPWD);
+              connectionCtx.setBleSTASSIDDwarf(Wifi_SSID);
+              saveBleSTASSIDDwarfDB(Wifi_SSID);
+              connectionCtx.setBleSTAPWDDwarf(Wifi_PWD);
+              saveBleSTAPWDDwarfDB(Wifi_PWD);
+              connectionCtx.setTypeIdDwarf(deviceDwarfID);
+              connectionCtx.setTypeNameDwarf(deviceDwarfName);
+              setConnecting(false);
+              setConnectionStatus(true);
             }
-            connectionCtx.setIPDwarf(result.dwarfIp);
-            saveIPDwarfDB(result.dwarfIp);
-            connectionCtx.setBlePWDDwarf(BluetoothPWD);
-            saveBlePWDDwarfDB(BluetoothPWD);
-            connectionCtx.setBleSTASSIDDwarf(Wifi_SSID);
-            saveBleSTASSIDDwarfDB(Wifi_SSID);
-            connectionCtx.setBleSTAPWDDwarf(Wifi_PWD);
-            saveBleSTAPWDDwarfDB(Wifi_PWD);
-            connectionCtx.setTypeIdDwarf(deviceDwarfID);
-            connectionCtx.setTypeNameDwarf(deviceDwarfName);
-            setConnecting(false);
-            setConnectionStatus(true);
           }
+        } else if (response.ok && response.status === 204) {
+          console.log(`runExecutable: No device Found`);
+          setConnecting(false);
+          setConnectionStatus(false);
+          setErrorTxt("No device Found!");
+        } else if (response.ok && response.status === 202) {
+          const result = await response.json();
+          console.log(
+            `runExecutable: Select device in ${JSON.stringify(result)}`
+          );
+          if (result.devices) {
+            setDevices(result.devices);
+          }
+          setConnecting(false);
+          setErrorTxt("More than one device found, Select one");
+        } else {
+          console.error(`runExecutable: ${JSON.stringify(response)}`);
+          setConnecting(false);
+          setConnectionStatus(false);
+          setErrorTxt("Error, Retry...");
         }
+      } else {
+        console.error(`runExecutable: ${JSON.stringify(response)}`);
+        setErrorTxt("Error, Retry...");
+        setConnecting(false);
+        setConnectionStatus(false);
       }
-    } else console.error(`runExecutable: ${JSON.stringify(response)}`);
-    button_default();
+    } catch (error: any) {
+      if (error.name === "AbortError") {
+        console.error("Request timed out!");
+        setErrorTxt("Error Timeout, Retry...");
+        setConnecting(false);
+        setConnectionStatus(false);
+      } else {
+        console.error("Fetch error:", error.message);
+        setErrorTxt("Error, Retry...");
+        setConnecting(false);
+        setConnectionStatus(false);
+      }
+    } finally {
+      button_default();
+    }
+  };
+
+  const handleSelect = (e) => {
+    if (selectedDevice) {
+      runExecutable();
+      setDevices([]);
+    }
+    e.preventDefault(); // Prevents any unintended form submission
   };
 
   return (
@@ -973,14 +1046,14 @@ export default function ConnectDwarfSTA() {
                 <p>{t("pServerStatusContent3")}</p>
                 <div className="row mb-3">
                   {/* Proxy IP Label */}
-                  <div className="col-md-2 text-end">
+                  <div className="col-lg-2 col-md-3 text-end">
                     <label htmlFor="proxyIp" className="form-label">
                       {t("pProxyIP")}
                     </label>
                   </div>
 
                   {/* Proxy IP Input */}
-                  <div className="col-lg-2 col-md-10">
+                  <div className="col-lg-3 col-md-10  d-flex align-items-center">
                     <input
                       className="form-control"
                       id="proxyIp"
@@ -989,29 +1062,26 @@ export default function ConnectDwarfSTA() {
                       value={proxyIpValue}
                       onChange={(e) => ipHandler(e)}
                     />
-                  </div>
-
-                  {/* Proxy IP Status Icon */}
-                  <div className="col-auto">
+                    {/* Proxy IP Status Icon */}
                     {proxyIpValue === connectionCtx.proxyIP ? (
                       <i
-                        className="bi bi-check-circle text-success"
+                        className="ms-3 bi bi-check-circle text-success"
                         title={t("cProxyIPSaved")}
                       ></i>
                     ) : (
                       <i
-                        className="bi bi-exclamation-triangle text-warning"
+                        className="ms-3 bi bi-exclamation-triangle text-warning"
                         title={t("cProxyIPNotSaved")}
                       ></i>
                     )}
                   </div>
 
                   {/* Local IP Label */}
-                  <div className="col-md-2 text-end">
+                  <div className="col-lg-2 col-md-3 text-end">
                     <label htmlFor="proxyLocalIp">{t("pProxyLocalIP")}</label>
                   </div>
 
-                  <div className="col-lg-2 col-md-10">
+                  <div className="col-lg-3 col-md-10 d-flex align-items-center">
                     <select
                       className="form-control"
                       id="proxyLocalIp"
@@ -1055,18 +1125,16 @@ export default function ConnectDwarfSTA() {
                         onKeyDown={handleKeyDown}
                       />
                     )}
-                  </div>
 
-                  {/* Local IP Status Icon */}
-                  <div className="col-auto">
+                    {/* Local IP Status Icon */}
                     {proxyLocalIpValue === connectionCtx.proxyLocalIP ? (
                       <i
-                        className="bi bi-check-circle text-success"
+                        className="ms-3 bi bi-check-circle text-success"
                         title="IP is saved in context"
                       ></i>
                     ) : (
                       <i
-                        className="bi bi-exclamation-triangle text-warning"
+                        className="ms-3 bi bi-exclamation-triangle text-warning"
                         title="IP is not saved in context"
                       ></i>
                     )}
@@ -1138,7 +1206,7 @@ export default function ConnectDwarfSTA() {
       <br />
       <form onSubmit={checkConnection} className="mb-3">
         <div className="row mb-3">
-          <div className="col-md-2 text-end">
+          <div className="col-lg-2 col-md-10 col-12 text-end">
             <label htmlFor="pwd" className="form-label">
               {t("pBluetoothPWD")}
             </label>
@@ -1154,7 +1222,7 @@ export default function ConnectDwarfSTA() {
               onChange={handleInputPWDChange}
             />
           </div>
-          <div className="col-md-2 text-end">
+          <div className="col-lg-2 col-md-10 col-12 text-end">
             <label htmlFor="ssid" className="form-label">
               {t("pSTA_SSID_Wifi")}
             </label>
@@ -1170,7 +1238,7 @@ export default function ConnectDwarfSTA() {
               onChange={handleInputSSIDChange}
             />
           </div>
-          <div className="col-md-2 text-end">
+          <div className="col-lg-2 col-md-10 col-12 text-end">
             <label htmlFor="wifipwd" className="form-label">
               {t("pSTA_PWD_Wifi")}
             </label>
@@ -1193,7 +1261,7 @@ export default function ConnectDwarfSTA() {
           stateBluetoothProxy &&
           stateBluetoothServer && (
             <div className="row mb-3">
-              <div className="col-lg-2 col-md-10">
+              <div className="col-lg-6 col-md-10">
                 <div>
                   <input
                     type="checkbox"
@@ -1224,6 +1292,32 @@ export default function ConnectDwarfSTA() {
           </button>
         )}{" "}
         {renderConnectionStatus()}
+        {devices?.length > 0 && (
+          <div className="row mb-3">
+            <div className="col-lg-4 col-md-10 mt-3 d-flex align-items-center ">
+              <select
+                className="form-select me-3 w-auto" // Adjust width based on content
+                value={selectedDevice}
+                onChange={(e) => setSelectedDevice(e.target.value)}
+              >
+                <option value="">Select a device</option>
+                {devices.map((device, index) => (
+                  <option key={index} value={device}>
+                    {device}
+                  </option>
+                ))}
+              </select>
+              <button
+                id="btnReconnect"
+                className="btn btn-more02 me-6"
+                onClick={(e) => handleSelect(e)}
+                disabled={!selectedDevice}
+              >
+                <i className="icon-bluetooth" /> {t("pConnect")}
+              </button>
+            </div>
+          </div>
+        )}
       </form>
     </div>
   );

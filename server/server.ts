@@ -4,6 +4,7 @@
 ////////////////////////////////////////////////////////////////////////
 const NEXT_PUBLIC_PORT_PROXY_CORS = 8860;
 const NEXT_PUBLIC_PORT_PROXY_CORS_HTTPS = 9443;
+const USE_CLIENT_CERTIFICATE = false; // if need set USE_CLIENT_CERTIFICATE to true
 
 import express from "express";
 const WebSocket = require("ws");
@@ -72,10 +73,20 @@ function check_certificates() {
     return false;
   } else {
     console.log("🔑 SSL certificate already exists.");
-    return {
-      key: fs.readFileSync(keyPath, "utf-8"),
-      cert: fs.readFileSync(certPath, "utf-8"),
-    };
+    if (USE_CLIENT_CERTIFICATE) {
+      return {
+        key: fs.readFileSync(keyPath, "utf-8"),
+        cert: fs.readFileSync(certPath, "utf-8"),
+        requestCert: true, // Require client certificate
+        rejectUnauthorized: true, // Reject clients without a valid certificate
+        ca: fs.readFileSync(certPath, "utf-8"), // Verify client certs against the Root CA
+      };
+    } else {
+      return {
+        key: fs.readFileSync(keyPath, "utf-8"),
+        cert: fs.readFileSync(certPath, "utf-8"),
+      };
+    }
   }
 }
 
@@ -83,6 +94,20 @@ const app = express();
 
 app.use(express.json());
 app.use(cors({ origin: "*", methods: "GET,POST,PUT,DELETE,PATCH,OPTIONS" }));
+
+if (USE_CLIENT_CERTIFICATE) {
+  // Middleware to check if a client certificate was provided
+  app.use((req, res, next) => {
+    const cert = req.socket.getPeerCertificate();
+    if (!req.client.authorized) {
+      return res
+        .status(401)
+        .send("Unauthorized: Invalid or missing certificate");
+    }
+    console.log(`Client connected: ${cert.subject.CN}`);
+    next();
+  });
+}
 
 // Handle preflight requests
 app.options("*", (req, res) => {
@@ -309,6 +334,12 @@ app.get("/run-exe-health", async (req, res) => {
 // Run EXE Route
 app.get("/run-exe", async (req, res) => {
   try {
+    let clientIp = req.ip.replace(/^::ffff:/, ""); // Normalize IPv6-mapped IPv4 addresses
+    if (clientIp === "::1") clientIp = "127.0.0.1";
+    console.log(`Received request from IP: ${clientIp}`);
+    const on_server =
+      clientIp === "127.0.0.1" || getLocalIPAddress().includes(clientIp);
+
     const externPath = path.resolve("./extern"); // Adjust path if needed
     const exeName = "connect_bluetooth";
     const exePath =
@@ -316,40 +347,134 @@ app.get("/run-exe", async (req, res) => {
         ? path.join(externPath, exeName + ".exe")
         : path.join(externPath, exeName);
 
-    // Extract query parameters
-    const ble_psd = req.query.ble_psd || "DWARF_12345678";
-    const ble_STA_ssid = req.query.ble_STA_ssid || "";
-    const ble_STA_pwd = req.query.ble_STA_pwd || "";
+    // Extract parameters from the request body
+    const {
+      ble_psd = "DWARF_12345678",
+      ble_STA_ssid = "",
+      ble_STA_pwd = "",
+      auto_select = 0,
+    } = req.body;
 
     // Ensure the executable exists
     if (!fs.existsSync(exePath)) {
       return res.status(404).json({ error: "Executable not found" });
     }
 
+    const command_line = on_server
+      ? ["--psd", ble_psd, "--ssid", ble_STA_ssid, "--pwd", ble_STA_pwd]
+      : [
+          "--psd",
+          ble_psd,
+          "--ssid",
+          ble_STA_ssid,
+          "--pwd",
+          ble_STA_pwd,
+          "--select",
+          auto_select,
+          "--cmd",
+        ];
+
     // Run the executable with parameters
-    const childProcess = spawn(
-      `"${exePath}"`,
-      ["--psd", ble_psd, "--ssid", ble_STA_ssid, "--pwd", ble_STA_pwd],
-      {
-        cwd: externPath,
-        shell: true,
-      }
-    );
+    const childProcess = spawn(`"${exePath}"`, command_line, {
+      cwd: externPath,
+      shell: true,
+    });
+
+    interface DwarfScanResult {
+      step: string;
+      dwarf_devices?: string[]; // Optional, since it might not be present in every step
+      dwarf_device?: string | null;
+      error?: string | null;
+      is_connected?: boolean;
+      connecting?: boolean;
+      device_dwarf_id?: number;
+      device_dwarf_name?: string;
+      device_dwarf_uid?: string;
+      ip_address?: string;
+    }
 
     let stdoutData = "";
     let stderrData = "";
+    let stdMessageData = {};
 
     childProcess.stdout.on("data", (data) => {
-      stdoutData += data.toString();
+      stdoutData += data.toString().trim();
+      console.log("Received:", stdoutData);
     });
 
     childProcess.stderr.on("data", (data) => {
-      stderrData += data.toString();
+      const text = data.toString().trim();
+      console.info("Info:", text);
+      stderrData += text;
+
+      // Try parsing JSON immediately if the data contains a valid JSON object
+      try {
+        let jsonString = text;
+        if (text.startsWith("{")) {
+          jsonString = text.slice(0, text.indexOf("}") + 1);
+        }
+        const sanitizedJson = jsonString
+          .replace(/None/g, "null")
+          .replace(/True/g, "true")
+          .replace(/False/g, "false")
+          .replace(/([{,]\s*)'([^']+)'(\s*[:])/g, '$1"$2"$3') // Convert keys to double quotes
+          .replace(/(:\s*)'([^']+)'/g, '$1"$2"') // Convert string values to double quotes
+          .replace(/BLEDevice\(([^)]+)\)/g, '"$1"'); // Convert Python-style objects
+        console.info("sanitizedJson:", sanitizedJson);
+        const parsedJson = JSON.parse(sanitizedJson);
+        stdMessageData = parsedJson; // Store the last JSON object
+        console.info("MessageData:", stdMessageData);
+      } catch (err) {
+        // Ignore non-JSON data
+        console.log("Ignore non JSPN data");
+      }
     });
 
     childProcess.on("close", async (code) => {
       if (code !== 0) {
         return res.status(500).json({ error: `Process failed: ${stderrData}` });
+      }
+
+      let jsonResult: DwarfScanResult | null = null;
+
+      jsonResult = stdMessageData as DwarfScanResult;
+      console.info("Final jsonResult:", stdMessageData);
+      console.log("Final jsonResult:", JSON.stringify(jsonResult, null, 2));
+
+      if (jsonResult) {
+        if (
+          jsonResult?.step === "1" &&
+          (jsonResult.dwarf_devices ?? []).length === 0
+        ) {
+          return res
+            .status(204)
+            .json({ message: "No devices found", action: "restart_scan" });
+        }
+        if (
+          jsonResult?.step === "3" &&
+          Array.isArray(jsonResult.dwarf_devices) &&
+          jsonResult.dwarf_devices.length > 1
+        ) {
+          const deviceNames = jsonResult.dwarf_devices.map((device: string) => {
+            // Split by comma and take the second part (the device name)
+            return device.split(", ")[1]; // This will give "DWARF3_3C2E2A" and "DWARF3_3AD246"
+          });
+          return res.status(202).json({
+            message: "Multiple devices found, user selection needed",
+            devices: deviceNames,
+          });
+        }
+        if (jsonResult?.step === "4" && jsonResult.is_connected) {
+          return res.status(200).json({
+            dwarfIp: jsonResult.ip_address,
+            dwarfId: jsonResult.device_dwarf_id,
+            details: jsonResult,
+          });
+        }
+        return res.status(500).json({
+          error: "Unexpected error, retrying...",
+          details: jsonResult,
+        });
       }
 
       // Read DWARF_IP from config.py (Simple Read Instead of Execution)
@@ -366,7 +491,7 @@ app.get("/run-exe", async (req, res) => {
       return res.status(200).json({
         dwarfIp: dwarfIpMatch ? dwarfIpMatch[1] : "",
         dwarfId: dwarfIdMatch ? dwarfIdMatch[1] : "",
-        output: stdoutData.trim(),
+        details: stderrData.trim(),
       });
     });
   } catch (error) {

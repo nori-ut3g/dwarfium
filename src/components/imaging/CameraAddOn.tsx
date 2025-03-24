@@ -1062,7 +1062,7 @@ export default function CameraAddOn(props: PropTypes) {
               </div>
               <div className="column">
                 <div className="header">
-                  <div className="title">Burst Photo</div>
+                  <div className="title">{t("cCameraAddOnBurst")}</div>
                   <Link href="#" className="" title="Show Settings">
                     <OverlayTrigger
                       trigger="click"

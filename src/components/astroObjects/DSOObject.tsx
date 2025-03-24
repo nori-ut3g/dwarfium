@@ -251,7 +251,7 @@ export default function DSOObject(props: AstronomyObjectPropType) {
       </h3>
       <div className="mb-2">{object.alternateNames}</div>
       <div className="row">
-        <div className="col-md-4">
+        <div className="col-md-3 col-lg-4 col-12">
           {t(object.type)}{" "}
           {object.constellation && t("cObjectsIn") + t(object.constellation)}
           <br />
@@ -259,7 +259,7 @@ export default function DSOObject(props: AstronomyObjectPropType) {
           <br />
           {t("cObjectsMagnitude")}: {object.magnitude}
         </div>
-        <div className="col-md-5">
+        <div className="col-md-6 col-lg-4 col-xl-5 col-12">
           {riseSetTime}
           <br></br>
           {altAz}{" "}
@@ -269,7 +269,7 @@ export default function DSOObject(props: AstronomyObjectPropType) {
           <br></br>
           {raDec}
         </div>
-        <div className="col-md-4 col-8">
+        <div className="col-md-12 col-lg-3 col-xl-3 col-12">
           <button
             className={`btn ${
               connectionCtx.connectionStatusStellarium

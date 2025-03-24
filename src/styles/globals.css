@@ -121,8 +121,12 @@ body {
   margin-left: -80px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 992px) {
  
+  .container-temp-batt {
+    margin-bottom: 0px;
+  }
+
   .battery-meter {
     margin: -31px 0px 1px 135px;
   }
@@ -131,7 +135,7 @@ body {
      margin-right: 39px;
   }
   .temperature-info {
-     width: auto;
+     width: 160px;
      margin: 0px auto 0px auto;
      margin-top: -20px;
      display: flex;
@@ -551,20 +555,7 @@ select {
     font-size: 20px;
     font-weight: bold;
 }
-/* Responsive adjustments for smaller screens */
-@media (max-width: 1024px) {
-    .text-success-connect {
-        font-size: 18px; /* Slightly smaller font size for tablets and smaller devices */
-        margin-top: 8px; /* Reduce top margin */
-    }
-}
 
-@media (max-width: 480px) {
-    .text-success-connect {
-        font-size: 16px; /* Smaller font size for mobile devices */
-        margin-top: 5px; /* Reduce top margin further for tighter layouts */
-    }
-}
 .text-warning-connect {
     color: #C57721 !important;
     margin-top: 10px;
@@ -578,6 +569,26 @@ select {
     font-size: 20px;
     font-weight: bold;
 }
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 1024px) {
+    .text-success-connect,
+    .text-warning-connect,
+    .text-danger-connect {
+        font-size: 18px; /* Slightly smaller font size for tablets and smaller devices */
+        margin-top: 8px; /* Reduce top margin */
+    }
+}
+
+@media (max-width: 480px) {
+    .text-success-connect,
+    .text-warning-connect,
+    .text-danger-connect {
+        font-size: 16px; /* Smaller font size for mobile devices */
+        margin-top: 5px; /* Reduce top margin further for tighter layouts */
+    }
+}
+
 /*scrollbar*/
 ::-webkit-scrollbar {
     -webkit-appearance: none;
@@ -831,6 +842,9 @@ img {
     font-weight: bold;
     margin-right: 10px;
     align-items: center; /* Vertical centering */
+    white-space: nowrap; /* Prevents text from wrapping */
+    overflow: hidden; /* Hides overflow */
+    text-overflow: ellipsis; /* Adds "..." if text overflows */
 }
 
 .button-container {
@@ -1077,6 +1091,12 @@ img {
     margin-top: -25px;
 }
 
+@media screen and (max-width: 992px) {
+    .connect-dwarf {
+        margin-top: -65px;
+    }
+}
+
 /* Add media queries for different screen sizes */
 @media screen and (max-width: 768px) {
     .header {
@@ -1127,16 +1147,16 @@ img {
         margin-top: 10px; /* Add spacing between status and button on smaller screens 
     }
 }*/
-
-/*@media (max-width: 992px) {
+/*
+@media (max-width: 992px) {
     .connect-dwarf {
         flex-direction: column; /* Stack items vertically on smaller screens 
         align-items: flex-end;
-        margin-right: 5%;
-        margin-top: -75px;
+        margin-top: -65px;
     }
 }
 */
+
 @media (max-width: 1400px) {
     .sethostmode-dwarf {
         justify-content: flex-end;
@@ -1230,13 +1250,14 @@ img {
     margin-top: -55px;
 }
 
-@media (max-width: 992px) { 
+@media (max-width: 1024px) { 
   .sky_object {
-    margin-top: -65px;
+    margin-top: -105px;
   }
 }
 @media (max-width: 768px) { 
   .sky_object {
+    margin-top: -55px;
     margin-left: 0%; 
   }
 }
@@ -1728,7 +1749,6 @@ img {
 }
 .button-container {
     display: flex;
-    flex-direction: column; /* Zet de knoppen onder elkaar */
     gap: 10px; /* Ruimte tussen de knoppen */
     align-items: center; /* Optioneel, centreren in de container */
 }

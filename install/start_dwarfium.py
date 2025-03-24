@@ -2,6 +2,7 @@ import importlib.util
 import subprocess
 import os
 import sys
+import socket
 
 package_name = "flask"
 
@@ -12,6 +13,19 @@ if importlib.util.find_spec(package_name) is None:
 from flask import Flask, request, jsonify, send_from_directory
 # Create a Flask app, serving static files from the current directory
 app = Flask(__name__, static_folder=os.getcwd())
+
+# Function to get local IP addresses
+def get_local_ip_addresses():
+    local_ips = []
+    hostname = socket.gethostname()
+
+    # Get all network interfaces
+    for ip in socket.getaddrinfo(hostname, None):
+        ip_address = ip[4][0]
+        if ip_address.startswith("192.") or ip_address.startswith("100.") or ip_address.startswith("10.") or ip_address.startswith("172.") or ip_address == "127.0.0.1":
+            local_ips.append(ip_address)
+
+    return local_ips
 
 # API endpoint to check if running
 @app.route('/health', methods=['GET'])
@@ -38,13 +52,14 @@ def run_exe_health():
     return jsonify({"error": "Executable not found"}), 404
 
 # API endpoint to execute a program with parameters
-@app.route('/run-exe', methods=['GET'])
+@app.route('/run-exe', methods=['POST'])
 def run_exe():
     try:
-        # Get parameters from the request (or set defaults)
-        ble_psd =  request.args.get('ble_psd', "DWARF_12345678")
-        ble_STA_ssid =  request.args.get('ble_STA_ssid', '')
-        ble_STA_pwd =  request.args.get('ble_STA_pwd', '')
+        data = request.get_json() or {}  # Ensure request body is a dictionary
+        ble_psd = data.get("ble_psd", "DWARF_12345678")
+        ble_STA_ssid = data.get("ble_STA_ssid", "")
+        ble_STA_pwd = data.get("ble_STA_pwd", "")
+        auto_select = data.get("auto_select", "0")  # Default value as string
 
         # Define the base name of the executable (without extension)
         extern_path = os.path.abspath(os.path.join(".","extern"))
@@ -56,11 +71,32 @@ def run_exe():
         else:
             exe_path = os.path.join(extern_path, exe_name)  # No .exe on Linux/macOS
 
+        client_ip = request.remote_addr
+        print(f"Received request from IP: {client_ip}")
+
+        local_ips = get_local_ip_addresses()
+
+        # Check if the request comes from the server itself
+        on_server = client_ip in local_ips
+
+        command_line = [
+            exe_path,
+            "--psd", ble_psd,
+            "--ssid", ble_STA_ssid,
+            "--pwd", ble_STA_pwd
+        ]
+
+        if not on_server:
+            command_line.append("--select")
+            command_line.append("0")
+            command_line.append("--cmd")
+
         # Ensure correct execution format for Linux/macOS
         if sys.platform != "win32":
             exe_path = "./" + exe_path.replace("\\", "/")  # Convert Windows-style paths if needed
+
         # Run the executable with parameters
-        process = subprocess.run([exe_path, "--psd", ble_psd, "--ssid", ble_STA_ssid, "--pwd", ble_STA_pwd], cwd=extern_path,capture_output=True, text=True)
+        process = subprocess.run(command_line, cwd=extern_path,capture_output=True, text=True)
 
         # Debugging: Check process output
         print("Process Output:", process.stdout)

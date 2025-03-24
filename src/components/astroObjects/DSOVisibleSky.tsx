@@ -29,12 +29,12 @@ export default function DSOVisibleSky({ updateVisibleSkyLimit }) {
   return (
     <div className="sky_object">
       <div className="row mb-3">
-        <div className="col-lg-5 col-md-6 col-4 mb-2 mb-md-0">
+        <div className="col-lg-5 col-md-6 col-6 mb-2 mb-md-0">
           <button className="btn btn-more02 w-100" onClick={setSkyLimitHandler}>
             {t("cVisibleSkyLimit")}
           </button>
         </div>
-        <div className="col-lg-5 col-md-5 col-6">
+        <div className="col-lg-8 col-md-10 col-6">
           <div className="tooltip-container">
             <input
               pattern="^[\\w\\s]{0,255}$/i"

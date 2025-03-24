@@ -17,6 +17,9 @@ export default async function handler(
   }
 
   try {
+    const { port = "8090" } = req.query;
+
+    const command_line = ["--port", String(port)];
     const exePath =
       process.platform === "win32"
         ? path.join(INSTALL_DIR, "windows", EXE_FULL_NAME)
@@ -26,7 +29,7 @@ export default async function handler(
       return res.status(404).json({ error: "Executable not found" });
     }
 
-    const childProcess = spawn(`"${exePath}"`, [], {
+    const childProcess = spawn(`"${exePath}"`, command_line, {
       cwd: INSTALL_DIR,
       shell: true,
     });

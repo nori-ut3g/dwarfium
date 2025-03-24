@@ -15,6 +15,7 @@
     "dev:tauri": "next dev",
     "dev:windows": "concurrently \"cd ./install/windows && mediamtx.exe ..\\config\\mediamtx.yml\" \"npm run dev",
     "dev:linux": "concurrently \"cd ./install/linux && ./mediamtx ../config/mediamtx.yml\" \"npm run dev",
+    "dev:https": "next dev --experimental-https --experimental-https-key ./cert/DwarfiumKey.pem --experimental-https-cert ./cert/DwarfiumCert.pem",
     "build": "next build",
     "build:api": "cross-env NEXT_PUBLIC_URL_PROXY_CORS=/api/proxy next build",
     "start:api": "cross-env NEXT_PUBLIC_URL_PROXY_CORS=/api/proxy next start",
