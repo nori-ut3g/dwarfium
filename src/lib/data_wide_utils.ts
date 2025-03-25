@@ -85,7 +85,6 @@ const getWideGainsDwarf2 = () => {
   if (camera)
     supportParam = camera.supportParams.find((param) => param.id === 1);
   if (supportParam) value = supportParam.gearMode;
-  console.log({ value });
   return value ? value : false;
 };
 

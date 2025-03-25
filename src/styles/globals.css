@@ -823,6 +823,20 @@ img {
     width: 180px;
 }
 
+.columnAction {
+    background-color: #191D1E;
+    border-left: 1px solid #ccc;
+    box-sizing: border-box;
+    text-align: center;
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    font-size: 12px;
+    width: 260px;
+    flex-direction: column;
+    flex-direction: column;
+    align-items: center; /* Ensure items are centered horizontally */
+}
+
 .separator {
     width: 100%;
     height: 1px;
@@ -831,6 +845,13 @@ img {
 }
 
 .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0px;
+}
+
+.header-camera {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -851,6 +872,17 @@ img {
     display: flex;
     gap: 10px; /* Space between buttons */
     margin-top: 20px;
+    justify-content: center; /* Center the buttons horizontally */
+    width: 100%; /* Ensure the container takes up the full width of its parent */
+}
+
+.button-container-view {
+    display: flex;
+    gap: 8px; /* Ruimte tussen de knoppen */
+    flex-direction: row; /* Keep buttons in a row by default */
+    flex-wrap: wrap; /* Allow buttons to wrap to a new row if needed */
+    justify-content: center; /* Center the buttons horizontally */
+    width: 100%; /* Ensure the container takes up the full width of its parent */
 }
 
 .button {
@@ -969,13 +1001,87 @@ img {
     }
 }
 
+@media (max-width: 1200px) {
+    .button {
+        padding: 0px 15px;
+    }
+
+    .button-cent {
+        padding: 0px 15px;
+    }
+
+    .title {
+        font-size: 16px;
+    }
+
+    .cameraAddon-image {
+        width: 60px;
+    }
+
+    .column {
+        font-size: 12px;
+        width: 180px;
+    }
+}
+
 @media (max-width: 1060px) {
+    .button {
+        padding: 0px 15px;
+    }
+
+    .button-cent {
+        padding: 0px 15px;
+    }
+
+    .title {
+        font-size: 16px;
+    }
+
+    .cameraAddon-image {
+        width: 60px;
+    }
+
+    .column {
+        font-size: 12px;
+        width: 150px;
+    }
+}
+
+@media (max-width: 920px) {
+    .button {
+        padding: 0px 12px;
+    }
+
+    .button-cent {
+        padding: 0px 12px;
+    }
+
+    .title {
+        font-size: 14px;
+    }
+
+    .cameraAddon-image {
+        width: 50px;
+    }
+
+    .column {
+        font-size: 10px;
+        width: 120px;
+    }
+
+    .columnAction {
+        font-size: 10px;
+        width: 200px;
+    }
+}
+
+@media (max-width: 768px) {
     .button {
         padding: 0px 8px;
     }
 
     .button-cent {
-        padding: 0px 8px;
+        padding: 0px 6px;
     }
 
     .title {
@@ -983,69 +1089,72 @@ img {
     }
 
     .cameraAddon-image {
-        width: 50px;
+        width: 40px;
+    }
+
+    .button-container {
+        gap: 4px; /* Space between buttons */
+    }
+
+    .button-container-view {
+        gap: 4px; /* Space between buttons */
+    }
+
+    .column {
+        font-size: 8px;
+        width: 120px;
+    }
+
+    .columnAction {
+        font-size: 8px;
+        width: 150px;
+    }
+}
+
+@media (max-width: 300px) {
+    .button {
+        padding: 0px 8px;
+    }
+
+    .button-cent {
+        padding: 0px 6px;
+    }
+
+    .title {
+        font-size: 10px;
+    }
+
+    .cameraAddon-image {
+        width: 40px;
+    }
+
+    .button-container {
+        gap: 3px; /* Space between buttons */
+    }
+
+    .button-container-view {
+        gap: 3px; /* Space between buttons */
     }
 
     .column {
         font-size: 8px;
         width: 100px;
     }
-}
 
-@media (max-width: 890px) {
-    .button {
-        padding: 0px 4px;
-    }
-
-    .button-cent {
-        padding: 0px 4px;
-    }
-
-    .title {
-        font-size: 8px;
-    }
-
-    .cameraAddon-image {
-        width: 50px;
-    }
-
-    .button-container {
-        gap: 5px; /* Space between buttons */
-    }
-
-    .column {
-        font-size: 7px;
-        width: 80px;
+    .columnAction {
+        font-size: 6px;
+        width: 130px;
     }
 }
 
-@media (max-width: 760px) {
-    .button {
-        padding: 0px 0px;
-    }
-
-    .button-cent {
-        padding: 0px 0px;
-    }
-
-    .title {
-        font-size: 5px;
-    }
-
-    .cameraAddon-image {
-        width: 50px;
-    }
-
-    .button-container {
-        gap: 2px; /* Space between buttons */
-    }
-
-    .column {
-        font-size: 8px;
-        width: 60px;
+/* Adjust for smaller screens */
+@media screen and (max-width: 1024px) {
+    hr {
+        margin: 0.25rem 0; /* Reduce margin */
+        height: 0.25px; /* Make thinner */
+        opacity: 0.15; /* Reduce visibility */
     }
 }
-
 .forecast-container {
     display: flex;
     flex-direction: column;
@@ -1746,11 +1855,6 @@ img {
 .no-info {
     font-style: italic;
     color: gray;
-}
-.button-container {
-    display: flex;
-    gap: 10px; /* Ruimte tussen de knoppen */
-    align-items: center; /* Optioneel, centreren in de container */
 }
 
 .help-msg {

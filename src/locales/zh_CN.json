@@ -397,5 +397,13 @@
   "cProxyIPSaved": "IP保存",
   "pConnectStellariumContent2_2": "您还可以下载并运行以下程序，该程序将自动配置该插件，要使用的端口为8090",
   "pProxyLocalCustomIP": "输入自定义IP",
-  "pProxyLocalEnterManually": "手动输入"
+  "pProxyLocalEnterManually": "手动输入",
+  "cCameraAddOnBurst": "爆发照片",
+  "cNavMosaic": "马赛克计划者",
+  "cNavObservation": "观察计划者",
+  "cActiveActionView": "行动",
+  "cOBSErrorStream": "启动或停止流时出错。\n检查控制台。",
+  "cOBSNotFound": "obs网站找不到。\n开始观察并检查Web插座设置。",
+  "cOBSSocketClose": "OBS Websocket已关闭。",
+  "cOBSSocketNotConnect": "obs websocket未连接。"
 }

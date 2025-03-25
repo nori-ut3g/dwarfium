@@ -17,11 +17,18 @@
   color: #aaa;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     
     .dropdown-wrapper.jsx-1b9225df978cd56a {
         width: auto;
     }
     
+}
+
+@media (max-width: 1024px) {
+    .nav-item {
+        width: 100%; /* Makes each item take the full width */
+        text-align: center; /* Centers the content */
+    }
 }
 

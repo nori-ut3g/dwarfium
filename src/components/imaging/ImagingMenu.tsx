@@ -51,6 +51,8 @@ export default function ImagingMenu(props: PropType) {
   const [showSettingsMenu, setShowSettingsMenu] = useState(false);
   const [validSettings, setValidSettings] = useState(isValid());
   const [showModal, setShowModal] = useState(false);
+  const [showOnlyControls, setShowOnlyControls] = useState(false);
+  const [showOnlyActions, setShowOnlyActions] = useState(false);
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
 
   let timerSession: ReturnType<typeof setInterval>;
@@ -64,6 +66,7 @@ export default function ImagingMenu(props: PropType) {
   }, []);
 
   // Dynamic placement
+  const sizeSmallScreen = 768;
   const popoverPlacement = screenWidth < 1024 ? "auto" : "left";
 
   useEffect(() => {
@@ -819,36 +822,38 @@ export default function ImagingMenu(props: PropType) {
 
   return (
     <ul className="nav nav-pills flex-column mb-auto border">
-      <li className={`nav-item ${styles.box}`}>
-        {checkPhotoMode()}
-        {!showModal &&
-          !connectionCtx.imagingSession.isRecording &&
-          !connectionCtx.imagingSession.endRecording && (
-            <Link
-              href="#"
-              className=""
-              onClick={() => {
-                setShowModal(true);
-              }}
-            >
-              {getAstroText()}
-            </Link>
-          )}
-        {showModal &&
-          !connectionCtx.imagingSession.isRecording &&
-          !connectionCtx.imagingSession.endRecording && (
-            <Link
-              href="#"
-              className=""
-              onClick={() => {
-                setShowModal(false);
-                anim_close();
-              }}
-            >
-              Photo
-            </Link>
-          )}
-      </li>
+      {screenWidth >= sizeSmallScreen && (
+        <li className={`nav-item ${styles.box}`}>
+          {checkPhotoMode()}
+          {!showModal &&
+            !connectionCtx.imagingSession.isRecording &&
+            !connectionCtx.imagingSession.endRecording && (
+              <Link
+                href="#"
+                className=""
+                onClick={() => {
+                  setShowModal(true);
+                }}
+              >
+                {getAstroText()}
+              </Link>
+            )}
+          {showModal &&
+            !connectionCtx.imagingSession.isRecording &&
+            !connectionCtx.imagingSession.endRecording && (
+              <Link
+                href="#"
+                className=""
+                onClick={() => {
+                  setShowModal(false);
+                  anim_close();
+                }}
+              >
+                Photo
+              </Link>
+            )}
+        </li>
+      )}
       <li className={`nav-item ${styles.box}`}>
         <Link href="#" className="" title="Show Settings">
           <OverlayTrigger
@@ -1065,7 +1070,82 @@ export default function ImagingMenu(props: PropType) {
             </Link>
           </li>
         )}
-      <CameraAddOn showModal={showModal} setShowModal={setShowModal} />
+      {screenWidth < sizeSmallScreen && (
+        <>
+          <hr />
+          <li className={`nav-item ${styles.box}`}>
+            {checkPhotoMode()}
+            {!showModal &&
+              !connectionCtx.imagingSession.isRecording &&
+              !connectionCtx.imagingSession.endRecording && (
+                <Link
+                  href="#"
+                  className=""
+                  onClick={() => {
+                    setShowModal(true);
+                    setShowOnlyActions(true);
+                  }}
+                >
+                  {getAstroText()}
+                </Link>
+              )}
+            {showModal &&
+              !connectionCtx.imagingSession.isRecording &&
+              !connectionCtx.imagingSession.endRecording && (
+                <Link
+                  href="#"
+                  className=""
+                  onClick={() => {
+                    setShowModal(false);
+                    setShowOnlyActions(false);
+                    anim_close();
+                  }}
+                >
+                  Photo
+                </Link>
+              )}
+          </li>
+          <hr />
+          <li className={`nav-item ${styles.box}`}>
+            {checkPhotoMode()}
+            {!showModal &&
+              !connectionCtx.imagingSession.isRecording &&
+              !connectionCtx.imagingSession.endRecording && (
+                <Link
+                  href="#"
+                  className=""
+                  onClick={() => {
+                    setShowModal(true);
+                    setShowOnlyControls(true);
+                  }}
+                >
+                  Show Controls
+                </Link>
+              )}
+            {showModal &&
+              !connectionCtx.imagingSession.isRecording &&
+              !connectionCtx.imagingSession.endRecording && (
+                <Link
+                  href="#"
+                  className=""
+                  onClick={() => {
+                    setShowModal(false);
+                    setShowOnlyControls(false);
+                    anim_close();
+                  }}
+                >
+                  Hide Controls
+                </Link>
+              )}
+          </li>
+        </>
+      )}
+      <CameraAddOn
+        showModal={showModal}
+        setShowModal={setShowModal}
+        showOnlyActions={showOnlyActions}
+        showOnlyControls={showOnlyControls}
+      />
     </ul>
   );
 }

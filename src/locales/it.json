@@ -397,5 +397,13 @@
   "cProxyIPSaved": "IP viene salvato",
   "pConnectStellariumContent2_2": "Puoi anche scaricare ed eseguire il seguente programma che configurerà automaticamente il plugin, la porta da utilizzare sarà 8090",
   "pProxyLocalCustomIP": "Immettere IP personalizzato",
-  "pProxyLocalEnterManually": "Entra manualmente"
+  "pProxyLocalEnterManually": "Entra manualmente",
+  "cCameraAddOnBurst": "Foto scoppiata",
+  "cNavMosaic": "Pianificatore a mosaico",
+  "cNavObservation": "Pianificatore di osservazione",
+  "cActiveActionView": "Azione",
+  "cOBSErrorStream": "Errore quando si avvia o si arresta il flusso. \nControlla la console.",
+  "cOBSNotFound": "Sito Web OB non trovato. \nAvviare OBS e controllare le impostazioni del socket Web.",
+  "cOBSSocketClose": "Obs WebSocket è chiuso.",
+  "cOBSSocketNotConnect": "Obs WebSocket non è connesso."
 }

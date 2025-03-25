@@ -49,6 +49,10 @@
     }
     .nav {
         flex-direction: row !important;
+        flex-wrap: wrap; /* Allows items to wrap if necessary */
+        justify-content: space-around; /* Distributes space evenly */
+        align-items: center; /* Aligns items in the center */
+        font-size: 0.9rem; /* Reduce font size for small screens */
     }
     .ImagingMenu_box__LmUky {
         width: 50px !important;
@@ -70,6 +74,9 @@
 
     .nav {
         flex-direction: row !important;
+        flex-wrap: wrap; /* Allows items to wrap if necessary */
+        justify-content: space-around; /* Distributes space evenly */
+        align-items: center; /* Aligns items in the center */
     }
-    
 }
+

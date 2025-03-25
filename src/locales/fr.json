@@ -397,5 +397,13 @@
   "pIndexBug2": "",
   "pIndexBug3": "",
   "pProxyLocalCustomIP": "Saisie IP",
-  "pProxyLocalEnterManually": "Saisie manuelle"
+  "pProxyLocalEnterManually": "Saisie manuelle",
+  "cCameraAddOnBurst": "Burst Photo",
+  "cNavMosaic": "Planificateur Mosaïque",
+  "cNavObservation": "Planificateur Observation",
+  "cActiveActionView": "Action",
+  "cOBSErrorStream": "Erreur lors du démarrage ou de l'arrêt du flux. \nVérifiez la console.",
+  "cOBSNotFound": "Site Web OBS n'est pas trouvé. \nDémarrez OBS et vérifiez les paramètres de socket Web.",
+  "cOBSSocketClose": "Obsocket est fermé.",
+  "cOBSSocketNotConnect": "Obsocket n'est pas connecté."
 }

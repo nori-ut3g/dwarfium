@@ -397,5 +397,13 @@
   "cProxyIPSaved": "IP wird gespeichert",
   "pConnectStellariumContent2_2": "Sie können das folgende Programm auch herunterladen und ausführen",
   "pProxyLocalCustomIP": "Geben Sie benutzerdefinierte IP ein",
-  "pProxyLocalEnterManually": "Manuell eintreten"
+  "pProxyLocalEnterManually": "Manuell eintreten",
+  "cCameraAddOnBurst": "Burst -Foto",
+  "cNavMosaic": "Mosaikplaner",
+  "cNavObservation": "Beobachtungsplaner",
+  "cActiveActionView": "Aktion",
+  "cOBSErrorStream": "Fehler beim Starten oder Stoppen des Streams. \nÜberprüfen Sie die Konsole.",
+  "cOBSNotFound": "OBS -Website nicht gefunden. \nStarten Sie OBS und überprüfen Sie die Einstellungen für Web -Socket.",
+  "cOBSSocketClose": "OBS -Websocket ist geschlossen.",
+  "cOBSSocketNotConnect": "OBS -Websocket ist nicht miteinander verbunden."
 }

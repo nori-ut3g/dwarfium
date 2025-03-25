@@ -85,7 +85,7 @@
   "pConnect": "Connect",
   "pConnectDwarfII": "Connect to {{DwarfType}}",
   "pConnectWeb": "Connect via Web",
-  "pDirectBluetooth" : "Direct connection",
+  "pDirectBluetooth": "Direct connection",
   "pResetDwarfType": "If your model is not correctly detected click here and reconnect",
   "pConnectPrivateID": "If you use another Dwarfium or our automatic sessions tools, to avoid conflics check this, last connected one will have control disabled",
   "pConnectDwarfIIContent": "For Dwarfium to connect to the {{DwarfType}}, both the {{DwarfType}} and Dwarfium standalone app or web server or proxy (if your server is on an another network) must be on the same local network.",
@@ -147,6 +147,7 @@
   "cAstroSettingsWide": "Wide Camera Settings",
   "cAstroSettingsWideGain": "Gain",
   "cAstroSettingsWideExposure": "Exposure",
+  "cActiveActionView": "Action",
   "cCameraAddOnPhoto": "Photo",
   "cCameraAddOnVideo": "Video",
   "cCameraAddOnPanorama": "Panorama",
@@ -398,5 +399,11 @@
   "cImageEditorSepia": "Sepia",
   "cImageEditorCopyright": "Enter copyright...",
   "cImageEditorFullImage": "Full Image",
-  "cImageEditorShareFacebook": "Share on Facebook"
+  "cImageEditorShareFacebook": "Share on Facebook",
+  "cNavMosaic": "Mosaic Planner",
+  "cNavObservation": "Observation Planner",
+  "cOBSNotFound": "OBS website not found. Start OBS and check web socket settings.",
+  "cOBSSocketClose": "OBS Websocket is closed.",
+  "cOBSSocketNotConnect": "OBS Websocket is not connected.",
+  "cOBSErrorStream": "Error when starting or stopping the stream. Check the console."
 }

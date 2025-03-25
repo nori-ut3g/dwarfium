@@ -397,5 +397,13 @@
   "cProxyIPSaved": "IP jest zapisywany",
   "pConnectStellariumContent2_2": "Możesz także pobrać i uruchomić następujący program, który automatycznie skonfiguruje wtyczkę, port do użycia wyniesie 8090",
   "pProxyLocalCustomIP": "Wprowadź niestandardowe IP",
-  "pProxyLocalEnterManually": "Wprowadź ręcznie"
+  "pProxyLocalEnterManually": "Wprowadź ręcznie",
+  "cCameraAddOnBurst": "Zdjęcie serwisowe",
+  "cNavMosaic": "Planista mozaiki",
+  "cNavObservation": "Planista obserwacyjny",
+  "cActiveActionView": "Działanie",
+  "cOBSErrorStream": "Błąd podczas uruchamiania lub zatrzymywania strumienia. \nSprawdź konsolę.",
+  "cOBSNotFound": "Nie znaleziono strony internetowej OB. \nRozpocznij OBS i sprawdź ustawienia gniazda internetowego.",
+  "cOBSSocketClose": "OBS WebSocket jest zamknięty.",
+  "cOBSSocketNotConnect": "OBS WebSocket nie jest połączony."
 }
