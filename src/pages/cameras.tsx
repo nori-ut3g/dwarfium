@@ -72,9 +72,7 @@ export default function AstroPhoto() {
       } catch (error: any) {
         console.warn("OBS WebSocket niet beschikbaar:", error.message);
         setIsObsConnected(false);
-        setObsError(
-         {t("cOBSNotFound")}
-        );
+        setObsError(t("cOBSNotFound"));
       }
     };
 
@@ -82,7 +80,7 @@ export default function AstroPhoto() {
 
     obsInstance.on("ConnectionClosed", () => {
       setIsObsConnected(false);
-      setObsError({t("cOBSSocketClose")});
+      setObsError(t("cOBSSocketClose"));
     });
 
     return () => {
@@ -92,7 +90,7 @@ export default function AstroPhoto() {
 
   const toggleStreaming = async () => {
     if (!obs) {
-      setObsError({t("cOBSSocketNotConnect")});
+      setObsError(t("cOBSSocketNotConnect"));
       return;
     }
 
@@ -115,9 +113,7 @@ export default function AstroPhoto() {
       }
     } catch (error: any) {
       console.error("Fout bij streamen:", error);
-      setObsError(
-         {t("cOBSErrorStream")}
-      );
+      setObsError(t("cOBSErrorStream"));
     }
   };
 
