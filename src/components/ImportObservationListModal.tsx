@@ -85,8 +85,23 @@ export default function ImportObjectListModal(props: PropTypes) {
     formFile.text().then((data) => {
       const csvData = Papa.parse(data, { header: true });
       const cloneObjectLists = structuredClone(objectLists);
+      // Process the CSV data to handle both old and new formats
+      console.log("csvData", csvData);
+      console.log("csvData after", csvData);
       cloneObjectLists[name] = processObjectListTelescopius(
-        csvData.data as ObjectTelescopius[]
+        csvData.data.map((entry) => {
+          let RA_Entry =
+            entry["Right Ascension (j2000)"] || entry["Right Ascension"];
+          console.log("entry RA", RA_Entry);
+          let DEC_Entry = entry["Declination (j2000)"] || entry["Declination"];
+          console.log("entry DEC", DEC_Entry);
+          return {
+            ...entry,
+            // Check if the new columns exist, otherwise fallback to the old columns
+            "Right Ascension": RA_Entry, // New or old column
+            Declination: DEC_Entry, // New or old column
+          } as ObjectTelescopius[];
+        })
       );
       saveObjectListsDb(JSON.stringify(cloneObjectLists));
       setObjectLists(cloneObjectLists);

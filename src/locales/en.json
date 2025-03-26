@@ -273,7 +273,7 @@
   "cGoToUserListNewList": "Add new list",
   "cGoToUserListDeleteList": "Delete list",
   "cGoToUserListCustomObjectsListInstruction1": "\r\n  To add custom objects lists, create an objects list at \r\n  <a href=\"https://telescopius.com\">Telescopius</a>, download \r\n  the CSV, and click \"Add new list\".\r\n",
-  "cGoToUserListCustomObjectsListInstruction2": "The lists are stored in the browser&apos;s database (localStorage). Since the data is stored in your browser, other users of the site will not be able to access your lists.",
+  "cGoToUserListCustomObjectsListInstruction2": "The lists are stored in the browser's database (localStorage). Since the data is stored in your browser, other users of the site will not be able to access your lists.",
   "cGoToUserListCustomObjectsListInstruction3": "If you want to share your list with other people, you can send other people the csv from Telescopius.",
   "cImportManualModalTitle": "Enter Manual Data",
   "cImportManualModalObjecTName": "Object Name",
