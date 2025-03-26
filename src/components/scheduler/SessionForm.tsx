@@ -651,8 +651,8 @@ const SessionForm: React.FC = () => {
           />
         </div>
         {showPreview && (
-          <div className="modal">
-            <div className="modal-content">
+          <div className="modal-json">
+            <div className="modal-json-content">
               <h3>JSON Preview</h3>
               <pre>{JSON.stringify(jsonPreview, null, 2)}</pre>
               <button onClick={confirmCsvImport}>Confirm</button>
