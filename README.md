@@ -147,6 +147,7 @@ You can install them separately in different networks
    ```cmd
    cd DwarfiumProxy
    ./llaunch-tools.bat
+   ```
 
 It's better to use https for the server, so you need to use a Dwarfium Certificate. As the DwarfiumProxy is your personnal proxy, the certificate is yours only.
 The certificate creation is easy, a tool createSSLcert.exe is provided, run it once where your proxy is, it will create and install the certificate on your computer.
