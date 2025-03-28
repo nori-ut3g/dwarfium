@@ -106,17 +106,72 @@ If you just want to get the site up and running on your machine, follow these st
 
    ```bash
    cd Dwarfium
-   ./launch-tools
+   ./launch-server&tools
    ```
 
    On Windows
 
    ```cmd
    cd Dwarfium
-   ./launch-tools.bat
+   ./llaunch-server&tools.bat
    ```
 
    2.4. Visit the site in a browser. If you're using the script, visit [localhost:8000](http://localhost:8000/).
+
+## Dwarfium Proxy Configuration
+Dwarfium used internally a proxy programm to communicate with the dwarf and other services (Meteo data, Asteroids, etc).
+Now we provided access to the proxy to permits more use cases.
+
+Imagine you have a friend who lives in a region with a beautiful sky and not you!
+
+Now for a week or more install the Dwarf in his house, and now back to home, you can remote control your dwarf.
+
+How to do that?
+
+Dwarfium can be installed in two components a web server and the proxy, the proxy must be installed near the Dwarf to control it.
+
+in the release page you will find: DwarfiumServer-Win.zip and Dwarfium-Win.zip , Linux version will come soon.
+You can install them separately in different networks
+
+   1.1. Unzip the files. `DwarfiumServer` and `DwarfiumProxy` directories will be created. 
+
+   1.2. There is a script inside the `DwarfiumServer` directory that launch a Python's web server.
+
+   ```cmd
+   cd Dwarfium
+   ./llaunch-server.bat
+   ```
+
+   1.3. There is a script inside the `DwarfiumProxy` directory that launch the Proxy and the tools for D3 video streams.
+
+   ```cmd
+   cd DwarfiumProxy
+   ./llaunch-tools.bat
+
+It's better to use https for the server, so you need to use a Dwarfium Certificate. As the DwarfiumProxy is your personnal proxy, the certificate is yours only.
+The certificate creation is easy, a tool createSSLcert.exe is provided, run it once where your proxy is, it will create and install the certificate on your computer.
+You need to copy the two files (DwarfiumCert.pem and DwarfiumKey.pem) on the server Installation dir.
+Then you can access to the web server in https.
+
+But as the web server is in a different place as the proxy, they need to communicate together.
+The easiest way is to use a VPN like Tailscale: you can install Taiscale on different system (PC, Linux, Android, IPhone) and as long as an internet connection is available, they can speak together.
+You do not need to use a VPN, you can access to the server even it's on remote, but you need to forward the port 800 on the rooter where the server is : 8000 and for the proxy it is 8860 and 9443.
+
+You use the internal local network Ip of the server (https://Server_IP:8000) to open Dwarfium.
+Go to the Setup page.
+
+![Screenshot of updates](images/Proxy-Settings.png)
+
+You have to set the Dwarf Proxy Local IP in the Proxy IP field.
+
+If you have not install a VPN, use the publi IP in the Proxy IP field and use the internal Ip for the Proxy Local Ip field.
+Click on Save Proxy IP
+
+The Connexion Info must now be green now.
+
+Use the Direct Bluetooth detection on Proxy (near the Dwarf) to connect to the Dwarf
+
+After success, connect to the Dwarf IP in the Connect Session
 
 ## Technical Details
 
