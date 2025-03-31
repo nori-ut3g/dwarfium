@@ -77,6 +77,7 @@ export default function ConnectDwarfSTA() {
     setWifi_PWD(event.target.value);
   };
   const abortControllerRef = useRef<AbortController | null>(null);
+  const abortControllerRef2 = useRef<AbortController | null>(null);
 
   // Debouncing logic
   useEffect(() => {
@@ -539,7 +540,7 @@ export default function ConnectDwarfSTA() {
           // Run health checks in parallel, passing the signal
           const [statusProxy, statusBluetoothServer] = await Promise.all([
             checkHealth("/api/health", 3000, signal),
-            checkHealth("/api/run-exe-health", 3000, signal),
+            checkHealth("/api/run-ble-health", 3000, signal),
           ]);
 
           setIsProxyOnServer(true);
@@ -572,15 +573,22 @@ export default function ConnectDwarfSTA() {
           const [statusProxy, statusBluetoothProxy, statusBluetoothServer] =
             await Promise.all([
               checkHealth(proxyUrl + "/health", 3000, signal),
-              checkHealth(proxyUrl + "/run-exe-health", 3000, signal),
-              checkHealth(serverUrl + "/run-exe-health", 3000, signal),
+              checkHealth(proxyUrl + "/run-ble-health", 3000, signal),
+              checkHealth(serverUrl + "/run-ble-health", 3000, signal),
             ]);
 
           setIsProxyOnServer(sameProxyServer);
           setStateProxy(statusProxy);
 
           if (statusProxy) {
-            if (connectionCtx?.proxyIP && connectionCtx?.proxyLocalIP) {
+            if (
+              connectionCtx?.proxyIP &&
+              (!connectionCtx?.proxyLocalIP ||
+                connectionCtx?.proxyIP == connectionCtx?.proxyLocalIP) &&
+              isLocalIp(connectionCtx?.proxyIP)
+            )
+              connectionCtx.setProxyInLan(true);
+            else if (connectionCtx?.proxyIP && connectionCtx?.proxyLocalIP) {
               const proxyLocalUrl = proxyUrl?.replace(
                 connectionCtx.proxyIP,
                 connectionCtx.proxyLocalIP
@@ -640,6 +648,68 @@ export default function ConnectDwarfSTA() {
       abortControllerRef.current?.abort();
     };
   }, [connectionCtx.proxyIP]);
+
+  useEffect(() => {
+    const isTauri = "__TAURI__" in window;
+    console.log("Effect 2 triggered, aborting previous request if exists...");
+    if (abortControllerRef2.current) {
+      abortControllerRef2.current.abort(); // Abort the previous request
+    }
+    abortControllerRef2.current = new AbortController(); // Create a new one
+    const signal = abortControllerRef2.current.signal;
+
+    const checkLocalProxyStatus = async (signal: AbortSignal) => {
+      let proxyUrl = getProxyUrl(connectionCtx);
+      setSavedProxyUrl(proxyUrl);
+
+      try {
+        if (stateProxy) {
+          if (
+            connectionCtx?.proxyIP &&
+            (!connectionCtx?.proxyLocalIP ||
+              connectionCtx?.proxyIP == connectionCtx?.proxyLocalIP) &&
+            isLocalIp(connectionCtx?.proxyIP)
+          )
+            connectionCtx.setProxyInLan(true);
+          else if (connectionCtx?.proxyIP && connectionCtx?.proxyLocalIP) {
+            const proxyLocalUrl = proxyUrl?.replace(
+              connectionCtx.proxyIP,
+              connectionCtx.proxyLocalIP
+            );
+            console.log("proxyLocalUrl:", proxyLocalUrl);
+            let statusLocalProxy = await checkHealth(
+              proxyLocalUrl + "/health",
+              3000,
+              signal
+            );
+            console.log("statusLocalProxy:", statusLocalProxy);
+            connectionCtx.setProxyInLan(statusLocalProxy);
+          }
+        }
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          if (signal.aborted) {
+            console.log("checkProxyStatus aborted due to new request.");
+          } else {
+            console.error("Error in checkProxyStatus:", error);
+          }
+        } else {
+          console.error("An unknown error occurred:", error);
+        }
+      }
+    };
+
+    if (isTauri) {
+      setOnTauri(true);
+      connectionCtx?.setProxyInLan(true);
+    } else {
+      checkLocalProxyStatus(signal);
+    }
+    return () => {
+      console.log("Cleanup: Aborting previous checkProxyLocalStatus call");
+      abortControllerRef2.current?.abort();
+    };
+  }, [connectionCtx.proxyLocalIP]);
 
   // Handle checkbox change
   const handleCheckboxBleServerChange = (event) => {
@@ -764,12 +834,12 @@ export default function ConnectDwarfSTA() {
     //  ? `&auto_select=${selectedDevice}`
     //  : "&auto_select=0";
     //const requestCmdGet =
-    //  `/run-exe?ble_psd=${pwd_data}&ble_STA_ssid=${ssid_data}&ble_STA_pwd=${wifipwd_data}` +
+    //  `/run-ble?ble_psd=${pwd_data}&ble_STA_ssid=${ssid_data}&ble_STA_pwd=${wifipwd_data}` +
     //  auto_select;
 
     const auto_select_value = selectedDevice ? selectedDevice : "0";
     setSelectedDevice(""); // Reset Device
-    const requestCmd = `/run-exe`;
+    const requestCmd = `/run-ble`;
     const requestBody = {
       ble_psd: BluetoothPWD,
       ble_STA_ssid: Wifi_SSID,
@@ -859,7 +929,29 @@ export default function ConnectDwarfSTA() {
               connectionCtx.setTypeNameDwarf(deviceDwarfName);
               setConnecting(false);
               setConnectionStatus(true);
+            } else if (result.dwarfIp && result.dwarfIp == "None") {
+              if (result.dwarfId == "1" || result.dwarfId == "2") {
+                console.log(`runExecutable: device Found but error`);
+                setConnecting(false);
+                setConnectionStatus(false);
+                setErrorTxt(
+                  "Device Found with Error, check Password and Retry ..."
+                );
+              } else {
+                console.log(`runExecutable: No device Found`);
+                setConnecting(false);
+                setConnectionStatus(false);
+                setErrorTxt("No device Found!");
+              }
+            } else {
+              setConnecting(false);
+              setConnectionStatus(false);
+              setErrorTxt("Error, Retry...");
             }
+          } else {
+            setConnecting(false);
+            setConnectionStatus(false);
+            setErrorTxt("Error, Retry...");
           }
         } else if (response.ok && response.status === 204) {
           console.log(`runExecutable: No device Found`);
@@ -876,6 +968,11 @@ export default function ConnectDwarfSTA() {
           }
           setConnecting(false);
           setErrorTxt("More than one device found, Select one");
+        } else if (response.ok && response.status === 401) {
+          console.log(`runExecutable: device Found but error`);
+          setConnecting(false);
+          setConnectionStatus(false);
+          setErrorTxt("Device Found with Error, check Password and Retry ...");
         } else {
           console.error(`runExecutable: ${JSON.stringify(response)}`);
           setConnecting(false);
@@ -1081,7 +1178,7 @@ export default function ConnectDwarfSTA() {
                     <label htmlFor="proxyLocalIp">{t("pProxyLocalIP")}</label>
                   </div>
 
-                  <div className="col-lg-3 col-md-10 d-flex align-items-center">
+                  <div className="col-lg-4 col-md-10 d-flex align-items-center">
                     <select
                       className="form-control"
                       id="proxyLocalIp"
@@ -1112,12 +1209,11 @@ export default function ConnectDwarfSTA() {
                       <option value="custom">
                         {t("pProxyLocalEnterManually")}
                       </option>
-                    </select>
-
+                    </select>{" "}
                     {/* Show input field if "custom" is selected */}
                     {isCustomInput && (
                       <input
-                        className="form-control mt-2"
+                        className="form-control ms-4"
                         type="text"
                         placeholder={t("pProxyLocalCustomIP")}
                         value={proxyLocalIpValue}
@@ -1125,7 +1221,6 @@ export default function ConnectDwarfSTA() {
                         onKeyDown={handleKeyDown}
                       />
                     )}
-
                     {/* Local IP Status Icon */}
                     {proxyLocalIpValue === connectionCtx.proxyLocalIP ? (
                       <i

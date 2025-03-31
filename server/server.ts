@@ -62,32 +62,29 @@ function getLocalIPAddress(): string[] {
 const isMultipart = (contentType) =>
   typeof contentType === "string" && contentType.includes("multipart");
 
-const certPath = path.join(".", "DwarfiumCert.pem");
-const keyPath = path.join(".", "DwarfiumKey.pem");
-
 function check_certificates() {
-  if (!fs.existsSync(keyPath) || !fs.existsSync(certPath)) {
-    console.log(
-      "🔒 SSL Certificates not found, use createSSLcert tool to generate and install them..."
-    );
-    return false;
-  } else {
-    console.log("🔑 SSL certificate already exists.");
-    if (USE_CLIENT_CERTIFICATE) {
-      return {
-        key: fs.readFileSync(keyPath, "utf-8"),
-        cert: fs.readFileSync(certPath, "utf-8"),
-        requestCert: true, // Require client certificate
-        rejectUnauthorized: true, // Reject clients without a valid certificate
-        ca: fs.readFileSync(certPath, "utf-8"), // Verify client certs against the Root CA
-      };
-    } else {
-      return {
-        key: fs.readFileSync(keyPath, "utf-8"),
-        cert: fs.readFileSync(certPath, "utf-8"),
-      };
-    }
+  const basePath = "."; // Current directory
+  const caPath = path.join(basePath, "CADwarfiumCert.pem"); // Your Root CA
+
+  // Possible certificate and key names
+  const certPath = path.join(basePath, "DwarfiumCert.pem");
+  const keyPath = path.join(basePath, "DwarfiumKey.pem");
+
+  if (fs.existsSync(certPath) && fs.existsSync(keyPath)) {
+    console.log(`✅ Using certificate: ${certPath}`);
+    return {
+      key: fs.readFileSync(keyPath, "utf-8"),
+      cert: fs.readFileSync(certPath, "utf-8"),
+      requestCert: true, // Require client certificates
+      rejectUnauthorized: false, // Enforce validation
+      ca: fs.existsSync(caPath) ? fs.readFileSync(caPath, "utf-8") : undefined,
+    };
   }
+
+  console.warn(
+    "🔒 SSL Certificates not found, use createSSLcert tool to generate and install them..."
+  );
+  return false;
 }
 
 const app = express();
@@ -127,13 +124,11 @@ const httpsServer = httpsOptions
 // Function to determine the correct agent dynamically
 function getAgentForUrl(url: string) {
   const targetUrl = new URL(url);
-  if (targetUrl.protocol === "https:") {
-    return httpsOptions
-      ? new https.Agent({
-          ca: httpsOptions.cert,
-          rejectUnauthorized: false, // Allows self-signed certificates
-        })
-      : undefined;
+  if (targetUrl.protocol === "https:" && httpsOptions) {
+    return new https.Agent({
+      ca: httpsOptions.ca, // Use the CA certificate
+      rejectUnauthorized: false,
+    });
   } else if (targetUrl.protocol === "http:") {
     return new http.Agent(); // Use a regular HTTP agent for HTTP requests
   }
@@ -314,8 +309,8 @@ app.get("/health", (req, res) => {
   res.status(200).json({ status: "Proxy is running" });
 });
 
-// Run EXE Health Route
-app.get("/run-exe-health", async (req, res) => {
+// Run BLE Health Route
+app.get("/run-ble-health", async (req, res) => {
   const externPath = path.resolve("./extern"); // Adjust path if needed
   const exeName = "connect_bluetooth";
   const exePath =
@@ -331,8 +326,8 @@ app.get("/run-exe-health", async (req, res) => {
   }
 });
 
-// Run EXE Route
-app.post("/run-exe", async (req, res) => {
+// Run BLE Route
+app.post("/run-ble", async (req, res) => {
   try {
     let clientIp = req.ip.replace(/^::ffff:/, ""); // Normalize IPv6-mapped IPv4 addresses
     if (clientIp === "::1") clientIp = "127.0.0.1";
@@ -464,12 +459,20 @@ app.post("/run-exe", async (req, res) => {
             devices: deviceNames,
           });
         }
-        if (jsonResult?.step === "4" && jsonResult.is_connected) {
-          return res.status(200).json({
-            dwarfIp: jsonResult.ip_address,
-            dwarfId: jsonResult.device_dwarf_id,
-            details: jsonResult,
-          });
+        if (jsonResult?.step === "4") {
+          if (jsonResult.is_connected) {
+            return res.status(200).json({
+              dwarfIp: jsonResult.ip_address,
+              dwarfId: jsonResult.device_dwarf_id,
+              details: jsonResult,
+            });
+          } else {
+            return res.status(401).json({
+              dwarfIp: jsonResult.ip_address,
+              dwarfId: jsonResult.device_dwarf_id,
+              details: jsonResult,
+            });
+          }
         }
         return res.status(500).json({
           error: "Unexpected error, retrying...",

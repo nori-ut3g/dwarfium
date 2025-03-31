@@ -3,6 +3,7 @@ import subprocess
 import os
 import sys
 import socket
+import ssl
 
 package_name = "flask"
 
@@ -32,9 +33,9 @@ def get_local_ip_addresses():
 def health():
     return jsonify({"status": "Proxy is running"}), 200
 
-# API endpoint to check if a program is here
-@app.route('/run-exe-health', methods=['GET'])
-def run_exe_health():
+# API endpoint to check if a BLE program is here
+@app.route('/run-ble-health', methods=['GET'])
+def run_ble_health():
     # Define the base name of the executable (without extension)
     extern_path = os.path.abspath(os.path.join(".", "extern"))
     exe_name = "connect_bluetooth"
@@ -51,9 +52,9 @@ def run_exe_health():
 
     return jsonify({"error": "Executable not found"}), 404
 
-# API endpoint to execute a program with parameters
-@app.route('/run-exe', methods=['POST'])
-def run_exe():
+# API endpoint to execute ble program with parameters
+@app.route('/run-ble', methods=['POST'])
+def run_ble():
     try:
         data = request.get_json() or {}  # Ensure request body is a dictionary
         ble_psd = data.get("ble_psd", "DWARF_12345678")
@@ -184,7 +185,7 @@ def stellarium_config_exe():
 @app.route("/<path:path>")
 def serve_static(path):
     #  If the requested path is an API route, return 404 instead of redirecting
-    if path == "health" or path == "run-exe-health" or path == "run-exe" or path =="stellarium-config-heathl" or path =="stellarium-config-exe":
+    if path == "health" or path == "run-ble-health" or path == "run-ble" or path =="stellarium-config-health" or path =="stellarium-config-exe":
         return jsonify({"error": "Not Found"}), 404
 
     full_path = os.path.join(app.static_folder, path)
@@ -205,11 +206,29 @@ if __name__ == '__main__':
     # Path to your certificate and key files
     cert_file = 'DwarfiumCert.pem'
     key_file = 'DwarfiumKey.pem'
+    ca_file = 'CADwarfiumCert.pem'
 
-    # Check if certificates exist and run accordingly
-    if os.path.exists(cert_file) and os.path.exists(key_file):
+    # Define possible certificate paths
+    cert_files = ['DwarfiumCert.pem', 'DwarfiumServerCert.pem']
+    key_files = ['DwarfiumKey.pem', 'DwarfiumServerKey.pem']
+    ca_file = 'CADwarfiumCert.pem'
+
+    # Find the first available certificate and key
+    cert_file = next((cert for cert in cert_files if os.path.exists(cert)), None)
+    key_file = next((key for key in key_files if os.path.exists(key)), None)
+
+    if cert_file and key_file:
+        print(f"Using certificate: {cert_file} and key: {key_file}")
+
+        ssl_context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
+        ssl_context.load_cert_chain(certfile=cert_file, keyfile=key_file)
+
+        if os.path.exists(ca_file):
+            print("Using CA certificate for additional security")
+            ssl_context.load_verify_locations(cafile=ca_file)  # Load CA
+
         print("Starting Dwarfium HTTPS server on port 8000")
-        app.run(host='0.0.0.0', port=8000, ssl_context=(cert_file, key_file))
+        app.run(host='0.0.0.0', port=8000, ssl_context=ssl_context)
     else:
         print("Starting Dwarfium HTTP server on port 8000")
         app.run(host='0.0.0.0', port=8000)

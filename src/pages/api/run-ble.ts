@@ -208,12 +208,20 @@ export default async function handler(
             devices: deviceNames,
           });
         }
-        if (jsonResult?.step === "4" && jsonResult.is_connected) {
-          return res.status(200).json({
-            dwarfIp: jsonResult.ip_address,
-            dwarfId: jsonResult.device_dwarf_id,
-            details: jsonResult,
-          });
+        if (jsonResult?.step === "4") {
+          if (jsonResult.is_connected) {
+            return res.status(200).json({
+              dwarfIp: jsonResult.ip_address,
+              dwarfId: jsonResult.device_dwarf_id,
+              details: jsonResult,
+            });
+          } else {
+            return res.status(401).json({
+              dwarfIp: jsonResult.ip_address,
+              dwarfId: jsonResult.device_dwarf_id,
+              details: jsonResult,
+            });
+          }
         }
         return res.status(500).json({
           error: "Unexpected error, retrying...",
