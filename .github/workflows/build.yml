@@ -171,6 +171,34 @@ jobs:
               data:  await fs.readFileSync(artifactPath),
             });
 
+      # Add ARM-64 artifacts to the existing release
+      - name: Add ARM64 Artifacts
+        if: matrix.platform == 'ubuntu-22.04-arm'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const releaseTag = `v${process.env.VERSION}`;
+            const path = require('path');
+            const artifactPath = path.join('./artifacts', 'Dwarfium-Arm64.zip');
+      
+            // Get the release by tag
+            const { data: release } = await github.rest.repos.getReleaseByTag({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag: releaseTag
+            });
+            
+            // Upload release asset
+            const fs = require('fs');
+
+            await github.rest.repos.uploadReleaseAsset({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: release.id,
+              name: 'Dwarfium-Arm64.zip',
+              data:  await fs.readFileSync(artifactPath),
+            });
+
   update-gist:
     runs-on: ubuntu-latest
     needs: [publish-tauri]
