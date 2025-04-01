@@ -74,7 +74,7 @@ jobs:
         run: |
             npm run build
             npm run prepare:dist
-            zip -r Dwarfium.zip Dwarfium-Arm64
+            zip -r Dwarfium-Arm64.zip Dwarfium
 
       - name: Create artifact Dwarfium
         if: matrix.platform == 'ubuntu-22.04'
