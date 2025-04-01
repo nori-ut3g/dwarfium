@@ -113,13 +113,15 @@ If you just want to get the site up and running on your machine, follow these st
 
    ```cmd
    cd Dwarfium
-   ./llaunch-server&tools.bat
+   ./launch-server&tools.bat
    ```
 
    2.4. Visit the site in a browser. If you're using the script, visit [localhost:8000](http://localhost:8000/).
 
 ## Dwarfium Proxy Configuration
+
 Dwarfium used internally a proxy programm to communicate with the dwarf and other services (Meteo data, Asteroids, etc).
+
 Now we provided access to the proxy to permits more use cases.
 
 Imagine you have a friend who lives in a region with a beautiful sky and not you!
@@ -131,6 +133,7 @@ How to do that?
 Dwarfium can be installed in two components a web server and the proxy, the proxy must be installed near the Dwarf to control it.
 
 in the release page you will find: DwarfiumServer-Win.zip and Dwarfium-Win.zip , Linux version will come soon.
+
 You can install them separately in different networks
 
    1.1. Unzip the files. `DwarfiumServer` and `DwarfiumProxy` directories will be created. 
@@ -139,26 +142,127 @@ You can install them separately in different networks
 
    ```cmd
    cd Dwarfium
-   ./llaunch-server.bat
+   ./launch-server.bat
    ```
 
    1.3. There is a script inside the `DwarfiumProxy` directory that launch the Proxy and the tools for D3 video streams.
 
    ```cmd
    cd DwarfiumProxy
-   ./llaunch-tools.bat
+   ./launch-tools.bat
    ```
 
 It's better to use https for the server, so you need to use a Dwarfium Certificate. As the DwarfiumProxy is your personnal proxy, the certificate is yours only.
+
 The certificate creation is easy, a tool createSSLcert.exe is provided, run it once where your proxy is, it will create and install the certificate on your computer.
-You need to copy the two files (DwarfiumCert.pem and DwarfiumKey.pem) on the server Installation dir.
+
+You need to copy the two files (CADwarfiumCert.pem and CADwarfiumKey.pem) on the server Installation dir.
+
+Use the same tools createSSLcert.exe, this will create the certificate for the server.
 Then you can access to the web server in https.
 
-But as the web server is in a different place as the proxy, they need to communicate together.
+# How to Add `CADwarfiumCert.pem` Certificate for Server Access
+
+If you need to access a server from another machine (e.g., from a different location, or a mobile device), you must install the `CADwarfiumCert.pem` certificate on that machine to ensure a secure connection. Follow the steps below to add this certificate to the root certificate store on your system.
+
+## For Windows:
+
+1. **Open the Certificate Manager:**
+   - Press `Win + S` (Windows key + S) to open the search bar.
+   - Type `cert` and select **"Manage user certificates"** from the search results. This will open the **Certificate Manager**.
+
+2. **Import the Certificate:**
+   - In the Certificate Manager, expand the **Trusted Root Certification Authorities** folder.
+   - Right-click on the **Certificates** folder under this section and select **All Tasks > Import**.
+   - The Certificate Import Wizard will appear. Click **Next**.
+
+3. **Select the Certificate File:**
+   - Click **Browse**, navigate to the location where you saved the `CADwarfiumCert.pem` certificate file, select it, and click **Open**.
+   - Click **Next**.
+
+4. **Choose the Certificate Store:**
+   - Make sure the option **Place all certificates in the following store** is selected.
+   - Choose **Trusted Root Certification Authorities** from the list.
+   - Click **Next** and then **Finish**.
+
+5. **Confirm the Installation:**
+   - A message will appear asking if you want to install the certificate. Click **Yes** to confirm.
+   - A final message will appear confirming the successful import of the certificate. Click **OK**.
+
+## For macOS:
+
+1. **Open Keychain Access:**
+   - Open **Spotlight** (press `Cmd + Space`) and type **Keychain Access**, then press **Enter**.
+   
+2. **Import the Certificate:**
+   - In the **Keychain Access** window, click on **System** in the left sidebar.
+   - Drag the `CADwarfiumCert.pem` certificate file into the Keychain Access window, or go to **File > Import Items** and select the certificate file.
+
+3. **Trust the Certificate:**
+   - After importing, locate the certificate in the list under **System** keychain.
+   - Double-click on the certificate to open its properties.
+   - Expand the **Trust** section and select **Always Trust** from the dropdown menu.
+
+4. **Close Keychain Access:**
+   - Close the Keychain Access application. The certificate is now trusted and ready for use.
+
+## For Linux (Ubuntu):
+
+1. **Install the Certificate:**
+   - Open a terminal and run the following command to install the certificate:
+   
+     ```bash
+     sudo cp CADwarfiumCert.pem /usr/local/share/ca-certificates/
+     ```
+
+2. **Update the Certificate Store:**
+   - To update the system’s trusted certificates, run:
+   
+     ```bash
+     sudo update-ca-certificates
+     ```
+
+3. **Verify the Installation:**
+   - To check that the certificate is installed correctly, you can run:
+   
+     ```bash
+     sudo ls /etc/ssl/certs | grep CADwarfiumCert
+     ```
+
+4. **Restart Your Browser/Application:**
+   - After adding the certificate, restart any browser or application that needs access to the server to apply the changes.
+
+## For Mobile Devices (Android/iOS):
+
+1. **Transfer the Certificate:**
+   - First, send the `CADwarfiumCert.pem` certificate to your mobile device. You can do this via email, cloud storage, or direct transfer.
+   
+2. **Install the Certificate:**
+   - On **Android**, go to **Settings > Security > Install from storage** and select the certificate.
+   - On **iOS**, email the certificate to yourself and tap on it to begin the installation process. You will be prompted to add it to your trusted certificates.
+
+3. **Verify the Certificate:**
+   - After installation, the mobile device will trust the certificate for secure connections to the server.
+
+## Why Is This Necessary?
+
+The certificate is used to ensure that the server you are connecting to is legitimate and trustworthy. Without adding the certificate to your machine's trusted store, you may face security warnings or be unable to connect securely.
+
+If you have any questions or run into issues during the process, feel free to ask!
+
+
+# Configuration
+
+## Proxy and Server in a different network
+
+As the web server is in a different place as the proxy, they need to communicate together.
+
 The easiest way is to use a VPN like Tailscale: you can install Taiscale on different system (PC, Linux, Android, IPhone) and as long as an internet connection is available, they can speak together.
-You do not need to use a VPN, you can access to the server even it's on remote, but you need to forward the port 800 on the rooter where the server is : 8000 and for the proxy it is 8860 and 9443.
+
+You do not need to use a VPN, you can access to the server even it's on remote, but you need to forward the port 8000 on the rooter where the server is : 8000 and for the proxy it is 8860 and 9443.
 
 You use the internal local network Ip of the server (https://Server_IP:8000) to open Dwarfium.
+
 Go to the Setup page.
 
 ![Screenshot of updates](images/Proxy-Settings.png)
