@@ -44,44 +44,85 @@ function createDir(baseDir, dirName) {
 }
 
 createDir(DEPLOY_DIR, "extern")
+const os = require("os");
 
 // Copy tools to the deployment directory
 const platform = process.platform; // 'win32', 'linux', 'darwin'
+const arch = os.arch(); // 'x64', 'arm64', 'arm'
+
 const tools = {
-  win32: [
-    { src: "./install/windows/stellarium_auto_config.exe", dest: "stellarium_auto_config.exe" },
-    { src: "./src-tauri/bin/DwarfiumProxy-x86_64-pc-windows-msvc.exe", dest: "DwarfiumProxy.exe" },
-    { src: "./install/windows/createSSLcert.exe", dest: "createSSLcert.exe" },
-    { src: "./src-tauri/bin/mediamtx-x86_64-pc-windows-msvc.exe", dest: "mediamtx.exe" },
-    { src: "./install/config/mediamtx.yml", dest: "mediamtx.yml" },
-    { src: "./install/config/mediamtx-https.yml", dest: "mediamtx-https.yml" },
-    { src: "./install/start_dwarfium.py", dest: "start_dwarfium.py" },
-    { src: "./install/windows/extern/extern.zip", dest: "./extern" },
-    { src: "./install/extern/config.ini", dest: "./extern/config.ini" },
-    { src: "./install/extern/config.py", dest: "./extern/config.py" }
-  ],
-  linux: [
-    { src: "./install/linux/stellarium_auto_config", dest: "stellarium_auto_config" },
-    { src: "./src-tauri/bin/DwarfiumProxy-x86_64-unknown-linux-gnu", dest: "DwarfiumProxy" },
-    { src: "./install/linux/createSSLcert", dest: "createSSLcert" },
-    { src: "./src-tauri/bin/mediamtx-x86_64-unknown-linux-gnu", dest: "mediamtx" },
-    { src: "./install/config/mediamtx.yml", dest: "mediamtx.yml" },
-    { src: "./install/config/mediamtx-https.yml", dest: "mediamtx-https.yml" },
-    { src: "./install/start_dwarfium.py", dest: "start_dwarfium.py" },
-    { src: "./install/extern/config.ini", dest: "./extern/config.ini" },
-    { src: "./install/extern/config.py", dest: "./extern/config.py" }
-  ],
-  darwin: [
-    { src: "./src-tauri/bin/DwarfiumProxy-x86_64-apple-darwin", dest: "DwarfiumProxy" },
-    { src: "./src-tauri/bin/mediamtx-x86_64-apple-darwin", dest: "mediamtx" },
-    { src: "./install/macos/createSSLcert", dest: "createSSLcert" },
-    { src: "./install/config/mediamtx.yml", dest: "mediamtx.yml" },
-    { src: "./install/config/mediamtx-https.yml", dest: "mediamtx-https.yml" },
-    { src: "./install/start_dwarfium.py", dest: "start_dwarfium.py" },
-    { src: "./install/extern/config.ini", dest: "./extern/config.ini" },
-    { src: "./install/extern/config.py", dest: "./extern/config.py" }
-  ]
-}[platform] || [];
+  win32: {
+    x64 : [
+      { src: "./install/windows/stellarium_auto_config.exe", dest: "stellarium_auto_config.exe" },
+      { src: "./src-tauri/bin/DwarfiumProxy-x86_64-pc-windows-msvc.exe", dest: "DwarfiumProxy.exe" },
+      { src: "./install/windows/createSSLcert.exe", dest: "createSSLcert.exe" },
+      { src: "./src-tauri/bin/mediamtx-x86_64-pc-windows-msvc.exe", dest: "mediamtx.exe" },
+      { src: "./install/config/mediamtx.yml", dest: "mediamtx.yml" },
+      { src: "./install/config/mediamtx-https.yml", dest: "mediamtx-https.yml" },
+      { src: "./install/start_dwarfium.py", dest: "start_dwarfium.py" },
+      { src: "./install/windows/extern/extern.zip", dest: "./extern" },
+      { src: "./install/extern/config.ini", dest: "./extern/config.ini" },
+      { src: "./install/extern/config.py", dest: "./extern/config.py" }
+    ],
+  },
+  linux: {
+    x64 : [
+      { src: "./install/linux/stellarium_auto_config", dest: "stellarium_auto_config" },
+      { src: "./src-tauri/bin/DwarfiumProxy-x86_64-unknown-linux-gnu", dest: "DwarfiumProxy" },
+      { src: "./install/linux/createSSLcert", dest: "createSSLcert" },
+      { src: "./src-tauri/bin/mediamtx-x86_64-unknown-linux-gnu", dest: "mediamtx" },
+      { src: "./install/config/mediamtx.yml", dest: "mediamtx.yml" },
+      { src: "./install/config/mediamtx-https.yml", dest: "mediamtx-https.yml" },
+      { src: "./install/start_dwarfium.py", dest: "start_dwarfium.py" },
+      { src: "./install/extern/config.ini", dest: "./extern/config.ini" },
+      { src: "./install/extern/config.py", dest: "./extern/config.py" }
+    ],
+    arm64 : [
+      { src: "./install/linux/stellarium_auto_config", dest: "stellarium_auto_config" },
+      { src: "./src-tauri/bin/DwarfiumProxy-aarch64-unknown-linux-gnu", dest: "DwarfiumProxy" },
+      { src: "./install/linux/createSSLcert-arm64", dest: "createSSLcert" },
+      { src: "./src-tauri/bin/mediamtx-aarch64-unknown-linux-gnu", dest: "mediamtx" },
+      { src: "./install/config/mediamtx.yml", dest: "mediamtx.yml" },
+      { src: "./install/config/mediamtx-https.yml", dest: "mediamtx-https.yml" },
+      { src: "./install/start_dwarfium.py", dest: "start_dwarfium.py" },
+      { src: "./install/extern/config.ini", dest: "./extern/config.ini" },
+      { src: "./install/extern/config.py", dest: "./extern/config.py" }
+    ],
+    arm : [
+      { src: "./install/linux/stellarium_auto_config", dest: "stellarium_auto_config" },
+      { src: "./src-tauri/bin/DwarfiumProxy--armv7-unknown-linux-gnu", dest: "DwarfiumProxy" },
+      { src: "./install/linux/createSSLcert-armv7", dest: "createSSLcert" },
+      { src: "./src-tauri/bin/mediamtx--armv7-unknown-linux-gnu", dest: "mediamtx" },
+      { src: "./install/config/mediamtx.yml", dest: "mediamtx.yml" },
+      { src: "./install/config/mediamtx-https.yml", dest: "mediamtx-https.yml" },
+      { src: "./install/start_dwarfium.py", dest: "start_dwarfium.py" },
+      { src: "./install/extern/config.ini", dest: "./extern/config.ini" },
+      { src: "./install/extern/config.py", dest: "./extern/config.py" }
+    ],
+  },
+  darwin: {
+    x64 : [
+      { src: "./src-tauri/bin/DwarfiumProxy-x86_64-apple-darwin", dest: "DwarfiumProxy" },
+      { src: "./src-tauri/bin/mediamtx-x86_64-apple-darwin", dest: "mediamtx" },
+      { src: "./install/macos/createSSLcert", dest: "createSSLcert" },
+      { src: "./install/config/mediamtx.yml", dest: "mediamtx.yml" },
+      { src: "./install/config/mediamtx-https.yml", dest: "mediamtx-https.yml" },
+      { src: "./install/start_dwarfium.py", dest: "start_dwarfium.py" },
+      { src: "./install/extern/config.ini", dest: "./extern/config.ini" },
+      { src: "./install/extern/config.py", dest: "./extern/config.py" }
+    ],
+    arm64 : [
+      { src: "./src-tauri/bin/DwarfiumProxy-aarch64-apple-darwin", dest: "DwarfiumProxy" },
+      { src: "./src-tauri/bin/mediamtx-aarch64-apple-darwin", dest: "mediamtx" },
+      { src: "./install/macos/createSSLcert-arm64", dest: "createSSLcert" },
+      { src: "./install/config/mediamtx.yml", dest: "mediamtx.yml" },
+      { src: "./install/config/mediamtx-https.yml", dest: "mediamtx-https.yml" },
+      { src: "./install/start_dwarfium.py", dest: "start_dwarfium.py" },
+      { src: "./install/extern/config.ini", dest: "./extern/config.ini" },
+      { src: "./install/extern/config.py", dest: "./extern/config.py" }
+    ],
+  },
+}[platform]?.[arch] || [];
 
 console.log("Copying tools...");
 tools.forEach(({ src, dest }) => {

@@ -31,22 +31,22 @@ const filesToCopy = {
       : arch === "arm64"
       ? [
           {
-            source: "./install/linux/DwarfiumProxy",
+            source: "./install/linux/DwarfiumProxy-arm64",
             destination: `./src-tauri/bin/DwarfiumProxy-aarch64-unknown-linux-gnu`
           },
           {
-            source: "./install/linux/mediamtx",
+            source: "./install/linux/mediamtx-arm64",
             destination: `./src-tauri/bin/mediamtx-aarch64-unknown-linux-gnu`
           }
         ]
       : arch === "arm"
       ? [
           {
-            source: "./install/linux/DwarfiumProxy",
+            source: "./install/linux/DwarfiumProxy-armv7",
             destination: `./src-tauri/bin/DwarfiumProxy-armv7-unknown-linux-gnueabihf`
           },
           {
-            source: "./install/linux/mediamtx",
+            source: "./install/linux/mediamtx-armv7",
             destination: `./src-tauri/bin/mediamtx-armv7-unknown-linux-gnueabihf`
           }
         ]
@@ -67,11 +67,11 @@ const filesToCopy = {
       : arch === "arm64"
       ? [
           {
-            source: "./install/macos/DwarfiumProxy",
+            source: "./install/macos/DwarfiumProxy-arm64",
             destination: `./src-tauri/bin/DwarfiumProxy-aarch64-apple-darwin`
           },
           {
-            source: "./install/macos/mediamtx",
+            source: "./install/macos/mediamtx-arm64",
             destination: `./src-tauri/bin/mediamtx-aarch64-apple-darwin`
           }
         ]

@@ -5,29 +5,56 @@ const platform = os.platform(); // 'win32', 'linux', 'darwin'
 const arch = os.arch(); // 'x64', 'arm64'
 
 const targets = {
-  win32: "node16-win-x64",
-  linux: "node16-linux-x64",
-  darwin: "node16-macos-x64"
+  win32: {
+    x64: "node16-win-x64",
+  },
+  linux: {
+    x64: "node16-linux-x64",
+    arm64: "node16-linux-arm64",
+    arm: "node16-linux-armv7"
+  },
+  darwin: {
+    x64: "node16-macos-x64",
+    arm64: "node16-macos-arm64"
+  }
 };
 
 const outputPaths = {
-  win32: "./install/windows/DwarfiumProxy.exe",
-  linux: "./install/linux/DwarfiumProxy",
-  darwin: "./install/macos/DwarfiumProxy"
+  win32: {
+    x64: "./install/windows/DwarfiumProxy.exe",
+  },
+  linux: {
+    x64: "./install/linux/DwarfiumProxy",
+    arm64: "./install/linux/DwarfiumProxy-arm64",
+    arm: "./install/linux/DwarfiumProxy-armv7"
+  },
+  darwin: {
+    x64: "./install/macos/DwarfiumProxy",
+    arm64: "./install/macos/DwarfiumProxy-arm64"
+  }
 };
 
 const outputPathsCert = {
-  win32: "./install/windows/createSSLcert.exe",
-  linux: "./install/linux/createSSLcert",
-  darwin: "./install/macos/createSSLcert"
+  win32: {
+    x64: "./install/windows/createSSLcert.exe",
+  },
+  linux: {
+    x64: "./install/linux/createSSLcert",
+    arm64: "./install/linux/createSSLcert-arm64",
+    arm: "./install/linux/createSSLcert-armv7"
+  },
+  darwin: {
+    x64: "./install/macos/createSSLcert",
+    arm64: "./install/macos/createSSLcert-arm64"
+  }
 };
 
-const target = targets[platform];
-const outputPath = outputPaths[platform];
-const outputPathCert = outputPathsCert[platform];
+const target = targets[platform]?.[arch];
+const outputPath = outputPaths[platform]?.[arch];
+const outputPathCert = outputPathsCert[platform]?.[arch];
 
 if (!target || !outputPath) {
-  console.error(`Unsupported platform: ${platform}`);
+  console.error(`Unsupported platform/architecture: ${platform}-${arch}`);
   process.exit(1);
 }
 
