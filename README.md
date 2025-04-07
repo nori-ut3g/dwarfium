@@ -118,6 +118,35 @@ If you just want to get the site up and running on your machine, follow these st
 
    2.4. Visit the site in a browser. If you're using the script, visit [localhost:8000](http://localhost:8000/).
 
+### ⚠️ Only one application can control the Dwarf at a time
+
+If you see this message, 
+
+![Screenshot of updates](images/SlaveMode.PNG)
+
+it's likely because the **Dwarflab mobile app** is still connected.
+
+---
+
+#### 🛠 What to do:
+
+1. Open the **Dwarflab** mobile app.
+2. On the home page, **uncheck**:
+   > **Set Current Device as Host**
+3. Then choose one of the following:
+   - Close the mobile app completely  
+   - Turn off Wi-Fi on your phone  
+   - Restart the Dwarf device
+
+![Screenshot of updates](images/SlaveMode_App-1.jpg)
+![Screenshot of updates](images/SlaveMode_App-2.jpg)
+![Screenshot of updates](images/SlaveMode_App-3.jpg)
+
+
+---
+
+After about **one minute**, **Dwarfium** should be able to send commands to the Dwarf.
+
 ## Dwarfium Proxy Configuration
 
 Dwarfium used internally a proxy programm to communicate with the dwarf and other services (Meteo data, Asteroids, etc).
