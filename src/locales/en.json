@@ -407,11 +407,11 @@
   "cOBSSocketClose": "OBS Websocket is closed.",
   "cOBSSocketNotConnect": "OBS Websocket is not connected.",
   "cOBSErrorStream": "Error when starting or stopping the stream. Check the console.",
-  "cGoToListpersonal": "My Personal Libary",
+  "cGoToListpersonal": "My Personal Library",
   "cObjectsAddPersonal": "Add the object to My Personal Library",
-  "cObjectsInfoPersonal": "The Object is in your Personal Library", 
+  "cObjectsInfoPersonal": "The Object is in your Personal Library",
   "cObjectsRemovePersonal": "Want to remove the Object from your Personal Library?",
-  "cRemoveFromPersonalListTitle" : "Remove Object from My Personal Library",
-  "cRemoveFromPersonalListConfirm" :"Are you sure you want to remove this object",
+  "cRemoveFromPersonalListTitle": "Remove Object from My Personal Library",
+  "cRemoveFromPersonalListConfirm": "Are you sure you want to remove this object",
   "cRemoveFromPersonalListButton": "Remove Object"
 }

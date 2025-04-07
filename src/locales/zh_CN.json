@@ -406,7 +406,7 @@
   "cOBSNotFound": "obs网站找不到。\n开始观察并检查Web插座设置。",
   "cOBSSocketClose": "OBS Websocket已关闭。",
   "cOBSSocketNotConnect": "obs websocket未连接。",
-  "cGoToListpersonal": "我的个人性欲",
+  "cGoToListpersonal": "我的个人图书馆",
   "cObjectsAddPersonal": "将对象添加到我的个人库中",
   "cObjectsInfoPersonal": "该对象在您的个人库中",
   "cObjectsRemovePersonal": "想从您的个人库中删除对象吗？",

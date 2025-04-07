@@ -406,7 +406,7 @@
   "cOBSNotFound": "Site Web OBS n'est pas trouvé. \nDémarrez OBS et vérifiez les paramètres de socket Web.",
   "cOBSSocketClose": "Obsocket est fermé.",
   "cOBSSocketNotConnect": "Obsocket n'est pas connecté.",
-  "cGoToListpersonal": "Mon Libary personnel",
+  "cGoToListpersonal": "Ma bibliothèque personnelle",
   "cObjectsAddPersonal": "Ajouter l'objet à ma bibliothèque personnelle",
   "cObjectsInfoPersonal": "L'objet est dans votre bibliothèque personnelle",
   "cObjectsRemovePersonal": "Vous voulez supprimer l'objet de votre bibliothèque personnelle?",

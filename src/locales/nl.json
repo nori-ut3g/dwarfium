@@ -406,7 +406,7 @@
   "cOBSSocketClose": "OBS WebSocket is gesloten.",
   "cOBSSocketNotConnect": "OBS WebSocket is niet verbonden.",
   "cOBSErrorStream": "Fout bij starten of stoppen van de stream. Controleer de console.",
-  "cGoToListpersonal": "Mijn persoonlijke libary",
+  "cGoToListpersonal": "Mijn persoonlijke bibliotheek",
   "cObjectsAddPersonal": "Voeg het object toe aan mijn persoonlijke bibliotheek",
   "cObjectsInfoPersonal": "Het object bevindt zich in uw persoonlijke bibliotheek",
   "cObjectsRemovePersonal": "Wilt u het object uit uw persoonlijke bibliotheek verwijderen?",
