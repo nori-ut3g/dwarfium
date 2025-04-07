@@ -138,10 +138,11 @@ it's likely because the **Dwarflab mobile app** is still connected.
    - Turn off Wi-Fi on your phone  
    - Restart the Dwarf device
 
-![Screenshot of updates](images/SlaveMode_App-1.jpg)
-![Screenshot of updates](images/SlaveMode_App-2.jpg)
-![Screenshot of updates](images/SlaveMode_App-3.jpg)
-
+<p align="center">
+  <img src="images/SlaveMode_App-1.jpg" alt="Image 1" width="30%" />
+  <img src="images/SlaveMode_App-2.jpg" alt="Image 2" width="30%" />
+  <img src="images/SlaveMode_App-3.jpg" alt="Image 3" width="30%" />
+</p>
 
 ---
 
