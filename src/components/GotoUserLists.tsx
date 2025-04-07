@@ -12,12 +12,15 @@ import { AstroObject } from "@/types";
 import {
   fetchObjectListsDb,
   fetchObjectListsNamesDb,
+  fetchObjectListByNameDb,
   saveUserCurrentObjectListNameDb,
 } from "@/db/db_utils";
 
 type PropType = {
   objectFavoriteNames: string[];
   setObjectFavoriteNames: Dispatch<SetStateAction<string[]>>;
+  objectPersonalList: AstroObject[];
+  setObjectPersonalList: Dispatch<SetStateAction<AstroObject[]>>;
   setModule: Dispatch<SetStateAction<string | undefined>>;
   setErrors: Dispatch<SetStateAction<string | undefined>>;
   setSuccess: Dispatch<SetStateAction<string | undefined>>;
@@ -25,6 +28,7 @@ type PropType = {
 
 export default function GotoUserLists(props: PropType) {
   const { objectFavoriteNames, setObjectFavoriteNames } = props;
+  const { objectPersonalList, setObjectPersonalList } = props;
   const { setModule, setErrors, setSuccess } = props;
 
   let connectionCtx = useContext(ConnectionContext);
@@ -35,21 +39,45 @@ export default function GotoUserLists(props: PropType) {
   }>({});
   const [showImportModal, setShowImportModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectPersonalList, setSelectPersonalList] = useState(
+    connectionCtx.currentUserObjectListName === "personal"
+  );
 
   useEffect(() => {
-    // get objects lists from local storage on page load
+    try {
+      // get objects lists from local storage on page load
+      console.log("Load personalObjecList on load");
+      let personalObjecList = fetchObjectListByNameDb("personal");
+      if (personalObjecList) {
+        setObjectPersonalList(personalObjecList);
+        console.log(
+          "Loaded  personalObjecList on load: ",
+          personalObjecList.length
+        );
+      } else {
+        console.log("No personalObjecList found in DB");
+      }
+    } catch (error) {
+      console.error("Error personalObjecList on load", error);
+    }
+  }, []);
+
+  useEffect(() => {
+    // get objects lists from local storage personal list change
     let names = fetchObjectListsNamesDb();
     if (names) {
       setObjectListsNames(names);
     }
     let lists = fetchObjectListsDb();
+    console.log("List Objects", lists);
     if (lists) {
       setObjectLists(lists);
     }
-  }, []);
+  }, [objectPersonalList]);
 
   function selectListHandler(e: ChangeEvent<HTMLSelectElement>) {
     let listName = e.target.value;
+    setSelectPersonalList(listName == "personal");
     connectionCtx.setUserCurrentObjectListName(listName);
     saveUserCurrentObjectListNameDb(listName);
   }
@@ -96,10 +124,15 @@ export default function GotoUserLists(props: PropType) {
           <div className="col-md-4">
             <select
               className="form-select mb-2"
-              value={connectionCtx.currentUserObjectListName || "default"}
+              value={
+                connectionCtx.currentUserObjectListName ||
+                "default" ||
+                "personal"
+              }
               onChange={selectListHandler}
             >
               <option value="default">{t("cGoToListdefault")}</option>
+              <option value="personal">{t("cGoToListpersonal")}</option>
               {objectListsNames.map((list, index) => (
                 <option key={index} value={list}>
                   {list}
@@ -115,12 +148,14 @@ export default function GotoUserLists(props: PropType) {
             >
               {t("cGoToUserListNewList")}
             </button>
-            <button
-              className="btn btn-more03 me-2 mb-2"
-              onClick={deleteListModalHandle}
-            >
-              {t("cGoToUserListDeleteList")}
-            </button>
+            {!selectPersonalList && (
+              <button
+                className="btn btn-more03 me-2 mb-2"
+                onClick={deleteListModalHandle}
+              >
+                {t("cGoToUserListDeleteList")}
+              </button>
+            )}
           </div>
         </div>
 
@@ -130,6 +165,9 @@ export default function GotoUserLists(props: PropType) {
               objects={objectLists[connectionCtx.currentUserObjectListName]}
               objectFavoriteNames={objectFavoriteNames}
               setObjectFavoriteNames={setObjectFavoriteNames}
+              objectPersonalList={objectPersonalList}
+              setObjectPersonalList={setObjectPersonalList}
+              isInObjectPersonalList={selectPersonalList}
               setModule={setModule}
               setErrors={setErrors}
               setSuccess={setSuccess}

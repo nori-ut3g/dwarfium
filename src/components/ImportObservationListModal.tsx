@@ -101,6 +101,7 @@ export default function ImportObjectListModal(props: PropTypes) {
           } as ObjectTelescopius;
         })
       );
+      console.log("saveObjectListsDb", JSON.stringify(cloneObjectLists));
       saveObjectListsDb(JSON.stringify(cloneObjectLists));
       setObjectLists(cloneObjectLists);
 

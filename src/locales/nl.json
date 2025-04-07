@@ -378,7 +378,7 @@
   "pMediaMtxRunning": "MediaMTX Video streaming voor D3 is actief",
   "pProxyIP": "Proxy ip",
   "pProxyLocalIP": "Proxy lokaal IP",
-  "pProxyNotRunning": "Proxy loopt niet op",
+  "pProxyNotRunning": "Geen proxy gedetecteerd of loopt op",
   "pProxyRunning": "Proxy loopt op",
   "pProxyRunningLocally": "Proxy draait lokaal (knooppunt JS)",
   "pProxyRunningOnServer": "Proxy draait op dezelfde machine als server op",
@@ -404,8 +404,14 @@
   "cActiveActionView": "Actie",
   "cOBSNotFound": "OBS WebSocket niet gevonden. Start OBS en controleer WebSocket-instellingen.",
   "cOBSSocketClose": "OBS WebSocket is gesloten.",
-  "cOBSSocketNotConnect":"OBS WebSocket is niet verbonden.",
-  "cOBSErrorStream": "Fout bij starten of stoppen van de stream. Controleer de console."
-  
-  
+  "cOBSSocketNotConnect": "OBS WebSocket is niet verbonden.",
+  "cOBSErrorStream": "Fout bij starten of stoppen van de stream. Controleer de console.",
+  "cGoToListpersonal": "Mijn persoonlijke libary",
+  "cObjectsAddPersonal": "Voeg het object toe aan mijn persoonlijke bibliotheek",
+  "cObjectsInfoPersonal": "Het object bevindt zich in uw persoonlijke bibliotheek",
+  "cObjectsRemovePersonal": "Wilt u het object uit uw persoonlijke bibliotheek verwijderen?",
+  "cRemoveFromPersonalListButton": "Verwijder object",
+  "cRemoveFromPersonalListConfirm": "Weet je zeker dat je dit object wilt verwijderen",
+  "cRemoveFromPersonalListTitle": "Verwijder het object uit mijn persoonlijke bibliotheek",
+  "pMediaMtxNeedOpenPort8888": "Maar u moet poort 8888 open hebben op de proxy LAN -router."
 }

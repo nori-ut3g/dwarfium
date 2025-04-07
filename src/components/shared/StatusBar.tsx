@@ -30,6 +30,7 @@ export default function StatusBar() {
       i18n.changeLanguage(storedLanguage);
     }
   }, []);
+
   useSetupConnection();
   let connectionCtx = useContext(ConnectionContext);
 
@@ -99,6 +100,15 @@ export default function StatusBar() {
       connectionCtx.astroSettings.wideExposure,
       connectionCtx.typeIdDwarf
     );
+
+  useEffect(() => {
+    console.log("SatusBar: update connectionCtx connexion Proxy Info");
+  }, [
+    connectionCtx.proxyIP,
+    connectionCtx.proxyLocalIP,
+    connectionCtx.useHttps,
+    connectionCtx.proxyInLan,
+  ]);
 
   return (
     <div>

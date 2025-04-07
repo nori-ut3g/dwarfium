@@ -50,9 +50,10 @@ export default function DeleteObjectListModal(props: PropTypes) {
     const cloneObjectLists = structuredClone(objectLists);
     delete cloneObjectLists[connectionCtx.currentUserObjectListName as string];
     setObjectLists(cloneObjectLists);
+    console.log("saveObjectListsDb", JSON.stringify(cloneObjectLists));
     saveObjectListsDb(JSON.stringify(cloneObjectLists));
-    connectionCtx.setUserCurrentObjectListName(undefined);
-    saveUserCurrentObjectListNameDb("default");
+    connectionCtx.setUserCurrentObjectListName("personal");
+    saveUserCurrentObjectListNameDb("personal");
 
     // close modal
     setShowModal(false);

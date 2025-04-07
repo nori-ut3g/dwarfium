@@ -61,11 +61,12 @@
   "pProxyRunningLocally": "Proxy is running locally (node JS)",
   "pProxyRunningOnServer": "Proxy is running on the same machine as Server at ",
   "pProxyRunning": "Proxy is running at ",
-  "pProxyNotRunning": "Proxy is not running at ",
+  "pProxyNotRunning": "No proxy detected or running at ",
   "pProxyLocalEnterManually": "Enter Manually",
   "pProxyLocalCustomIP": "Enter custom IP",
   "pMediaMtxRunning": "MediaMtx Video Streaming for D3 is running",
   "pMediaMtxNotRunning": "MediaMtx Video Streaming for D3 is not started!",
+  "pMediaMtxNeedOpenPort8888": "But you need to have port 8888 open on the proxy LAN router.",
   "pDirecBluetoothProxyAvailable": "Direct Bluetooth detection on Proxy is available",
   "pDirecBluetoothServerAvailable": "Direct Bluetooth detection on Server is available",
   "pDirecBluetoothProxyNotAvailable": "Direct Bluetooth detection on Proxy is not available!",
@@ -405,5 +406,12 @@
   "cOBSNotFound": "OBS website not found. Start OBS and check web socket settings.",
   "cOBSSocketClose": "OBS Websocket is closed.",
   "cOBSSocketNotConnect": "OBS Websocket is not connected.",
-  "cOBSErrorStream": "Error when starting or stopping the stream. Check the console."
+  "cOBSErrorStream": "Error when starting or stopping the stream. Check the console.",
+  "cGoToListpersonal": "My Personal Libary",
+  "cObjectsAddPersonal": "Add the object to My Personal Library",
+  "cObjectsInfoPersonal": "The Object is in your Personal Library", 
+  "cObjectsRemovePersonal": "Want to remove the Object from your Personal Library?",
+  "cRemoveFromPersonalListTitle" : "Remove Object from My Personal Library",
+  "cRemoveFromPersonalListConfirm" :"Are you sure you want to remove this object",
+  "cRemoveFromPersonalListButton": "Remove Object"
 }

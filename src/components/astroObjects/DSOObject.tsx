@@ -17,14 +17,20 @@ import {
   convertDMSToDecimalDegrees,
 } from "@/lib/math_utils";
 import { toIsoStringInLocalTime } from "@/lib/date_utils";
-import { saveObjectFavoriteNamesDb } from "@/db/db_utils";
-
+import {
+  saveObjectFavoriteNamesDb,
+  saveObjectListsByNameDb,
+} from "@/db/db_utils";
+import RemoveFromPersonalLibrary from "@/components/RemoveFromPersonalLibModal";
 import GotoModal from "./GotoModal";
 
 type AstronomyObjectPropType = {
   object: AstroObject;
   objectFavoriteNames: string[];
   setObjectFavoriteNames: Dispatch<SetStateAction<string[]>>;
+  objectPersonalList: AstroObject[];
+  setObjectPersonalList: Dispatch<SetStateAction<AstroObject[]>>;
+  isInObjectPersonalList: boolean;
   setModule: Dispatch<SetStateAction<string | undefined>>;
   setErrors: Dispatch<SetStateAction<string | undefined>>;
   setSuccess: Dispatch<SetStateAction<string | undefined>>;
@@ -37,6 +43,9 @@ export default function DSOObject(props: AstronomyObjectPropType) {
     object,
     objectFavoriteNames,
     setObjectFavoriteNames,
+    objectPersonalList,
+    setObjectPersonalList,
+    isInObjectPersonalList,
     setModule,
     setErrors,
     setSuccess,
@@ -45,6 +54,8 @@ export default function DSOObject(props: AstronomyObjectPropType) {
   const [showModal, setShowModal] = useState(false);
   const [gotoMessages, setGotoMessages] = useState<Message[]>([] as Message[]);
   const [forceFavoriteUpdate, setForceFavoriteUpdate] = useState(false);
+  const [isInPersonalList, setIsInPersonalList] = useState(false);
+  const [showRemoveModal, setShowRemoveModal] = useState(false);
 
   const { t } = useTranslation();
   // eslint-disable-next-line no-unused-vars
@@ -69,6 +80,10 @@ export default function DSOObject(props: AstronomyObjectPropType) {
   }, [forceFavoriteUpdate]);
 
   const [forceUpdate, setForceUpdate] = useState(false);
+
+  useEffect(() => {
+    setIsInPersonalList(isInAstroList(objectPersonalList, object.displayName));
+  }, [isInPersonalList]);
 
   // Recalculate all data
   const handleRefreshClick = () => {
@@ -97,6 +112,32 @@ export default function DSOObject(props: AstronomyObjectPropType) {
     }
     setForceFavoriteUpdate((prev) => !prev);
   };
+
+  function addAstroObject(
+    list: AstroObject[],
+    newObject: AstroObject
+  ): AstroObject[] {
+    const exists = list.some(
+      (obj) => obj.displayName === newObject.displayName
+    );
+    return exists ? list : [...list, newObject];
+  }
+
+  function isInAstroList(list: AstroObject[], name: string): boolean {
+    return list.some((obj) => obj.displayName === name);
+  }
+
+  function addObjectToPersonalList() {
+    const updatedPersonalList = addAstroObject(objectPersonalList, object);
+
+    saveObjectListsByNameDb("personal", JSON.stringify(updatedPersonalList));
+    setObjectPersonalList(updatedPersonalList);
+    setIsInPersonalList(true);
+  }
+
+  function removeObjectToPersonalList() {
+    setShowRemoveModal(true);
+  }
 
   // Memorize the calculated data using useMemo
   const riseSetTime = useMemo(() => renderRiseSetTime(), [forceUpdate]);
@@ -235,81 +276,122 @@ export default function DSOObject(props: AstronomyObjectPropType) {
   }
 
   return (
-    <div className="border-bottom p-2">
-      <h3 className="fs-5 mb-0">
-        {!object.favorite && (
-          <button className="btn-refresh" onClick={handleFavoriteClick}>
-            <i className="bi bi-heart" aria-hidden="true"></i>
-          </button>
-        )}
-        {object.favorite && (
-          <button className="btn-refresh" onClick={handleFavoriteClick}>
-            <i className="bi bi-heart-fill" aria-hidden="true"></i>
-          </button>
-        )}{" "}
-        {object.displayName}
-      </h3>
-      <div className="mb-2">{object.alternateNames}</div>
-      <div className="row">
-        <div className="col-md-3 col-lg-4 col-12">
-          {t(object.type)}{" "}
-          {object.constellation && t("cObjectsIn") + t(object.constellation)}
-          <br />
-          {t("cObjectsSize")}: {object.size}
-          <br />
-          {t("cObjectsMagnitude")}: {object.magnitude}
-        </div>
-        <div className="col-md-6 col-lg-4 col-xl-5 col-12">
-          {riseSetTime}
-          <br></br>
-          {altAz}{" "}
-          <button className="btn-refresh" onClick={handleRefreshClick}>
-            <i className="fa fa-refresh" aria-hidden="true"></i>
-          </button>
-          <br></br>
-          {raDec}
-        </div>
-        <div className="col-md-12 col-lg-3 col-xl-3 col-12">
-          <button
-            className={`btn ${
-              connectionCtx.connectionStatusStellarium
-                ? "btn-more02"
-                : "btn-secondary"
-            } me-2 mb-2`}
-            onClick={() => centerHandler(object, connectionCtx, setErrors)}
-            disabled={!connectionCtx.connectionStatusStellarium}
-          >
-            {t("cObjectsCenter")}
-          </button>
-          <button
-            className={`btn ${
-              connectionCtx.connectionStatus ? "btn-more02" : "btn-secondary"
-            } me-4 mb-2`}
-            onClick={gotoFn}
-            disabled={!connectionCtx.connectionStatus}
-          >
-            {t("cObjectsGoto")}
-          </button>
-          <button
-            className={`btn btn-more02 me-2 mb-2`}
-            onClick={saveData}
-            disabled={
-              !connectionCtx.saveAstroData ||
-              object.displayName == connectionCtx.saveAstroData.displayName
-            }
-          >
-            {t("cObjectsCopyData")}
-          </button>
-          <br />
-          <GotoModal
-            object={object}
-            showModal={showModal}
-            setShowModal={setShowModal}
-            messages={gotoMessages}
-            setMessages={setGotoMessages}
+    <>
+      {(!isInObjectPersonalList || isInPersonalList) && (
+        <div className="border-bottom p-2">
+          <h3 className="fs-5 mb-0">
+            {!object.favorite && (
+              <button className="btn-refresh" onClick={handleFavoriteClick}>
+                <i className="bi bi-heart" aria-hidden="true"></i>
+              </button>
+            )}
+            {object.favorite && (
+              <button className="btn-refresh" onClick={handleFavoriteClick}>
+                <i className="bi bi-heart-fill" aria-hidden="true"></i>
+              </button>
+            )}{" "}
+            {object.displayName}
+          </h3>
+          <div className="mb-2">{object.alternateNames}</div>
+          <div className="row">
+            <div className="col-md-3 col-lg-4 col-12">
+              {t(object.type)}{" "}
+              {object.constellation &&
+                t("cObjectsIn") + t(object.constellation)}
+              <br />
+              {t("cObjectsSize")}: {object.size}
+              <br />
+              {t("cObjectsMagnitude")}: {object.magnitude}
+            </div>
+            <div className="col-md-6 col-lg-4 col-xl-5 col-12">
+              {riseSetTime}
+              <br></br>
+              {altAz}{" "}
+              <button className="btn-refresh" onClick={handleRefreshClick}>
+                <i className="fa fa-refresh" aria-hidden="true"></i>
+              </button>
+              <br></br>
+              {raDec}
+            </div>
+            <div className="col-md-12 col-lg-3 col-xl-3 col-12">
+              <button
+                className={`btn ${
+                  connectionCtx.connectionStatusStellarium
+                    ? "btn-more02"
+                    : "btn-secondary"
+                } me-2 mb-2`}
+                onClick={() => centerHandler(object, connectionCtx, setErrors)}
+                disabled={!connectionCtx.connectionStatusStellarium}
+              >
+                {t("cObjectsCenter")}
+              </button>
+              <button
+                className={`btn ${
+                  connectionCtx.connectionStatus
+                    ? "btn-more02"
+                    : "btn-secondary"
+                } me-4 mb-2`}
+                onClick={gotoFn}
+                disabled={!connectionCtx.connectionStatus}
+              >
+                {t("cObjectsGoto")}
+              </button>
+              <button
+                className={`btn btn-more02 me-2 mb-2`}
+                onClick={saveData}
+                disabled={
+                  !connectionCtx.saveAstroData ||
+                  object.displayName == connectionCtx.saveAstroData.displayName
+                }
+              >
+                {t("cObjectsCopyData")}
+              </button>
+              {!isInPersonalList && (
+                <button
+                  className={`btn btn-more02 me-2 mb-2`}
+                  title={t("cObjectsAddPersonal")}
+                  onClick={addObjectToPersonalList}
+                >
+                  <i className="bi bi-bookmark-plus fs-3"></i>
+                </button>
+              )}
+              {isInPersonalList && (
+                <button
+                  className={`btn btn-more02 me-2 mb-2`}
+                  title={
+                    isInObjectPersonalList
+                      ? t("cObjectsRemovePersonal")
+                      : t("cObjectsInfoPersonal")
+                  }
+                  onClick={
+                    isInObjectPersonalList
+                      ? removeObjectToPersonalList
+                      : () => {}
+                  }
+                >
+                  <i className="bi bi-star-fill fs-3"></i>
+                </button>
+              )}
+              <br />
+              <GotoModal
+                object={object}
+                showModal={showModal}
+                setShowModal={setShowModal}
+                messages={gotoMessages}
+                setMessages={setGotoMessages}
+              />
+            </div>
+          </div>
+          <RemoveFromPersonalLibrary
+            showModal={showRemoveModal}
+            setShowModal={setShowRemoveModal}
+            objectName={object.displayName}
+            objectPersonalList={objectPersonalList}
+            setObjectPersonalList={setObjectPersonalList}
+            setIsInPersonalList={setIsInPersonalList}
           />
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 }

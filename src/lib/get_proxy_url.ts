@@ -146,11 +146,14 @@ export function getMediaMTXUrl(connectionCtx: ConnectionContextType): string {
     // If already defined, use it
     if (connectionCtx?.proxyLocalIP) {
       hostname = connectionCtx.proxyLocalIP;
-      console.log("proxyLocalIP:", hostname);
+      console.debug("proxyLocalIP:", hostname);
+    } else if (connectionCtx?.proxyIP) {
+      hostname = connectionCtx.proxyIP;
+      console.debug("proxyIP:", hostname);
     } else {
       hostname = window.location.hostname;
     }
-    console.log("Final getMediaMTXUrl:", hostname);
+    console.debug("Final getMediaMTXUrl:", hostname);
 
     return hostname || process.env.NEXT_PUBLIC_IP_MEDIAMTX || "localhost";
   }
@@ -234,8 +237,8 @@ export async function checkMediaMtxStreamUrls(
 export function compareURLsIgnoringPort(url1, url2) {
   try {
     if (url1.includes("api") || url2.includes("api")) return false;
-    console.log("url1 URL:", url1);
-    console.log("url2 URL:", url2);
+    console.debug("compare url1 URL:", url1);
+    console.debug("compare url2 URL:", url2);
     const hostname1 = new URL(url1).hostname;
     const hostname2 = new URL(url2).hostname;
     return hostname1 === hostname2;
@@ -247,7 +250,7 @@ export function compareURLsIgnoringPort(url1, url2) {
 
 export const isLocalIp = (url) => {
   const islocalIp = /(localhost|127\.0\.0\.1|192\.168\.|10\.|172\.16\.|100\.)/;
-  console.log(`isLocalIp $(url): `, islocalIp.test(url));
+  console.debug(`isLocalIp $(url): `, islocalIp.test(url));
 
   return islocalIp.test(url);
 };
@@ -259,7 +262,7 @@ export function getTransfomProxyImageUrl(
   forceHttps: boolean = false
 ) {
   if (connectionCtx && !connectionCtx.useHttps && connectionCtx.proxyInLan) {
-    console.log("getTransfomProxyImageUrl - Local Lan.");
+    console.debug("getTransfomProxyImageUrl - Local Lan.");
     return imageUrl;
   } else if (
     connectionCtx &&
@@ -267,13 +270,40 @@ export function getTransfomProxyImageUrl(
     forceHttps &&
     connectionCtx.proxyInLan
   ) {
-    console.log("getTransfomProxyImageUrl - Local Lan Force Https.");
+    console.debug("getTransfomProxyImageUrl - Local Lan Force Https.");
     return imageUrl.replace("http:", "https:");
   } else {
     if (!proxyUrl) proxyUrl = getProxyUrl(connectionCtx);
     if (connectionCtx && connectionCtx.useHttps && forceHttps) {
       imageUrl = imageUrl.replace("http:", "https:");
     }
-    return `${proxyUrl}?target=${encodeURIComponent(imageUrl)}`;
+    if (!proxyUrl && !connectionCtx.proxyIP) return imageUrl;
+
+    // this is not working for D3: use MediaMtx proxy with port 8888
+    // May not succeed port 8888 must be open on Proxy or Server
+    if (imageUrl.includes("8888")) {
+      try {
+        if (proxyUrl && proxyUrl.includes("api")) {
+          console.debug("getTransfomProxyImageUrl - NEXT JS - Local Lan.");
+          return imageUrl;
+        } else {
+          // Use URL object to modify the host
+          const url = new URL(imageUrl);
+          const url_proxy = new URL(proxyUrl!);
+          url.hostname = url_proxy.hostname;
+
+          const newImageUrl = url.toString();
+          console.debug("getTransfomProxyImageUrl - newImageUrl:", newImageUrl);
+          return newImageUrl;
+        }
+      } catch (error) {
+        console.error("Invalid URL:", getTransfomProxyImageUrl);
+        return imageUrl;
+      }
+    } else {
+      const newImageUrl = `${proxyUrl}?target=${encodeURIComponent(imageUrl)}`;
+      console.debug("getTransfomProxyImageUrl - proxy:", newImageUrl);
+      return newImageUrl;
+    }
   }
 }

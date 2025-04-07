@@ -39,6 +39,8 @@ type Message = {
 type PropType = {
   objectFavoriteNames: string[];
   setObjectFavoriteNames: Dispatch<SetStateAction<string[]>>;
+  objectPersonalList: AstroObject[];
+  setObjectPersonalList: Dispatch<SetStateAction<AstroObject[]>>;
   setModule: Dispatch<SetStateAction<string | undefined>>;
   setErrors: Dispatch<SetStateAction<string | undefined>>;
   setSuccess: Dispatch<SetStateAction<string | undefined>>;
@@ -46,6 +48,7 @@ type PropType = {
 
 export default function ManualGoto(props: PropType) {
   const { objectFavoriteNames, setObjectFavoriteNames } = props;
+  const { objectPersonalList, setObjectPersonalList } = props;
   const { setModule, setErrors, setSuccess } = props;
   let connectionCtx = useContext(ConnectionContext);
   const [RA, setRA] = useState<string | undefined>();
@@ -328,6 +331,9 @@ export default function ManualGoto(props: PropType) {
           object={objectNGC}
           objectFavoriteNames={objectFavoriteNames}
           setObjectFavoriteNames={setObjectFavoriteNames}
+          objectPersonalList={objectPersonalList}
+          setObjectPersonalList={setObjectPersonalList}
+          isInObjectPersonalList={false}
           setModule={setModule}
           setErrors={setErrors}
           setSuccess={setSuccess}

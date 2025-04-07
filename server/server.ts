@@ -272,7 +272,7 @@ httpServer.on("upgrade", (req, socket, head) => {
     try {
       wss.emit("connection", ws, req);
     } catch (error: any) {
-      console.error("Proxy error:", error);
+      console.error("Proxy Upgrade http error:", error);
       const err = error as Error; // Cast error to Error
       console.error(
         "Client WebSocket details:",
@@ -294,7 +294,7 @@ if (httpsServer) {
       try {
         wss.emit("connection", ws, req);
       } catch (error: any) {
-        console.error("Proxy error:", error);
+        console.error("Proxy Upgrade https error:", error);
         const err = error as Error; // Cast error to Error
         console.error(
           "Client WebSocket details:",
@@ -578,6 +578,11 @@ app.get("/getLocalIP", async (req, res) => {
   res.status(200).json({ ips: getLocalIPAddress() });
 });
 
+app.use((req, res, next) => {
+  console.debug(`📥 Incoming Request: ${req.method} ${req.originalUrl}`);
+  next();
+});
+
 // Proxy route
 app.all("*", async (req, res) => {
   const controller = new AbortController();
@@ -592,6 +597,7 @@ app.all("*", async (req, res) => {
     console.log("Proxy is running");
     const { target } = req.query;
     console.log("target: ", target);
+    console.log("originalUrl: ", req.originalUrl);
     if (!target) {
       // Log the full query object to see all parameters
       console.log("Request error:", req.originalUrl);
@@ -601,6 +607,11 @@ app.all("*", async (req, res) => {
     // Extract the last target from the query string if it's recursive
     const lastTarget = new URL(target).searchParams.get("target") || target;
     console.log("target: ", lastTarget);
+    const urlLastTarget = new URL(target);
+    console.log("target port: ", urlLastTarget.port);
+
+    // Assign the correct agent based on `lastTarget`
+    const agent = getAgentForUrl(lastTarget);
 
     // Prepare headers, removing problematic ones
     const filteredHeaders = Object.fromEntries(
@@ -637,9 +648,6 @@ app.all("*", async (req, res) => {
       body?: string;
       signal?: AbortSignal; // Ensure signal is part of the type
     }
-
-    // Assign the correct agent based on `lastTarget`
-    const agent = getAgentForUrl(lastTarget);
 
     const fetchOptions: FetchOptions = {
       signal: req.signal ?? controller.signal,

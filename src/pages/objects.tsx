@@ -14,6 +14,7 @@ import { useSetupConnection } from "@/hooks/useSetupConnection";
 import { useLoadIntialValues } from "@/hooks/useLoadIntialValues";
 import { ConnectionContext } from "@/stores/ConnectionContext";
 import { fetchObjectFavoriteNamesDb } from "@/db/db_utils";
+import { AstroObject } from "@/types";
 
 import ResizablePIP from "@/components/ResizablePIP";
 import DwarfCameras from "@/components/DwarfCameras";
@@ -27,6 +28,9 @@ export default function Goto() {
   // eslint-disable-next-line no-unused-vars
   const [selectedLanguage, setSelectedLanguage] = useState<string>("en");
   const [objectFavoriteNames, setObjectFavoriteNames] = useState<string[]>([]);
+  const [objectPersonalList, setObjectPersonalList] = useState<AstroObject[]>(
+    []
+  );
   const [errors, setErrors] = useState<string | undefined>();
   const [success, setSuccess] = useState<string | undefined>();
   const [module, setModule] = useState<string | undefined>();
@@ -150,6 +154,8 @@ export default function Goto() {
           <GotoLists
             objectFavoriteNames={objectFavoriteNames}
             setObjectFavoriteNames={setObjectFavoriteNames}
+            objectPersonalList={objectPersonalList}
+            setObjectPersonalList={setObjectPersonalList}
             setModule={setModule}
             setErrors={setErrors}
             setSuccess={setSuccess}
@@ -159,6 +165,8 @@ export default function Goto() {
           <GotoStellarium
             objectFavoriteNames={objectFavoriteNames}
             setObjectFavoriteNames={setObjectFavoriteNames}
+            objectPersonalList={objectPersonalList}
+            setObjectPersonalList={setObjectPersonalList}
             setModule={setModule}
             setErrors={setErrors}
             setSuccess={setSuccess}
@@ -168,6 +176,8 @@ export default function Goto() {
           <GotoUserLists
             objectFavoriteNames={objectFavoriteNames}
             setObjectFavoriteNames={setObjectFavoriteNames}
+            objectPersonalList={objectPersonalList}
+            setObjectPersonalList={setObjectPersonalList}
             setModule={setModule}
             setErrors={setErrors}
             setSuccess={setSuccess}

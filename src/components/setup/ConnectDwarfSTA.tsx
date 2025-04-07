@@ -63,6 +63,7 @@ export default function ConnectDwarfSTA() {
   const [stateBluetoothServer, setStateBluetoothServer] = useState(false);
   const [stateMediaMtx, setStateMediaMtx] = useState(false);
   const [isProxyOnServer, setIsProxyOnServer] = useState(false);
+  const [stateProxyInLan, setStateProxyInLan] = useState(false);
   const [debouncedValue, setDebouncedValue] = useState(""); // Debounced value
   const [devices, setDevices] = useState<string[]>([]);
   const [selectedDevice, setSelectedDevice] = useState<string>("");
@@ -550,6 +551,7 @@ export default function ConnectDwarfSTA() {
             const serverIp = getServerIp();
             if (serverIp) {
               connectionCtx.setProxyInLan(isLocalIp(serverIp));
+              setStateProxyInLan(isLocalIp(serverIp));
               console.log("ProxyInLan:", isLocalIp(serverIp));
             }
             await getProxyLocalIP(proxyUrl, signal);
@@ -586,9 +588,10 @@ export default function ConnectDwarfSTA() {
               (!connectionCtx?.proxyLocalIP ||
                 connectionCtx?.proxyIP == connectionCtx?.proxyLocalIP) &&
               isLocalIp(connectionCtx?.proxyIP)
-            )
+            ) {
               connectionCtx.setProxyInLan(true);
-            else if (connectionCtx?.proxyIP && connectionCtx?.proxyLocalIP) {
+              setStateProxyInLan(true);
+            } else if (connectionCtx?.proxyIP && connectionCtx?.proxyLocalIP) {
               const proxyLocalUrl = proxyUrl?.replace(
                 connectionCtx.proxyIP,
                 connectionCtx.proxyLocalIP
@@ -601,6 +604,7 @@ export default function ConnectDwarfSTA() {
               );
               console.log("statusLocalProxy:", statusLocalProxy);
               connectionCtx.setProxyInLan(statusLocalProxy);
+              setStateProxyInLan(statusLocalProxy);
             }
             await getProxyLocalIP(proxyUrl, signal);
           }
@@ -640,6 +644,7 @@ export default function ConnectDwarfSTA() {
     if (isTauri) {
       setOnTauri(true);
       connectionCtx?.setProxyInLan(true);
+      setStateProxyInLan(true);
     } else {
       checkProxyStatus(signal);
     }
@@ -669,9 +674,10 @@ export default function ConnectDwarfSTA() {
             (!connectionCtx?.proxyLocalIP ||
               connectionCtx?.proxyIP == connectionCtx?.proxyLocalIP) &&
             isLocalIp(connectionCtx?.proxyIP)
-          )
+          ) {
             connectionCtx.setProxyInLan(true);
-          else if (connectionCtx?.proxyIP && connectionCtx?.proxyLocalIP) {
+            setStateProxyInLan(true);
+          } else if (connectionCtx?.proxyIP && connectionCtx?.proxyLocalIP) {
             const proxyLocalUrl = proxyUrl?.replace(
               connectionCtx.proxyIP,
               connectionCtx.proxyLocalIP
@@ -684,6 +690,7 @@ export default function ConnectDwarfSTA() {
             );
             console.log("statusLocalProxy:", statusLocalProxy);
             connectionCtx.setProxyInLan(statusLocalProxy);
+            setStateProxyInLan(statusLocalProxy);
           }
         }
       } catch (error: unknown) {
@@ -702,6 +709,7 @@ export default function ConnectDwarfSTA() {
     if (isTauri) {
       setOnTauri(true);
       connectionCtx?.setProxyInLan(true);
+      setStateProxyInLan(true);
     } else {
       checkLocalProxyStatus(signal);
     }
@@ -1067,6 +1075,16 @@ export default function ConnectDwarfSTA() {
                     style={{ color: "green" }}
                   ></i>
                   <span> {t("pMediaMtxRunning")}</span>
+                  {!stateProxyInLan && (
+                    <>
+                      <br />
+                      <i
+                        className="bi bi bi-exclamation-circle"
+                        style={{ color: "orange" }}
+                      ></i>
+                      <span> {t("pMediaMtxNeedOpenPort8888")}</span>
+                    </>
+                  )}
                 </div>
               </div>
             )}

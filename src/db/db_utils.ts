@@ -253,7 +253,43 @@ export function saveObjectListsDb(names: string) {
 export function fetchObjectListsDb() {
   let data = localStorage.getItem("objectLists");
   if (data) {
+    console.log("objectLists", JSON.parse(data));
     return JSON.parse(data);
+  }
+}
+
+export function saveObjectListsByNameDb(name: string, data: string) {
+  const list = JSON.parse(data); // parse the JSON string
+
+  const current = localStorage.getItem("objectLists");
+  let parsed = {};
+
+  if (current) {
+    try {
+      parsed = JSON.parse(current);
+    } catch (e) {
+      console.error("Error parsing existing objectLists:", e);
+    }
+  }
+
+  parsed[name] = list;
+
+  localStorage.setItem("objectLists", JSON.stringify(parsed));
+}
+
+export function fetchObjectListByNameDb(name: string) {
+  const stored = localStorage.getItem("objectLists");
+  if (!stored) return [];
+
+  try {
+    const allLists = JSON.parse(stored);
+    console.log("alllist-name", name);
+    console.log("alllist-name", allLists);
+    console.log("alllist-name", allLists[name]);
+    return allLists[name] || [];
+  } catch (e) {
+    console.error("Error parsing objectLists:", e);
+    return [];
   }
 }
 
@@ -264,6 +300,7 @@ export function saveCurrentObjectListNameDb(name: string) {
 export function fetchCurrentObjectListNameDb() {
   let data = localStorage.getItem("currentObjectListName");
   if (data) {
+    console.log("currentObjectListName", data);
     return data;
   }
 }

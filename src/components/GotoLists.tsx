@@ -4,19 +4,24 @@ import type { Dispatch, SetStateAction } from "react";
 import { useTranslation } from "react-i18next";
 import i18n from "@/i18n";
 
+import { AstroObject } from "@/types";
 import DSOList from "@/components/astroObjects/DSOList";
 import PlanetsList from "@/components/astroObjects/PlanetsList";
 import dsoCatalog from "../../data/catalogs/dso_catalog.json";
 import { processObjectListOpenNGC } from "@/lib/observation_lists_utils";
 import { ConnectionContext } from "@/stores/ConnectionContext";
-import { saveCurrentObjectListNameDb } from "@/db/db_utils";
+import {
+  saveCurrentObjectListNameDb,
+  fetchObjectListByNameDb,
+} from "@/db/db_utils";
 
 let dsoObject = processObjectListOpenNGC(dsoCatalog);
-console.info("DSO processObjectListOpenNGC");
 
 type PropType = {
   objectFavoriteNames: string[];
   setObjectFavoriteNames: Dispatch<SetStateAction<string[]>>;
+  objectPersonalList: AstroObject[];
+  setObjectPersonalList: Dispatch<SetStateAction<AstroObject[]>>;
   setModule: Dispatch<SetStateAction<string | undefined>>;
   setErrors: Dispatch<SetStateAction<string | undefined>>;
   setSuccess: Dispatch<SetStateAction<string | undefined>>;
@@ -24,10 +29,14 @@ type PropType = {
 
 export default function AutoGoto(props: PropType) {
   const { objectFavoriteNames, setObjectFavoriteNames } = props;
+  const { objectPersonalList, setObjectPersonalList } = props;
   const { setModule, setErrors, setSuccess } = props;
+
   const { t } = useTranslation();
   // eslint-disable-next-line no-unused-vars
   const [selectedLanguage, setSelectedLanguage] = useState<string>("en");
+
+  let connectionCtx = useContext(ConnectionContext);
 
   useEffect(() => {
     const storedLanguage = localStorage.getItem("language");
@@ -37,7 +46,24 @@ export default function AutoGoto(props: PropType) {
     }
   }, []);
 
-  let connectionCtx = useContext(ConnectionContext);
+  useEffect(() => {
+    try {
+      // get objects lists from local storage on page load
+      console.log("Load personalObjecList on load");
+      let personalObjecList = fetchObjectListByNameDb("personal");
+      if (personalObjecList) {
+        setObjectPersonalList(personalObjecList);
+        console.log(
+          "Loaded  personalObjecList on load: ",
+          personalObjecList.length
+        );
+      } else {
+        console.log("No personalObjecList found in DB");
+      }
+    } catch (error) {
+      console.error("Error personalObjecList on load", error);
+    }
+  }, []);
 
   function selectListHandler(e: ChangeEvent<HTMLSelectElement>) {
     connectionCtx.setCurrentObjectListName(e.target.value);
@@ -108,6 +134,9 @@ export default function AutoGoto(props: PropType) {
             objects={dsoObject}
             objectFavoriteNames={objectFavoriteNames}
             setObjectFavoriteNames={setObjectFavoriteNames}
+            objectPersonalList={objectPersonalList}
+            setObjectPersonalList={setObjectPersonalList}
+            isInObjectPersonalList={false}
             setModule={setModule}
             setErrors={setErrors}
             setSuccess={setSuccess}

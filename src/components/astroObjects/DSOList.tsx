@@ -28,6 +28,9 @@ type PropType = {
   objects: AstroObject[];
   objectFavoriteNames: string[];
   setObjectFavoriteNames: Dispatch<SetStateAction<string[]>>;
+  objectPersonalList: AstroObject[];
+  setObjectPersonalList: Dispatch<SetStateAction<AstroObject[]>>;
+  isInObjectPersonalList: boolean;
   setModule: Dispatch<SetStateAction<string | undefined>>;
   setErrors: Dispatch<SetStateAction<string | undefined>>;
   setSuccess: Dispatch<SetStateAction<string | undefined>>;
@@ -37,6 +40,8 @@ export default function DSOList(props: PropType) {
   let connectionCtx = useContext(ConnectionContext);
   let dsoObjects: AstroObject[] = props.objects;
   const { objectFavoriteNames, setObjectFavoriteNames } = props;
+  const { objectPersonalList, setObjectPersonalList } = props;
+  const { isInObjectPersonalList } = props;
   const { setModule, setErrors, setSuccess } = props;
   const [objects, setObjects] = useState(dsoObjects);
   const [selectedCategories, setSelectedCategories] = useState(["all"]);
@@ -458,6 +463,9 @@ export default function DSOList(props: PropType) {
             object={object}
             objectFavoriteNames={objectFavoriteNames}
             setObjectFavoriteNames={setObjectFavoriteNames}
+            objectPersonalList={objectPersonalList}
+            setObjectPersonalList={setObjectPersonalList}
+            isInObjectPersonalList={isInObjectPersonalList}
             setModule={setModule}
             setErrors={setErrors}
             setSuccess={setSuccess}

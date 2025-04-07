@@ -378,7 +378,7 @@
   "pMoonphaseVisibility": "能见度",
   "pProxyIP": "代理IP",
   "pProxyLocalIP": "代理本地IP",
-  "pProxyNotRunning": "代理没有运行",
+  "pProxyNotRunning": "未检测到或运行",
   "pProxyRunning": "代理正在运行",
   "pProxyRunningLocally": "代理在本地运行（节点JS）",
   "pProxyRunningOnServer": "代理在与服务器同一台机器上运行",
@@ -405,5 +405,13 @@
   "cOBSErrorStream": "启动或停止流时出错。\n检查控制台。",
   "cOBSNotFound": "obs网站找不到。\n开始观察并检查Web插座设置。",
   "cOBSSocketClose": "OBS Websocket已关闭。",
-  "cOBSSocketNotConnect": "obs websocket未连接。"
+  "cOBSSocketNotConnect": "obs websocket未连接。",
+  "cGoToListpersonal": "我的个人性欲",
+  "cObjectsAddPersonal": "将对象添加到我的个人库中",
+  "cObjectsInfoPersonal": "该对象在您的个人库中",
+  "cObjectsRemovePersonal": "想从您的个人库中删除对象吗？",
+  "cRemoveFromPersonalListButton": "删除对象",
+  "cRemoveFromPersonalListConfirm": "您确定要删除此对象吗",
+  "cRemoveFromPersonalListTitle": "从我的个人库中删除对象",
+  "pMediaMtxNeedOpenPort8888": "但是您需要在代理LAN路由器上打开端口8888。"
 }

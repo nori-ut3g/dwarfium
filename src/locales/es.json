@@ -378,7 +378,7 @@
   "pMoonphaseVisibility": "Visibilidad",
   "pProxyIP": "Proxy ip",
   "pProxyLocalIP": "IP local proxy",
-  "pProxyNotRunning": "El proxy no se está ejecutando en",
+  "pProxyNotRunning": "No se detectó ni se ejecuta en",
   "pProxyRunning": "El proxy se está ejecutando en",
   "pProxyRunningLocally": "Proxy se ejecuta localmente (nodo JS)",
   "pProxyRunningOnServer": "Proxy se ejecuta en la misma máquina que el servidor en",
@@ -405,5 +405,13 @@
   "cOBSErrorStream": "Error al comenzar o detener la transmisión. \nRevise la consola.",
   "cOBSNotFound": "Sitio web OBS no encontrado. \nInicie OBS y consulte la configuración del socket web.",
   "cOBSSocketClose": "OBS WebSocket está cerrado.",
-  "cOBSSocketNotConnect": "OBS WebSocket no está conectado."
+  "cOBSSocketNotConnect": "OBS WebSocket no está conectado.",
+  "cGoToListpersonal": "Mi liberación personal",
+  "cObjectsAddPersonal": "Agregue el objeto a mi biblioteca personal",
+  "cObjectsInfoPersonal": "El objeto está en su biblioteca personal",
+  "cObjectsRemovePersonal": "¿Quiere eliminar el objeto de su biblioteca personal?",
+  "cRemoveFromPersonalListButton": "Eliminar objeto",
+  "cRemoveFromPersonalListConfirm": "¿Estás seguro de que quieres eliminar este objeto?",
+  "cRemoveFromPersonalListTitle": "Eliminar objeto de mi biblioteca personal",
+  "pMediaMtxNeedOpenPort8888": "Pero debe tener el puerto 8888 abierto en el enrutador de LAN proxy."
 }
