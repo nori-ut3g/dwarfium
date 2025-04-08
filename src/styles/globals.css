@@ -454,6 +454,10 @@ p {
     margin-top: 10px;
 }
 
+.session-name {
+    width: 20%;
+}
+
 .notification {
     background-color: #ffcccc;
     color: #ff0000;
@@ -1199,6 +1203,37 @@ img {
     padding-bottom: .5rem !important;
     margin-top: -25px;
 }
+
+@media (min-width: 810px) {
+    .container, .container-md, .container-sm {
+        max-width: 768px!important;
+    }
+}
+
+@media (min-width: 845px) {
+    .container, .container-md, .container-sm {
+        max-width: 810px!important;
+    }
+}
+
+@media (min-width: 885px) {
+    .container, .container-md, .container-sm {
+        max-width: 845px!important;
+    }
+}
+
+@media (min-width: 920px) {
+    .container, .container-md, .container-sm {
+        max-width: 885px!important;
+    }
+}
+
+@media (min-width: 960px) {
+    .container, .container-md, .container-sm {
+        max-width: 920px!important;
+    }
+}
+
 
 @media screen and (max-width: 992px) {
     .connect-dwarf {

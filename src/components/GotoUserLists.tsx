@@ -121,7 +121,7 @@ export default function GotoUserLists(props: PropType) {
         )}
 
         <div className="row">
-          <div className="col-md-4">
+          <div className="col-xl-6 col-lg-5 col-md-5 col-12">
             <select
               className="form-select mb-2"
               value={
@@ -141,7 +141,7 @@ export default function GotoUserLists(props: PropType) {
             </select>
           </div>
 
-          <div className="col-md-4">
+          <div className="col-lg-5 col-md-6 col-sm-6 col-10">
             <button
               className="btn btn-more02 me-2 mb-2"
               onClick={importListModalHandle}
