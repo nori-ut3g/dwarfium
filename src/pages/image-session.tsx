@@ -330,7 +330,7 @@ export default function AstroPhoto() {
       // Check if the date pattern exists at the end of the string
       if (datePattern.test(sessionName)) {
         // Replace the date with a <wbr> break before it
-        const modifiedSessionName = sessionName.replace(datePattern, '<wbr>$&');
+        const modifiedSessionName = sessionName.replace(datePattern, "<wbr>$&");
         return modifiedSessionName;
       } else {
         // If no date is found, return the sessionName as it is
@@ -414,7 +414,10 @@ export default function AstroPhoto() {
                 <thead>
                   <tr>
                     <th>{t("pImageSessionPreview")}</th>
-                    <th className="session-name" onClick={() => sortByProperty("name")}>
+                    <th
+                      className="session-name"
+                      onClick={() => sortByProperty("name")}
+                    >
                       {t("pImageSessionTarget")}{" "}
                       {sortBy === "name" && (
                         <span className="sorting">
@@ -474,9 +477,12 @@ export default function AstroPhoto() {
                             <div>{t("pImageSessionLoading")}</div>
                           )}
                         </td>
-                        <td className="session-name"
-                          dangerouslySetInnerHTML={{ __html: getTarget(session.name) }}>
-                        </td>
+                        <td
+                          className="session-name"
+                          dangerouslySetInnerHTML={{
+                            __html: getTarget(session.name),
+                          }}
+                        ></td>
                         <td>{session.date}</td>
                         <td>{getShootingInfo(session.name)}</td>
                         <td>{getAdditionalInfo(session.name)}</td>
