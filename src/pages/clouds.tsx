@@ -1,5 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import axios from "axios";
+import { ConnectionContext } from "@/stores/ConnectionContext";
+import { ConnectionContextType } from "@/types";
+import { getProxyUrl } from "@/lib/get_proxy_url";
 import CustomChart from "@/components/clouds/Chart";
 import Daypicker from "@/components/clouds/Daypicker";
 import { useTranslation } from "react-i18next";
@@ -24,6 +27,7 @@ const Clouds = () => {
   const [errorMessage, setErrorMessage] = useState<string>("");
 
   const cityInputRef = useRef<HTMLInputElement>(null);
+  let connectionCtx = useContext(ConnectionContext);
 
   useEffect(() => {
     setIsClient(true);
@@ -31,9 +35,14 @@ const Clouds = () => {
     const fetchData = async () => {
       if (city && apiKey) {
         try {
-          const response = await axios.get(
-            `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}`
-          );
+          let apiUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}`;
+          if (connectionCtx.proxyIP && getProxyUrl(connectionCtx)) {
+            const targetUrl = new URL(apiUrl);
+            apiUrl = `${getProxyUrl(connectionCtx)}?target=${encodeURIComponent(
+              targetUrl.href
+            )}`;
+          }
+          const response = await axios.get(apiUrl);
 
           setSelectedDate((prevDate) => {
             const newDate = new Date(prevDate);
@@ -121,9 +130,14 @@ const Clouds = () => {
   const fetchData = async () => {
     setErrorMessage("");
     try {
-      const response = await axios.get(
-        `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}`
-      );
+      let apiUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}`;
+      if (connectionCtx.proxyIP && getProxyUrl(connectionCtx)) {
+        const targetUrl = new URL(apiUrl);
+        apiUrl = `${getProxyUrl(connectionCtx)}?target=${encodeURIComponent(
+          targetUrl.href
+        )}`;
+      }
+      const response = await axios.get(apiUrl);
 
       setSelectedDate((prevDate) => {
         const newDate = new Date(prevDate);

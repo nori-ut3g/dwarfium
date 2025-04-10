@@ -1,5 +1,8 @@
-﻿import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
+import { ConnectionContext } from "@/stores/ConnectionContext";
+import { ConnectionContextType } from "@/types";
+import { getProxyUrl } from "@/lib/get_proxy_url";
 import WeatherForecastDay from "./WeatherForecastDay";
 
 interface ForecastData {
@@ -14,6 +17,7 @@ function WeatherForecast(props: { coordinates: { lat: number; lon: number } }) {
   const [apiKey] = useState<string>(
     typeof window !== "undefined" ? localStorage.getItem("apiKey") || "" : ""
   );
+  let connectionCtx = useContext(ConnectionContext);
 
   useEffect(() => {
     if (
@@ -26,6 +30,12 @@ function WeatherForecast(props: { coordinates: { lat: number; lon: number } }) {
       let lat = props.coordinates.lat;
       let lon = props.coordinates.lon;
       let apiURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=${units}`;
+      if (connectionCtx.proxyIP && getProxyUrl(connectionCtx)) {
+        const targetUrl = new URL(apiUrl);
+        apiUrl = `${getProxyUrl(connectionCtx)}?target=${encodeURIComponent(
+          targetUrl.href
+        )}`;
+      }
 
       axios
         .get(apiURL)

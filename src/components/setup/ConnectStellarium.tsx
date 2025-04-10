@@ -270,12 +270,12 @@ export default function ConnectStellarium(props: PropType) {
       <br />
       <form onSubmit={checkConnection}>
         <div className="row mb-3">
-          <div className="col-md-1">
+          <div className="col-lg-2 col-md-3 text-lg-end">
             <label htmlFor="stellarium_ip" className="form-label">
               {t("pIPAddress")}
             </label>
           </div>
-          <div className="col-lg-2 col-md-10">
+          <div className="col-lg-2 col-md-10  d-flex align-items-center">
             <input
               className="form-control"
               id="stellarium_ip"
@@ -287,12 +287,12 @@ export default function ConnectStellarium(props: PropType) {
           </div>
         </div>
         <div className="row mb-3">
-          <div className="col-md-1">
+          <div className="col-lg-2 col-md-3 text-lg-end">
             <label htmlFor="port" className="form-label">
               {t("pPort")}
             </label>
           </div>
-          <div className="col-lg-2 col-md-10">
+          <div className="col-lg-2 col-md-10  d-flex align-items-center">
             <input
               className="form-control"
               id="port"

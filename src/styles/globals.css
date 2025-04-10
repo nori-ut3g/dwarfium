@@ -136,7 +136,7 @@ body {
   }
   .temperature-info {
      width: 160px;
-     margin: 0px auto 0px auto;
+     margin: 0px auto 0px 0px;
      margin-top: -20px;
      display: flex;
      flex-direction: row;
@@ -1204,36 +1204,35 @@ img {
     margin-top: -25px;
 }
 
-@media (min-width: 810px) {
+@media (min-width: 810px) and (max-width: 991.98px) {
     .container, .container-md, .container-sm {
-        max-width: 768px!important;
+        max-width: 768px !important;
     }
 }
 
-@media (min-width: 845px) {
+@media (min-width: 845px) and (max-width: 991.98px) {
     .container, .container-md, .container-sm {
-        max-width: 810px!important;
+        max-width: 810px !important;
     }
 }
 
-@media (min-width: 885px) {
+@media (min-width: 885px) and (max-width: 991.98px) {
     .container, .container-md, .container-sm {
-        max-width: 845px!important;
+        max-width: 845px !important;
     }
 }
 
-@media (min-width: 920px) {
+@media (min-width: 920px) and (max-width: 991.98px) {
     .container, .container-md, .container-sm {
-        max-width: 885px!important;
+        max-width: 885px !important;
     }
 }
 
-@media (min-width: 960px) {
+@media (min-width: 960px) and (max-width: 991.98px) {
     .container, .container-md, .container-sm {
-        max-width: 920px!important;
+        max-width: 920px !important;
     }
 }
-
 
 @media screen and (max-width: 992px) {
     .connect-dwarf {

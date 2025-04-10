@@ -1,5 +1,8 @@
-﻿import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
+import { ConnectionContext } from "@/stores/ConnectionContext";
+import { ConnectionContextType } from "@/types";
+import { getProxyUrl } from "@/lib/get_proxy_url";
 
 interface WeatherData {
   hourly: {
@@ -22,16 +25,22 @@ const AstroWeather: React.FC = () => {
     Parijs: "48.85,2.35",
     Londen: "51.51,-0.13",
   };
+  let connectionCtx = useContext(ConnectionContext);
 
   useEffect(() => {
     if (!selectedLocation) return;
 
     const [lat, lon] = selectedLocation.split(",");
+    let apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=cloudcover,temperature_2m,windspeed_10m,relative_humidity_2m,dewpoint_2m&timezone=Europe/Brussels`;
+    if (connectionCtx.proxyIP && getProxyUrl(connectionCtx)) {
+      const targetUrl = new URL(apiUrl);
+      apiUrl = `${getProxyUrl(connectionCtx)}?target=${encodeURIComponent(
+        targetUrl.href
+      )}`;
+    }
 
     axios
-      .get(
-        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=cloudcover,temperature_2m,windspeed_10m,relative_humidity_2m,dewpoint_2m&timezone=Europe/Brussels`
-      )
+      .get(apiUrl)
       .then((response) => {
         setWeatherData(response.data as WeatherData);
       })

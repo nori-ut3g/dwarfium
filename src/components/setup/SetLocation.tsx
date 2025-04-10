@@ -125,12 +125,12 @@ export default function SetLocation() {
 
         <form>
           <div className="row mb-3">
-            <div className="col-lg-1 col-md-2">
+            <div className="col-lg-2 col-md-3 text-lg-end">
               <label htmlFor="latitude" className="form-label">
                 {t("pLatitude")}
               </label>
             </div>
-            <div className="col-lg-2 col-md-10">
+            <div className="col-lg-3 col-md-10  d-flex align-items-center">
               <input
                 //pattern="^([-+]?([1-8]?\d(\.\d+)?|90(\.0+)?))$"
                 className="form-control"
@@ -144,12 +144,12 @@ export default function SetLocation() {
             </div>
           </div>
           <div className="row mb-3">
-            <div className="col-lg-1 col-md-2">
+            <div className="col-lg-2 col-md-3 text-lg-end">
               <label htmlFor="longitude" className="form-label">
                 {t("pLongitude")}
               </label>
             </div>
-            <div className="col-lg-2 col-md-10">
+            <div className="col-lg-3 col-md-10  d-flex align-items-center">
               <input
                 //pattern="^([-+]?(180(\.\d+)?|1[0-7]\d(\.\d+)?|\d{1,2}(\.\d+)?))$"
                 className="form-control"
@@ -163,12 +163,12 @@ export default function SetLocation() {
             </div>
           </div>
           <div className="row mb-3">
-            <div className="col-lg-1 col-md-2">
+            <div className="col-lg-2 col-md-3 text-lg-end">
               <label htmlFor="timezone" className="form-label">
                 {t("pTimezone")}
               </label>
             </div>
-            <div className="col-lg-2 col-md-10">
+            <div className="col-lg-3 col-md-10  d-flex align-items-center">
               <input
                 pattern="^[a-z]*(\*/[a-z]+)$/i"
                 className="form-control"

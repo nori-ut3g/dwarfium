@@ -172,7 +172,7 @@
         flex-direction: column;
     }
 
-    .row, .col {
+    .allDiv  .row, .allDiv .col {
         flex-direction: column;
     }
 }

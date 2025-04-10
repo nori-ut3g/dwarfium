@@ -66,12 +66,12 @@ const RSSFeed = () => {
           className="comin-divu-main d-grid align-content-center w-100"
         >
           <div className="row align-items-center">
-            <div className="col-lg-2 col-md-4 col-sm-6">
+            <div className="col-lg-1 col-md-3 col-sm-3 col-2">
               <figure className="mx-auto mb-3 mb-md-0">
-                <img alt="Deep Sky Object" src="/images/astronomy.png" />
+                <img alt="Deep Sky Object" src="/images/astronomy.png" className="img-fluid w-50 w-md-80"/>
               </figure>
             </div>
-            <div className="col-lg-10 col-md-8 col-sm-6">
+            <div className="col-lg-8 col-md-7 col-sm-7 col-8">
               <h5 className="text-white">
                 <span className="rss-feed-title">{item.title}</span> <br />
                 <span className="rss-feed-pubDate">{item.pubDate}</span>

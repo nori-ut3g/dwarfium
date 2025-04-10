@@ -203,6 +203,7 @@ export default function DwarfCameras(props: PropType) {
 
   useEffect(() => {
     const updateButtonText = () => {
+      checkCameraStatus();
       if (window.innerWidth > 768) {
         setButtonSwap("Switch Cameras");
         setButtonReset("Reset View");

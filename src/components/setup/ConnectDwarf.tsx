@@ -276,7 +276,7 @@ export default function ConnectDwarf() {
       <br />
       <form onSubmit={checkConnection} className="mb-3">
         <div className="row mb-3">
-          <div className="col-md-1">
+          <div className="col-lg-2 col-md-3 text-lg-end">
             <label htmlFor="notify" className="form-label">
               {connectionCtx.typeNameDwarf}
             </label>
@@ -289,7 +289,7 @@ export default function ConnectDwarf() {
           </div>
         </div>
         <div className="row mb-3">
-          <div className="col-md-1">
+          <div className="col-lg-2 col-md-3 text-lg-end">
             <label htmlFor="notify" className="form-label">
               Specific ID
             </label>
@@ -309,12 +309,12 @@ export default function ConnectDwarf() {
           </div>
         </div>
         <div className="row mb-3">
-          <div className="col-md-1">
+          <div className="col-lg-2 col-md-3 text-lg-end">
             <label htmlFor="ip" className="form-label">
               {t("pIPAddress")}
             </label>
           </div>
-          <div className="col-lg-2 col-md-10">
+          <div className="col-lg-2 col-md-10  d-flex align-items-center">
             <input
               className="form-control"
               id="ip"

@@ -1161,7 +1161,7 @@ export default function ConnectDwarfSTA() {
                 <p>{t("pServerStatusContent3")}</p>
                 <div className="row mb-3">
                   {/* Proxy IP Label */}
-                  <div className="col-lg-2 col-md-3 text-end">
+                  <div className="col-lg-2 col-md-3 text-lg-end">
                     <label htmlFor="proxyIp" className="form-label">
                       {t("pProxyIP")}
                     </label>
@@ -1192,7 +1192,7 @@ export default function ConnectDwarfSTA() {
                   </div>
 
                   {/* Local IP Label */}
-                  <div className="col-lg-2 col-md-3 text-end">
+                  <div className="col-lg-2 col-md-3 text-lg-end">
                     <label htmlFor="proxyLocalIp">{t("pProxyLocalIP")}</label>
                   </div>
 
@@ -1319,7 +1319,7 @@ export default function ConnectDwarfSTA() {
       <br />
       <form onSubmit={checkConnection} className="mb-3">
         <div className="row mb-3">
-          <div className="col-lg-2 col-md-10 col-12 text-end">
+          <div className="col-lg-2 col-md-4 col-12 text-lg-end">
             <label htmlFor="pwd" className="form-label">
               {t("pBluetoothPWD")}
             </label>
@@ -1335,7 +1335,7 @@ export default function ConnectDwarfSTA() {
               onChange={handleInputPWDChange}
             />
           </div>
-          <div className="col-lg-2 col-md-10 col-12 text-end">
+          <div className="col-lg-2 col-md-10 col-12 text-lg-end">
             <label htmlFor="ssid" className="form-label">
               {t("pSTA_SSID_Wifi")}
             </label>
@@ -1351,7 +1351,7 @@ export default function ConnectDwarfSTA() {
               onChange={handleInputSSIDChange}
             />
           </div>
-          <div className="col-lg-2 col-md-10 col-12 text-end">
+          <div className="col-lg-2 col-md-10 col-12 text-lg-end">
             <label htmlFor="wifipwd" className="form-label">
               {t("pSTA_PWD_Wifi")}
             </label>

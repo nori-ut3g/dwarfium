@@ -1,4 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { ConnectionContext } from "@/stores/ConnectionContext";
+import { ConnectionContextType } from "@/types";
+import { getProxyUrl } from "@/lib/get_proxy_url";
 import WeatherInfo from "./weather/WeatherInfo";
 import WeatherForecast from "./weather/WeatherForecast";
 import axios, { AxiosError } from "axios";
@@ -29,10 +32,11 @@ function Weather() {
   );
   const [weatherData, setWeatherData] = useState<WeatherData>({ ready: false });
   const [error, setError] = useState<string | null>(null);
+  let connectionCtx = useContext(ConnectionContext);
 
   useEffect(() => {
     if (apiKey && cityInput) {
-      search(cityInput);
+      search(cityInput, connectionCtx);
     }
   }, []); // Empty dependency array means this runs once on mount
 
@@ -54,8 +58,14 @@ function Weather() {
     localStorage.setItem("city", response.data.city.name);
   }
 
-  function search(city: string) {
+  function search(city: string, connectionCtx: ConnectionContextType) {
     let apiUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric`;
+    if (connectionCtx.proxyIP && getProxyUrl(connectionCtx)) {
+      const targetUrl = new URL(apiUrl);
+      apiUrl = `${getProxyUrl(connectionCtx)}?target=${encodeURIComponent(
+        targetUrl.href
+      )}`;
+    }
     axios
       .get(apiUrl)
       .then(handleResponse)

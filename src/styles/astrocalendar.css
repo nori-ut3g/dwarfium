@@ -39,7 +39,7 @@
     }
 .rss-feed-title {
     color: #00B280;
-    font-size: 2.0rem;
+    font-size: 1.8rem;
 }
 .rss-feed-pubDate {
     color: #A3A1A1;
@@ -59,16 +59,16 @@
     }
     .rss-feed-title {
         color: #00B280;
-        font-size: 2.0rem;
+        font-size: 1.6rem;
         /* margin-top: 4px; */
     }
     .comin-divu-main h5 {
-        font-size: 1.8rem;
+        font-size: 1.4rem;
         font-weight: 600;
         text-transform: uppercase;
         color: #60CC69 !important;
     }
     .feed-item {
-        margin-bottom: 20px; /* Adjust as needed */
+        margin-bottom: 10px; /* Adjust as needed */
     }
 }
