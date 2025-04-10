@@ -1,7 +1,6 @@
 ﻿import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { ConnectionContext } from "@/stores/ConnectionContext";
-import { ConnectionContextType } from "@/types";
 import { getProxyUrl } from "@/lib/get_proxy_url";
 import WeatherForecastDay from "./WeatherForecastDay";
 
@@ -31,8 +30,8 @@ function WeatherForecast(props: { coordinates: { lat: number; lon: number } }) {
       let lon = props.coordinates.lon;
       let apiURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=${units}`;
       if (connectionCtx.proxyIP && getProxyUrl(connectionCtx)) {
-        const targetUrl = new URL(apiUrl);
-        apiUrl = `${getProxyUrl(connectionCtx)}?target=${encodeURIComponent(
+        const targetUrl = new URL(apiURL);
+        apiURL = `${getProxyUrl(connectionCtx)}?target=${encodeURIComponent(
           targetUrl.href
         )}`;
       }

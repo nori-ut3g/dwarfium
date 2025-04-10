@@ -84,7 +84,7 @@ function Weather() {
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (cityInput) {
-      search(cityInput);
+      search(cityInput, connectionCtx);
     }
   }
 

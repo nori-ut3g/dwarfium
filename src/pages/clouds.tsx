@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import axios from "axios";
 import { ConnectionContext } from "@/stores/ConnectionContext";
-import { ConnectionContextType } from "@/types";
 import { getProxyUrl } from "@/lib/get_proxy_url";
 import CustomChart from "@/components/clouds/Chart";
 import Daypicker from "@/components/clouds/Daypicker";
