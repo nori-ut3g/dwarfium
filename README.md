@@ -144,9 +144,17 @@ it's likely because the **Dwarflab mobile app** is still connected and controls 
    - Turn off Wi-Fi on your phone  
    - Restart the Dwarf device
 
+After about **one minute**, **Dwarfium** should be able to send commands to the Dwarf.
+
 ---
 
-After about **one minute**, **Dwarfium** should be able to send commands to the Dwarf.
+**At the end, if you want to let the official Dwarflab application take back control:**
+
+1. Go to the Setup page of Dwarfium.
+
+2. In the **Connect To** section, click on **Unlock Host Mode**, then click **Disconnect**.
+
+![Screenshot of updates](images/UnlockHostMode.PNG)
 
 ## Dwarfium Proxy Configuration
 
