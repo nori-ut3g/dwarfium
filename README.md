@@ -154,7 +154,7 @@ After about **one minute**, **Dwarfium** should be able to send commands to the 
 
 2. In the **Connect To** section, click on **Unlock Host Mode**, then click **Disconnect**.
 
-![Screenshot of updates](images/UnlockHostMode.PNG)
+![Screenshot of updates](images/UnlockHostMode.png)
 
 ## Dwarfium Proxy Configuration
 
