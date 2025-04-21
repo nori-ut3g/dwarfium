@@ -81,7 +81,7 @@ tools.forEach(({ src, dest }) => {
 console.log("Copying configuration...");
 const launcherScriptWindows = `
 @echo off
-
+cd /d "%~dp0"
 rem Check if Python is installed
 where python >nul 2>&1
 if errorlevel 1 (

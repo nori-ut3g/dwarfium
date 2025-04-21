@@ -149,7 +149,7 @@ tools.forEach(({ src, dest }) => {
 console.log("Copying configuration...");
 const launcherScriptWindows = `
 @echo off
-
+cd /d "%~dp0"
 rem Start DwarfiumProxy minimized
 start "" /Min DwarfiumProxy.exe
 
