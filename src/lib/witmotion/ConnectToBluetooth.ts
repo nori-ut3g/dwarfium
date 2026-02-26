@@ -51,28 +51,36 @@ export class UsingBluetooth implements DeviceInterface {
 
   public accelerometerCalibration = async () => {
     await defaultAccelerometerCalibration(
-      this.writeCharacteristic?.writeValue.bind(this.writeCharacteristic)
+      this.writeCharacteristic?.writeValue.bind(this.writeCharacteristic) as
+        | ((value: ArrayBufferView) => Promise<void>)
+        | undefined
     );
   };
 
   public magnetometerCalibration = async (command: String) => {
     await defaultMagnetometerCalibration(
       command,
-      this.writeCharacteristic?.writeValue.bind(this.writeCharacteristic)
+      this.writeCharacteristic?.writeValue.bind(this.writeCharacteristic) as
+        | ((value: ArrayBufferView) => Promise<void>)
+        | undefined
     );
   };
 
   public dofSelect = async (command: String) => {
     await defaultDofSelect(
       command,
-      this.writeCharacteristic?.writeValue.bind(this.writeCharacteristic)
+      this.writeCharacteristic?.writeValue.bind(this.writeCharacteristic) as
+        | ((value: ArrayBufferView) => Promise<void>)
+        | undefined
     );
   };
 
   public rateSelect = async (command: Number) => {
     await defaultRateSelect(
       command,
-      this.writeCharacteristic?.writeValue.bind(this.writeCharacteristic)
+      this.writeCharacteristic?.writeValue.bind(this.writeCharacteristic) as
+        | ((value: ArrayBufferView) => Promise<void>)
+        | undefined
     );
   };
 }
