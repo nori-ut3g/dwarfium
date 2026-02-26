@@ -9,6 +9,7 @@ import itTranslation from "@/locales/it.json";
 import plTranslation from "@/locales/pl.json";
 import ptTranslation from "@/locales/pt.json";
 import zhCNTranslation from "@/locales/zh_CN.json";
+import jaTranslation from "@/locales/ja.json";
 
 i18n.use(initReactI18next).init({
   resources: {
@@ -18,6 +19,7 @@ i18n.use(initReactI18next).init({
     fr: { translation: frTranslation },
     nl: { translation: nlTranslation },
     it: { translation: itTranslation },
+    ja: { translation: jaTranslation },
     pl: { translation: plTranslation },
     pt: { translation: ptTranslation },
     zhCN: { translation: zhCNTranslation },
