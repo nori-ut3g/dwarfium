@@ -7,6 +7,12 @@ on:
 jobs:
   check:
     runs-on: ubuntu-latest
+    env:
+      # Existing astro_utils tests depend on Europe/Paris timezone due to
+      # a variable shadowing bug in calc_jd() (astro_utils.ts:503).
+      # The `new Date()` constructor interprets UTC components as local time,
+      # so test expectations only match in the upstream developer's timezone.
+      TZ: Europe/Paris
     steps:
       - uses: actions/checkout@v4
 
@@ -14,6 +20,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          # npm cache requires a lock file, but package-lock.json is
+          # gitignored in upstream. Using npm install instead of npm ci.
 
       - name: Install dependencies
         run: npm install
