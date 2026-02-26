@@ -33,4 +33,6 @@ jobs:
         run: npm run test -- --passWithNoTests
 
       - name: Build
-        run: npm run build
+        # Use npx next build directly to skip postbuild script
+        # (postbuild runs package:server which requires pkg binary)
+        run: npx next build
