@@ -1,4 +1,7 @@
 # Dwarfium
+
+**English** | [日本語](README.ja.md)
+
 ![GitHub issues](https://img.shields.io/github/issues/stevejcl/dwarfii-stellarium-goto)
 ![GitHub last commit](https://img.shields.io/github/last-commit/stevejcl/dwarfii-stellarium-goto)
 ![GitHub](https://img.shields.io/github/license/stevejcl/dwarfii-stellarium-goto)
