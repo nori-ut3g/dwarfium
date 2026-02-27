@@ -44,6 +44,7 @@ describe("roundExposure", () => {
 
   it("rounds to 4 decimal places for very small values", () => {
     expect(roundExposure(0.0005)).toBe(0.0005);
+    // 0.00015 * 10000 = 1.4999999999999998 (IEEE 754), so Math.round() → 1
     expect(roundExposure(0.00015)).toBe(0.0001);
   });
 
@@ -100,8 +101,9 @@ describe("parseRaToFloat", () => {
     expect(parseRaToFloat("18.6156")).toBeCloseTo(18.6156, 3);
   });
 
-  it("returns false for invalid format", () => {
-    expect(parseRaToFloat("abc")).toBe(NaN);
+  it("returns NaN for non-colon string that is not a number", () => {
+    // parseFloat("abc") returns NaN; toBe(NaN) always fails since NaN !== NaN
+    expect(parseRaToFloat("abc")).toBeNaN();
   });
 
   it("returns false for NaN parts", () => {
