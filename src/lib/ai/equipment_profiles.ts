@@ -1,6 +1,6 @@
 /**
  * Equipment profiles for DWARF telescope models.
- * Used by observation_scorer and future shooting_advisor.
+ * Used by observation_scorer and shooting_advisor.
  */
 
 export interface EquipmentProfile {
