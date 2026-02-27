@@ -156,12 +156,13 @@ describe("fetchCurrentWeather", () => {
     expect(result.windSpeedKmh).toBe(10);
   });
 
-  it("calls Open-Meteo API with correct URL", async () => {
+  it("calls Open-Meteo API with correct URL including timezone", async () => {
     await fetchCurrentWeather(48.85, 2.35);
     const calledUrl = mockedAxios.get.mock.calls[0][0];
     expect(calledUrl).toContain("api.open-meteo.com");
     expect(calledUrl).toContain("latitude=48.85");
     expect(calledUrl).toContain("longitude=2.35");
+    expect(calledUrl).toContain("timezone=auto");
   });
 
   it("uses proxy URL when provided", async () => {
