@@ -19,6 +19,10 @@ export interface EquipmentProfile {
   limitingMagnitude: number;
   // Maximum recommended exposure in seconds
   maxExposureSec: number;
+  // Gain range for the sensor
+  minGain: number;
+  maxGain: number;
+  defaultGain: number;
 }
 
 // IMX415: 3840x2160 @ 1.45µm → active area 5.568x3.132mm
@@ -37,6 +41,9 @@ export const DWARF_II: EquipmentProfile = {
   fovHeightDeg: 1.794,
   limitingMagnitude: 14,
   maxExposureSec: 15,
+  minGain: 0,
+  maxGain: 240,
+  defaultGain: 80,
 };
 
 // IMX678: 3840x2160 @ 2.0µm → active area 7.680x4.320mm
@@ -55,6 +62,9 @@ export const DWARF_3: EquipmentProfile = {
   fovHeightDeg: 1.650,
   limitingMagnitude: 16,
   maxExposureSec: 30,
+  minGain: 0,
+  maxGain: 240,
+  defaultGain: 60,
 };
 
 export function getProfileByName(name: string): EquipmentProfile | undefined {
