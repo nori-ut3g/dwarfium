@@ -41,8 +41,8 @@ export default function TonightsBest(props: Props) {
 
   const ranked: RankedTarget[] = useMemo(() => {
     if (
-      !connectionCtx.latitude ||
-      !connectionCtx.longitude ||
+      connectionCtx.latitude == null ||
+      connectionCtx.longitude == null ||
       !weather ||
       !moon ||
       !equipment
@@ -69,7 +69,7 @@ export default function TonightsBest(props: Props) {
     refreshKey,
   ]);
 
-  if (!connectionCtx.latitude || !connectionCtx.longitude) {
+  if (connectionCtx.latitude == null || connectionCtx.longitude == null) {
     return (
       <div className="p-3 text-center text-muted">
         <i className="bi bi-geo-alt"></i> {t("cAiTonightNoLocation")}
