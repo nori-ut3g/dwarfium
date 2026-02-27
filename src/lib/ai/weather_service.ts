@@ -17,7 +17,6 @@ import {
 
 interface OpenMeteoHourly {
   cloudcover: number[];
-  temperature_2m: number[];
   windspeed_10m: number[];
   relative_humidity_2m: number[];
 }
@@ -38,7 +37,7 @@ export async function fetchCurrentWeather(
   lon: number,
   proxyUrl?: string
 ): Promise<WeatherCondition> {
-  let apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=cloudcover,windspeed_10m,relative_humidity_2m&forecast_days=1`;
+  let apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=cloudcover,windspeed_10m,relative_humidity_2m&forecast_days=1&timezone=auto`;
 
   if (proxyUrl) {
     apiUrl = `${proxyUrl}?target=${encodeURIComponent(apiUrl)}`;
