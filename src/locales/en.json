@@ -413,5 +413,13 @@
   "cObjectsRemovePersonal": "Want to remove the Object from your Personal Library?",
   "cRemoveFromPersonalListTitle": "Remove Object from My Personal Library",
   "cRemoveFromPersonalListConfirm": "Are you sure you want to remove this object",
-  "cRemoveFromPersonalListButton": "Remove Object"
+  "cRemoveFromPersonalListButton": "Remove Object",
+  "cAstroWeatherLoading": "Loading astronomical weather...",
+  "cAstroWeatherTitle": "Hourly Astronomical Weather",
+  "cAstroWeatherSelectLocation": "Select a location:",
+  "cAstroWeatherCloudCover": "Cloud cover:",
+  "cAstroWeatherTemperature": "Temperature:",
+  "cAstroWeatherWindSpeed": "Wind speed:",
+  "cAstroWeatherHumidity": "Humidity:",
+  "cAstroWeatherDewPoint": "Dew point:"
 }

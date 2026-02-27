@@ -413,5 +413,13 @@
   "cObjectsRemovePersonal": "マイライブラリからこの天体を削除しますか？",
   "cRemoveFromPersonalListTitle": "マイライブラリから天体を削除",
   "cRemoveFromPersonalListConfirm": "本当にこの天体を削除しますか？",
-  "cRemoveFromPersonalListButton": "天体を削除"
+  "cRemoveFromPersonalListButton": "天体を削除",
+  "cAstroWeatherLoading": "天文気象データを読み込み中...",
+  "cAstroWeatherTitle": "1時間ごとの天文気象",
+  "cAstroWeatherSelectLocation": "観測地を選択:",
+  "cAstroWeatherCloudCover": "雲量:",
+  "cAstroWeatherTemperature": "気温:",
+  "cAstroWeatherWindSpeed": "風速:",
+  "cAstroWeatherHumidity": "湿度:",
+  "cAstroWeatherDewPoint": "露点:"
 }

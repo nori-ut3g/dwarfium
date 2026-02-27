@@ -413,5 +413,13 @@
   "cRemoveFromPersonalListButton": "Remova o objeto",
   "cRemoveFromPersonalListConfirm": "Tem certeza que deseja remover este objeto",
   "cRemoveFromPersonalListTitle": "Remova o objeto da minha biblioteca pessoal",
-  "pMediaMtxNeedOpenPort8888": "Mas você precisa ter a porta 8888 aberta no roteador proxy LAN."
+  "pMediaMtxNeedOpenPort8888": "Mas você precisa ter a porta 8888 aberta no roteador proxy LAN.",
+  "cAstroWeatherLoading": "Carregando clima astronômico...",
+  "cAstroWeatherTitle": "Clima astronômico por hora",
+  "cAstroWeatherSelectLocation": "Selecionar localização:",
+  "cAstroWeatherCloudCover": "Cobertura de nuvens:",
+  "cAstroWeatherTemperature": "Temperatura:",
+  "cAstroWeatherWindSpeed": "Velocidade do vento:",
+  "cAstroWeatherHumidity": "Umidade:",
+  "cAstroWeatherDewPoint": "Ponto de orvalho:"
 }

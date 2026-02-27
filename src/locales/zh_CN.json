@@ -413,5 +413,13 @@
   "cRemoveFromPersonalListButton": "删除对象",
   "cRemoveFromPersonalListConfirm": "您确定要删除此对象吗",
   "cRemoveFromPersonalListTitle": "从我的个人库中删除对象",
-  "pMediaMtxNeedOpenPort8888": "但是您需要在代理LAN路由器上打开端口8888。"
+  "pMediaMtxNeedOpenPort8888": "但是您需要在代理LAN路由器上打开端口8888。",
+  "cAstroWeatherLoading": "正在加载天文气象数据...",
+  "cAstroWeatherTitle": "逐时天文气象",
+  "cAstroWeatherSelectLocation": "选择位置：",
+  "cAstroWeatherCloudCover": "云量：",
+  "cAstroWeatherTemperature": "温度：",
+  "cAstroWeatherWindSpeed": "风速：",
+  "cAstroWeatherHumidity": "湿度：",
+  "cAstroWeatherDewPoint": "露点："
 }
