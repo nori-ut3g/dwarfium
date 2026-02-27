@@ -1,4 +1,5 @@
 ﻿import React, { useEffect, useState, useContext } from "react";
+import { useTranslation } from "react-i18next";
 import axios from "axios";
 import { ConnectionContext } from "@/stores/ConnectionContext";
 import { getProxyUrl } from "@/lib/get_proxy_url";
@@ -14,15 +15,16 @@ interface WeatherData {
 }
 
 const AstroWeather: React.FC = () => {
+  const { t } = useTranslation();
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
-  const [selectedLocation, setSelectedLocation] = useState("50.85,4.35"); // Default: Brussel
+  const [selectedLocation, setSelectedLocation] = useState("50.85,4.35"); // Default: Brussels
 
-  const locations = {
+  const locations: Record<string, string> = {
     Amsterdam: "52.37,4.89",
-    Brussel: "50.85,4.35",
-    Berlijn: "52.52,13.41",
-    Parijs: "48.85,2.35",
-    Londen: "51.51,-0.13",
+    Brussels: "50.85,4.35",
+    Berlin: "52.52,13.41",
+    Paris: "48.85,2.35",
+    London: "51.51,-0.13",
   };
   let connectionCtx = useContext(ConnectionContext);
 
@@ -43,15 +45,18 @@ const AstroWeather: React.FC = () => {
       .then((response) => {
         setWeatherData(response.data as WeatherData);
       })
-      .catch((error) => console.error("Fout bij laden weerdata:", error));
+      .catch((error) =>
+        console.error("Error loading weather data:", error)
+      );
   }, [selectedLocation]);
 
-  if (!weatherData) return <p>🌙 Laden van astronomisch weer...</p>;
+  if (!weatherData)
+    return <p>{t("cAstroWeatherLoading")}</p>;
 
   return (
     <div className="astro-weather">
-      <h2 className="astro-title">Astronomisch Weer op uurbasis</h2>
-      <label htmlFor="location-select">Kies een locatie:</label>
+      <h2 className="astro-title">{t("cAstroWeatherTitle")}</h2>
+      <label htmlFor="location-select">{t("cAstroWeatherSelectLocation")}</label>
       <select
         id="location-select"
         value={selectedLocation}
@@ -65,13 +70,11 @@ const AstroWeather: React.FC = () => {
       </select>
 
       <div className="weather-info">
-        <p>🌤️ Bewolking: {weatherData.hourly.cloudcover[0]}%</p>
-        <p>🌡️ Temperatuur: {weatherData.hourly.temperature_2m[0]}°C</p>
-        <p>💨 Windsnelheid: {weatherData.hourly.windspeed_10m[0]} km/h</p>
-        <p>
-          💧 Luchtvochtigheid: {weatherData.hourly.relative_humidity_2m[0]}%
-        </p>
-        <p>❄️ Dauwpunt: {weatherData.hourly.dewpoint_2m[0]}°C</p>
+        <p>{t("cAstroWeatherCloudCover")} {weatherData.hourly.cloudcover[0]}%</p>
+        <p>{t("cAstroWeatherTemperature")} {weatherData.hourly.temperature_2m[0]}°C</p>
+        <p>{t("cAstroWeatherWindSpeed")} {weatherData.hourly.windspeed_10m[0]} km/h</p>
+        <p>{t("cAstroWeatherHumidity")} {weatherData.hourly.relative_humidity_2m[0]}%</p>
+        <p>{t("cAstroWeatherDewPoint")} {weatherData.hourly.dewpoint_2m[0]}°C</p>
       </div>
     </div>
   );

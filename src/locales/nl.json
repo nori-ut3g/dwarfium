@@ -413,5 +413,13 @@
   "cRemoveFromPersonalListButton": "Verwijder object",
   "cRemoveFromPersonalListConfirm": "Weet je zeker dat je dit object wilt verwijderen",
   "cRemoveFromPersonalListTitle": "Verwijder het object uit mijn persoonlijke bibliotheek",
-  "pMediaMtxNeedOpenPort8888": "Maar u moet poort 8888 open hebben op de proxy LAN -router."
+  "pMediaMtxNeedOpenPort8888": "Maar u moet poort 8888 open hebben op de proxy LAN -router.",
+  "cAstroWeatherLoading": "Astronomisch weer laden...",
+  "cAstroWeatherTitle": "Astronomisch weer op uurbasis",
+  "cAstroWeatherSelectLocation": "Kies een locatie:",
+  "cAstroWeatherCloudCover": "Bewolking:",
+  "cAstroWeatherTemperature": "Temperatuur:",
+  "cAstroWeatherWindSpeed": "Windsnelheid:",
+  "cAstroWeatherHumidity": "Luchtvochtigheid:",
+  "cAstroWeatherDewPoint": "Dauwpunt:"
 }
