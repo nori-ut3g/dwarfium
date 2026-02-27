@@ -55,6 +55,19 @@ export interface WeatherCondition {
 
 // ---- Output types ----
 
+export type RecommendationCode =
+  | "excellent"
+  | "good_weather_issue"
+  | "good_moon_issue"
+  | "good_low_alt"
+  | "good"
+  | "challenging"
+  | "below_horizon"
+  | "poor_weather"
+  | "marginal"
+  | "too_faint"
+  | "poor";
+
 export interface ObservationScore {
   /** Overall score 0-100 */
   overall: number;
@@ -68,8 +81,10 @@ export interface ObservationScore {
     /** Target difficulty score 0-100 (100 = easy target) */
     targetDifficulty: number;
   };
-  /** Short recommendation text */
+  /** Short recommendation text (English) */
   recommendation: string;
+  /** Stable code for i18n lookup */
+  recommendationCode: RecommendationCode;
 }
 
 // ---- Scoring weights ----
@@ -201,30 +216,36 @@ export function scoreTargetDifficulty(
   return Math.round(Math.max(0, Math.min(100, score)));
 }
 
+interface RecommendationResult {
+  text: string;
+  code: RecommendationCode;
+}
+
 /**
- * Generate a recommendation string based on scores.
+ * Generate a recommendation based on scores.
+ * Returns both a human-readable text and a stable code for i18n.
  */
 export function generateRecommendation(
   overall: number,
   factors: ObservationScore["factors"],
   altitudeDeg: number
-): string {
-  if (overall >= 80) return "Excellent conditions. Highly recommended.";
+): RecommendationResult {
+  if (overall >= 80) return { text: "Excellent conditions. Highly recommended.", code: "excellent" };
   if (overall >= 60) {
-    if (factors.weather < 50) return "Good target, but weather may interfere.";
-    if (factors.moonImpact < 50) return "Good target, but moonlight will reduce contrast.";
-    if (factors.altitude < 50) return "Good target, wait for higher altitude.";
-    return "Good conditions for observation.";
+    if (factors.weather < 50) return { text: "Good target, but weather may interfere.", code: "good_weather_issue" };
+    if (factors.moonImpact < 50) return { text: "Good target, but moonlight will reduce contrast.", code: "good_moon_issue" };
+    if (factors.altitude < 50) return { text: "Good target, wait for higher altitude.", code: "good_low_alt" };
+    return { text: "Good conditions for observation.", code: "good" };
   }
   if (overall >= 40) {
-    if (factors.targetDifficulty < 30) return "Challenging target for this equipment.";
-    if (altitudeDeg <= 0) return "Target is below the horizon.";
-    if (factors.weather < 30) return "Poor weather conditions. Consider postponing.";
-    return "Marginal conditions. Results may vary.";
+    if (factors.targetDifficulty < 30) return { text: "Challenging target for this equipment.", code: "challenging" };
+    if (altitudeDeg <= 0) return { text: "Target is below the horizon.", code: "below_horizon" };
+    if (factors.weather < 30) return { text: "Poor weather conditions. Consider postponing.", code: "poor_weather" };
+    return { text: "Marginal conditions. Results may vary.", code: "marginal" };
   }
-  if (altitudeDeg <= 0) return "Target is below the horizon.";
-  if (factors.targetDifficulty === 0) return "Target is too faint for this equipment.";
-  return "Poor conditions. Not recommended.";
+  if (altitudeDeg <= 0) return { text: "Target is below the horizon.", code: "below_horizon" };
+  if (factors.targetDifficulty === 0) return { text: "Target is too faint for this equipment.", code: "too_faint" };
+  return { text: "Poor conditions. Not recommended.", code: "poor" };
 }
 
 /**
@@ -251,11 +272,11 @@ export function calculateObservationScore(
     factors.targetDifficulty * WEIGHTS.targetDifficulty
   );
 
-  const recommendation = generateRecommendation(
+  const { text: recommendation, code: recommendationCode } = generateRecommendation(
     overall,
     factors,
     position.altitudeDeg
   );
 
-  return { overall, factors, recommendation };
+  return { overall, factors, recommendation, recommendationCode };
 }

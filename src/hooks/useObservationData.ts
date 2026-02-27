@@ -3,7 +3,7 @@
  * Provides all inputs needed by calculateObservationScore().
  */
 
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState, useCallback } from "react";
 
 import { ConnectionContext } from "@/stores/ConnectionContext";
 import { getProxyUrl } from "@/lib/get_proxy_url";
@@ -21,6 +21,7 @@ export interface ObservationData {
   equipment: EquipmentProfile | null;
   loading: boolean;
   error: string | null;
+  refresh: () => void;
 }
 
 const CACHE_TTL_MS = 15 * 60 * 1000; // 15 minutes
@@ -32,6 +33,7 @@ export function useObservationData(): ObservationData {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const lastFetchRef = useRef<number>(0);
+  const lastLocationRef = useRef<string>("");
 
   const lat = connectionCtx.latitude;
   const lon = connectionCtx.longitude;
@@ -40,17 +42,26 @@ export function useObservationData(): ObservationData {
   // Resolve equipment profile (synchronous)
   const equipment = deviceName ? resolveEquipmentProfile(deviceName) ?? null : null;
 
-  useEffect(() => {
-    if (lat == null || lon == null) return;
-
+  const fetchData = useCallback((latitude: number, longitude: number, force = false) => {
+    const locationKey = `${latitude},${longitude}`;
+    const locationChanged = locationKey !== lastLocationRef.current;
     const now = Date.now();
-    if (now - lastFetchRef.current < CACHE_TTL_MS && weather !== null) return;
+
+    // Skip if cache is still valid for the same location
+    if (!force && !locationChanged && now - lastFetchRef.current < CACHE_TTL_MS && weather !== null) {
+      return;
+    }
+
+    // Invalidate cache on location change
+    if (locationChanged) {
+      lastLocationRef.current = locationKey;
+    }
 
     setLoading(true);
     setError(null);
 
     // Moon condition is synchronous (suncalc)
-    const moonData = getCurrentMoonCondition(lat, lon);
+    const moonData = getCurrentMoonCondition(latitude, longitude);
     setMoon(moonData);
 
     // Weather is async (API call)
@@ -58,19 +69,46 @@ export function useObservationData(): ObservationData {
       ? getProxyUrl(connectionCtx) || undefined
       : undefined;
 
-    fetchCurrentWeather(lat, lon, proxyUrl)
+    const controller = new AbortController();
+
+    fetchCurrentWeather(latitude, longitude, proxyUrl)
       .then((data) => {
-        setWeather(data);
-        lastFetchRef.current = Date.now();
+        if (!controller.signal.aborted) {
+          setWeather(data);
+          lastFetchRef.current = Date.now();
+        }
       })
       .catch((err) => {
-        console.error("Failed to fetch weather data:", err);
-        setError("Failed to fetch weather data");
+        if (!controller.signal.aborted) {
+          console.error("Failed to fetch weather data:", err);
+          setError("Failed to fetch weather data");
+        }
       })
       .finally(() => {
-        setLoading(false);
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
       });
-  }, [lat, lon]);
 
-  return { weather, moon, equipment, loading, error };
+    return controller;
+  }, [weather, connectionCtx.proxyIP]);
+
+  useEffect(() => {
+    if (lat == null || lon == null) return;
+
+    const controller = fetchData(lat, lon);
+
+    // Cleanup: abort in-flight request on unmount or re-render
+    return () => {
+      controller?.abort();
+    };
+  }, [lat, lon, fetchData]);
+
+  const refresh = useCallback(() => {
+    if (lat != null && lon != null) {
+      fetchData(lat, lon, true);
+    }
+  }, [lat, lon, fetchData]);
+
+  return { weather, moon, equipment, loading, error, refresh };
 }

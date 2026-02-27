@@ -299,7 +299,8 @@ describe("generateRecommendation", () => {
       { altitude: 90, moonImpact: 90, weather: 80, targetDifficulty: 80 },
       60
     );
-    expect(result).toContain("Excellent");
+    expect(result.text).toContain("Excellent");
+    expect(result.code).toBe("excellent");
   });
 
   it("mentions weather for good target with poor weather", () => {
@@ -308,7 +309,8 @@ describe("generateRecommendation", () => {
       { altitude: 90, moonImpact: 90, weather: 40, targetDifficulty: 80 },
       60
     );
-    expect(result).toContain("weather");
+    expect(result.text).toContain("weather");
+    expect(result.code).toBe("good_weather_issue");
   });
 
   it("mentions moonlight for good target with bright moon", () => {
@@ -317,7 +319,8 @@ describe("generateRecommendation", () => {
       { altitude: 90, moonImpact: 40, weather: 80, targetDifficulty: 80 },
       60
     );
-    expect(result).toContain("moonlight");
+    expect(result.text).toContain("moonlight");
+    expect(result.code).toBe("good_moon_issue");
   });
 
   it("mentions altitude when target is low", () => {
@@ -326,7 +329,8 @@ describe("generateRecommendation", () => {
       { altitude: 40, moonImpact: 80, weather: 80, targetDifficulty: 80 },
       20
     );
-    expect(result).toContain("altitude");
+    expect(result.text).toContain("altitude");
+    expect(result.code).toBe("good_low_alt");
   });
 
   it("mentions below horizon when altitude <= 0", () => {
@@ -335,7 +339,8 @@ describe("generateRecommendation", () => {
       { altitude: 0, moonImpact: 90, weather: 80, targetDifficulty: 80 },
       -5
     );
-    expect(result).toContain("below the horizon");
+    expect(result.text).toContain("below the horizon");
+    expect(result.code).toBe("below_horizon");
   });
 
   it("mentions too faint when targetDifficulty is 0", () => {
@@ -344,7 +349,8 @@ describe("generateRecommendation", () => {
       { altitude: 80, moonImpact: 90, weather: 80, targetDifficulty: 0 },
       60
     );
-    expect(result).toContain("too faint");
+    expect(result.text).toContain("too faint");
+    expect(result.code).toBe("too_faint");
   });
 });
 
@@ -381,7 +387,7 @@ describe("calculateObservationScore", () => {
     expect(result.recommendation).toContain("Excellent");
   });
 
-  it("returns 0 overall when target is below horizon", () => {
+  it("returns low overall score when target is below horizon", () => {
     const target: TargetInfo = {
       magnitude: 4,
       angularSizeArcmin: 30,
