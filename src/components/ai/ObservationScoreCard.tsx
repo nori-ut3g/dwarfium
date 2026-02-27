@@ -22,19 +22,21 @@ type Props = {
   object: AstroObject;
 };
 
-// Map recommendation text from scorer to i18n keys
-const RECOMMENDATION_KEY_MAP: Record<string, string> = {
-  "Excellent conditions. Highly recommended.": "cAiRecExcellent",
-  "Good target, but weather may interfere.": "cAiRecWeatherIssue",
-  "Good target, but moonlight will reduce contrast.": "cAiRecMoonIssue",
-  "Good target, wait for higher altitude.": "cAiRecLowAlt",
-  "Good conditions for observation.": "cAiRecGood",
-  "Challenging target for this equipment.": "cAiRecChallenging",
-  "Target is below the horizon.": "cAiRecBelowHorizon",
-  "Poor weather conditions. Consider postponing.": "cAiRecPoorWeather",
-  "Marginal conditions. Results may vary.": "cAiRecMarginal",
-  "Target is too faint for this equipment.": "cAiRecTooFaint",
-  "Poor conditions. Not recommended.": "cAiRecPoor",
+// Map recommendation codes from scorer to i18n keys
+import type { RecommendationCode } from "@/lib/ai/observation_scorer";
+
+const RECOMMENDATION_KEY_MAP: Record<RecommendationCode, string> = {
+  excellent: "cAiRecExcellent",
+  good_weather_issue: "cAiRecWeatherIssue",
+  good_moon_issue: "cAiRecMoonIssue",
+  good_low_alt: "cAiRecLowAlt",
+  good: "cAiRecGood",
+  challenging: "cAiRecChallenging",
+  below_horizon: "cAiRecBelowHorizon",
+  poor_weather: "cAiRecPoorWeather",
+  marginal: "cAiRecMarginal",
+  too_faint: "cAiRecTooFaint",
+  poor: "cAiRecPoor",
 };
 
 function getScoreColorClass(score: number): string {
@@ -61,14 +63,14 @@ export default function ObservationScoreCard({ object }: Props) {
     if (
       !object.ra ||
       !object.dec ||
-      !connectionCtx.latitude ||
-      !connectionCtx.longitude
+      connectionCtx.latitude == null ||
+      connectionCtx.longitude == null
     )
       return null;
 
     const raDecimal = convertHMSToDecimalDegrees(object.ra);
     const decDecimal = convertDMSToDecimalDegrees(object.dec);
-    if (!raDecimal || !decDecimal) return null;
+    if (isNaN(raDecimal) || isNaN(decDecimal)) return null;
 
     const results = computeRaDecToAltAz(
       connectionCtx.latitude,
@@ -113,7 +115,7 @@ export default function ObservationScoreCard({ object }: Props) {
   }, [weather, moon, equipment, position, object]);
 
   // Don't render if location not set
-  if (!connectionCtx.latitude || !connectionCtx.longitude) return null;
+  if (connectionCtx.latitude == null || connectionCtx.longitude == null) return null;
 
   if (loading) {
     return (
@@ -127,7 +129,7 @@ export default function ObservationScoreCard({ object }: Props) {
 
   if (error || !score) return null;
 
-  const recKey = RECOMMENDATION_KEY_MAP[score.recommendation];
+  const recKey = RECOMMENDATION_KEY_MAP[score.recommendationCode];
 
   const factors = [
     { label: "cAiScoreAltitude", value: score.factors.altitude },
