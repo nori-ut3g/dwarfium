@@ -430,5 +430,10 @@
   "cAiRecPoorWeather": "天气条件差，建议推迟。",
   "cAiRecMarginal": "边际条件，结果可能有差异。",
   "cAiRecTooFaint": "目标对该设备来说太暗。",
-  "cAiRecPoor": "条件差，不推荐。"
+  "cAiRecPoor": "条件差，不推荐。",
+  "pTonightsBest": "今晚推荐",
+  "cAiTonightTitle": "今晚最佳观测目标",
+  "cAiTonightRefresh": "刷新",
+  "cAiTonightNoLocation": "请设置您的位置以查看推荐目标。",
+  "cAiTonightEmpty": "当前没有可见目标，请稍后再试。"
 }

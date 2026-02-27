@@ -8,6 +8,7 @@ import GotoStellarium from "@/components/GotoStellarium";
 import GotoLists from "@/components/GotoLists";
 import GotoUserLists from "@/components/GotoUserLists";
 import Asteroids from "@/components/Asteroids";
+import TonightsBest from "@/components/ai/TonightsBest";
 import StatusBar from "@/components/shared/StatusBar";
 import CalibrationDwarf from "@/components/shared/CalibrationDwarf";
 import { useSetupConnection } from "@/hooks/useSetupConnection";
@@ -131,6 +132,14 @@ export default function Goto() {
           >
             Asteroids
           </li>
+          <li
+            className={`nav-item nav-link ${
+              connectionCtx.gotoType === "tonightsBest" ? "active" : ""
+            }`}
+            onClick={() => connectionCtx.setGotoType("tonightsBest")}
+          >
+            {t("pTonightsBest")}
+          </li>
         </ul>
         <hr />
         {connectionCtx.connectionStatus && connectionCtx.PiPView && (
@@ -189,6 +198,17 @@ export default function Goto() {
             setErrors={setErrors}
             setSuccess={setSuccess}
           ></Asteroids>
+        )}
+        {connectionCtx.gotoType === "tonightsBest" && (
+          <TonightsBest
+            objectFavoriteNames={objectFavoriteNames}
+            setObjectFavoriteNames={setObjectFavoriteNames}
+            objectPersonalList={objectPersonalList}
+            setObjectPersonalList={setObjectPersonalList}
+            setModule={setModule}
+            setErrors={setErrors}
+            setSuccess={setSuccess}
+          />
         )}
         <br />
         <br />

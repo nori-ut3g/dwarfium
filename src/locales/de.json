@@ -430,5 +430,10 @@
   "cAiRecPoorWeather": "Schlechte Wetterbedingungen. Verschiebung empfohlen.",
   "cAiRecMarginal": "Grenzwertige Bedingungen. Ergebnisse können variieren.",
   "cAiRecTooFaint": "Ziel ist zu lichtschwach für diese Ausrüstung.",
-  "cAiRecPoor": "Schlechte Bedingungen. Nicht empfohlen."
+  "cAiRecPoor": "Schlechte Bedingungen. Nicht empfohlen.",
+  "pTonightsBest": "Beste Objekte",
+  "cAiTonightTitle": "Beste Ziele für heute Nacht",
+  "cAiTonightRefresh": "Aktualisieren",
+  "cAiTonightNoLocation": "Standort festlegen, um die besten Ziele zu sehen.",
+  "cAiTonightEmpty": "Derzeit sind keine Ziele sichtbar. Versuchen Sie es später erneut."
 }

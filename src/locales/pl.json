@@ -430,5 +430,10 @@
   "cAiRecPoorWeather": "Złe warunki pogodowe. Rozważ przełożenie.",
   "cAiRecMarginal": "Graniczne warunki. Wyniki mogą się różnić.",
   "cAiRecTooFaint": "Cel jest zbyt słaby dla tego sprzętu.",
-  "cAiRecPoor": "Złe warunki. Niezalecane."
+  "cAiRecPoor": "Złe warunki. Niezalecane.",
+  "pTonightsBest": "Najlepsze obiekty",
+  "cAiTonightTitle": "Najlepsze cele na dziś wieczór",
+  "cAiTonightRefresh": "Odśwież",
+  "cAiTonightNoLocation": "Ustaw swoją lokalizację, aby zobaczyć najlepsze cele.",
+  "cAiTonightEmpty": "Brak widocznych celów. Spróbuj ponownie później."
 }

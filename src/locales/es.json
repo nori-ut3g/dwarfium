@@ -430,5 +430,10 @@
   "cAiRecPoorWeather": "Malas condiciones climáticas. Considere posponer.",
   "cAiRecMarginal": "Condiciones marginales. Los resultados pueden variar.",
   "cAiRecTooFaint": "Objetivo demasiado tenue para este equipo.",
-  "cAiRecPoor": "Malas condiciones. No recomendado."
+  "cAiRecPoor": "Malas condiciones. No recomendado.",
+  "pTonightsBest": "Mejores objetos",
+  "cAiTonightTitle": "Mejores objetivos de esta noche",
+  "cAiTonightRefresh": "Actualizar",
+  "cAiTonightNoLocation": "Establece tu ubicación para ver los mejores objetivos.",
+  "cAiTonightEmpty": "No hay objetivos visibles actualmente. Inténtelo más tarde."
 }

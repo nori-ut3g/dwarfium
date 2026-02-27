@@ -430,5 +430,10 @@
   "cAiRecPoorWeather": "Poor weather conditions. Consider postponing.",
   "cAiRecMarginal": "Marginal conditions. Results may vary.",
   "cAiRecTooFaint": "Target is too faint for this equipment.",
-  "cAiRecPoor": "Poor conditions. Not recommended."
+  "cAiRecPoor": "Poor conditions. Not recommended.",
+  "pTonightsBest": "Tonight's Best",
+  "cAiTonightTitle": "Tonight's Best Targets",
+  "cAiTonightRefresh": "Refresh",
+  "cAiTonightNoLocation": "Set your location to see tonight's best targets.",
+  "cAiTonightEmpty": "No targets are currently visible. Try again later."
 }

@@ -430,5 +430,10 @@
   "cAiRecPoorWeather": "Más condições climáticas. Considere adiar.",
   "cAiRecMarginal": "Condições marginais. Os resultados podem variar.",
   "cAiRecTooFaint": "Alvo muito fraco para este equipamento.",
-  "cAiRecPoor": "Más condições. Não recomendado."
+  "cAiRecPoor": "Más condições. Não recomendado.",
+  "pTonightsBest": "Melhores objetos",
+  "cAiTonightTitle": "Melhores alvos de hoje à noite",
+  "cAiTonightRefresh": "Atualizar",
+  "cAiTonightNoLocation": "Defina sua localização para ver os melhores alvos.",
+  "cAiTonightEmpty": "Nenhum alvo visível no momento. Tente novamente mais tarde."
 }

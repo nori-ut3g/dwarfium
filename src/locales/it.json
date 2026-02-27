@@ -430,5 +430,10 @@
   "cAiRecPoorWeather": "Cattive condizioni meteo. Considerare di rimandare.",
   "cAiRecMarginal": "Condizioni marginali. I risultati possono variare.",
   "cAiRecTooFaint": "Obiettivo troppo debole per questa attrezzatura.",
-  "cAiRecPoor": "Cattive condizioni. Non raccomandato."
+  "cAiRecPoor": "Cattive condizioni. Non raccomandato.",
+  "pTonightsBest": "Migliori oggetti",
+  "cAiTonightTitle": "Migliori obiettivi di stasera",
+  "cAiTonightRefresh": "Aggiorna",
+  "cAiTonightNoLocation": "Imposta la tua posizione per vedere i migliori obiettivi.",
+  "cAiTonightEmpty": "Nessun obiettivo visibile al momento. Riprova più tardi."
 }

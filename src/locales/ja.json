@@ -430,5 +430,10 @@
   "cAiRecPoorWeather": "天候不良です。延期を検討してください。",
   "cAiRecMarginal": "条件は限界的です。結果にばらつきが出る可能性があります。",
   "cAiRecTooFaint": "この機材では暗すぎる対象です。",
-  "cAiRecPoor": "条件が悪いです。おすすめしません。"
+  "cAiRecPoor": "条件が悪いです。おすすめしません。",
+  "pTonightsBest": "今夜のおすすめ",
+  "cAiTonightTitle": "今夜のおすすめ天体",
+  "cAiTonightRefresh": "更新",
+  "cAiTonightNoLocation": "おすすめ天体を表示するには位置情報を設定してください。",
+  "cAiTonightEmpty": "現在見える天体がありません。後でもう一度お試しください。"
 }

@@ -430,5 +430,10 @@
   "cAiRecPoorWeather": "Slechte weersomstandigheden. Overweeg uitstel.",
   "cAiRecMarginal": "Marginale omstandigheden. Resultaten kunnen variëren.",
   "cAiRecTooFaint": "Object is te zwak voor deze apparatuur.",
-  "cAiRecPoor": "Slechte omstandigheden. Niet aanbevolen."
+  "cAiRecPoor": "Slechte omstandigheden. Niet aanbevolen.",
+  "pTonightsBest": "Beste objecten",
+  "cAiTonightTitle": "Beste objecten vanavond",
+  "cAiTonightRefresh": "Vernieuwen",
+  "cAiTonightNoLocation": "Stel uw locatie in om de beste objecten te zien.",
+  "cAiTonightEmpty": "Momenteel geen zichtbare objecten. Probeer het later opnieuw."
 }
