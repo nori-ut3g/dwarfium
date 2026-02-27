@@ -11,7 +11,42 @@ import {
   type WeatherCondition,
 } from "@/lib/ai/observation_scorer";
 
-import { DWARF_II, DWARF_3 } from "@/lib/ai/equipment_profiles";
+import {
+  DWARF_II,
+  DWARF_3,
+  getProfileByName,
+} from "@/lib/ai/equipment_profiles";
+
+// ---- getProfileByName ----
+
+describe("getProfileByName", () => {
+  it("returns DWARF II profile", () => {
+    const profile = getProfileByName("DWARF II");
+    expect(profile).toBeDefined();
+    expect(profile!.name).toBe("DWARF II");
+    expect(profile!.apertureMm).toBe(24);
+  });
+
+  it("returns DWARF 3 profile", () => {
+    const profile = getProfileByName("DWARF 3");
+    expect(profile).toBeDefined();
+    expect(profile!.name).toBe("DWARF 3");
+    expect(profile!.apertureMm).toBe(35);
+  });
+
+  it("returns undefined for unknown profile", () => {
+    expect(getProfileByName("DWARF 99")).toBeUndefined();
+    expect(getProfileByName("")).toBeUndefined();
+  });
+
+  it("DWARF II and DWARF 3 have different FOV values", () => {
+    const d2 = getProfileByName("DWARF II")!;
+    const d3 = getProfileByName("DWARF 3")!;
+    // DWARF 3 has longer focal length → narrower FOV
+    expect(d3.fovWidthDeg).toBeLessThan(d2.fovWidthDeg);
+    expect(d3.fovHeightDeg).toBeLessThan(d2.fovHeightDeg);
+  });
+});
 
 // ---- scoreAltitude ----
 

@@ -7,13 +7,27 @@ import type { EquipmentProfile } from "./equipment_profiles";
 
 // ---- Input types ----
 
+// Known categories from data/objectTypes.js
+export type DsoTypeCategory =
+  | "galaxies"
+  | "nebulae"
+  | "clusters"
+  | "stars"
+  | "moon_planets"
+  | "asteroids"
+  | "comet"
+  | "duplicate"
+  | "nonexistent"
+  | "other"
+  | "mosaic";
+
 export interface TargetInfo {
   /** Visual magnitude (null if unknown) */
   magnitude: number | null;
   /** Angular size in arcminutes (null if point source) */
   angularSizeArcmin: number | null;
-  /** DSO type category: "galaxies" | "nebulae" | "clusters" | "stars" | "moon_planets" */
-  typeCategory: string;
+  /** DSO type category */
+  typeCategory: DsoTypeCategory;
 }
 
 export interface TargetPosition {
@@ -93,7 +107,7 @@ export function scoreAltitude(altitudeDeg: number): number {
  */
 export function scoreMoonImpact(
   moon: MoonCondition,
-  typeCategory: string
+  typeCategory: DsoTypeCategory
 ): number {
   // Moon below horizon = no impact
   if (moon.altitudeDeg <= 0) return 100;
