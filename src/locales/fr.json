@@ -413,5 +413,22 @@
   "cRemoveFromPersonalListButton": "Supprimer l'objet",
   "cRemoveFromPersonalListConfirm": "Êtes-vous sûr de vouloir supprimer cet objet",
   "cRemoveFromPersonalListTitle": "Supprimer l'objet de ma bibliothèque personnelle",
-  "pMediaMtxNeedOpenPort8888": "Mais vous devez avoir le port 8888 ouvert sur le routeur LAN proxy."
+  "pMediaMtxNeedOpenPort8888": "Mais vous devez avoir le port 8888 ouvert sur le routeur LAN proxy.",
+  "cAiScoreTitle": "Score d'observation",
+  "cAiScoreLoading": "Chargement des conditions...",
+  "cAiScoreAltitude": "Altitude",
+  "cAiScoreWeather": "Météo",
+  "cAiScoreMoon": "Lune",
+  "cAiScoreDifficulty": "Difficulté",
+  "cAiRecExcellent": "Conditions excellentes. Fortement recommandé.",
+  "cAiRecWeatherIssue": "Bonne cible, mais la météo pourrait gêner.",
+  "cAiRecMoonIssue": "Bonne cible, mais le clair de lune réduira le contraste.",
+  "cAiRecLowAlt": "Bonne cible, attendre une altitude plus élevée.",
+  "cAiRecGood": "Bonnes conditions d'observation.",
+  "cAiRecChallenging": "Cible difficile pour cet équipement.",
+  "cAiRecBelowHorizon": "La cible est sous l'horizon.",
+  "cAiRecPoorWeather": "Mauvaises conditions météo. Envisagez de reporter.",
+  "cAiRecMarginal": "Conditions limites. Les résultats peuvent varier.",
+  "cAiRecTooFaint": "Cible trop faible pour cet équipement.",
+  "cAiRecPoor": "Mauvaises conditions. Non recommandé."
 }

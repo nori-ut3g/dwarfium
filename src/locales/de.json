@@ -413,5 +413,22 @@
   "cRemoveFromPersonalListButton": "Objekt entfernen",
   "cRemoveFromPersonalListConfirm": "Sind Sie sicher, dass Sie dieses Objekt entfernen möchten?",
   "cRemoveFromPersonalListTitle": "Entfernen Sie das Objekt aus meiner persönlichen Bibliothek",
-  "pMediaMtxNeedOpenPort8888": "Sie müssen jedoch Port 8888 auf dem Proxy Lan Router geöffnet haben."
+  "pMediaMtxNeedOpenPort8888": "Sie müssen jedoch Port 8888 auf dem Proxy Lan Router geöffnet haben.",
+  "cAiScoreTitle": "Beobachtungsbewertung",
+  "cAiScoreLoading": "Bedingungen werden geladen...",
+  "cAiScoreAltitude": "Höhe",
+  "cAiScoreWeather": "Wetter",
+  "cAiScoreMoon": "Mond",
+  "cAiScoreDifficulty": "Schwierigkeit",
+  "cAiRecExcellent": "Ausgezeichnete Bedingungen. Sehr empfehlenswert.",
+  "cAiRecWeatherIssue": "Gutes Ziel, aber das Wetter könnte stören.",
+  "cAiRecMoonIssue": "Gutes Ziel, aber Mondlicht verringert den Kontrast.",
+  "cAiRecLowAlt": "Gutes Ziel, auf größere Höhe warten.",
+  "cAiRecGood": "Gute Bedingungen für die Beobachtung.",
+  "cAiRecChallenging": "Anspruchsvolles Ziel für diese Ausrüstung.",
+  "cAiRecBelowHorizon": "Ziel befindet sich unter dem Horizont.",
+  "cAiRecPoorWeather": "Schlechte Wetterbedingungen. Verschiebung empfohlen.",
+  "cAiRecMarginal": "Grenzwertige Bedingungen. Ergebnisse können variieren.",
+  "cAiRecTooFaint": "Ziel ist zu lichtschwach für diese Ausrüstung.",
+  "cAiRecPoor": "Schlechte Bedingungen. Nicht empfohlen."
 }

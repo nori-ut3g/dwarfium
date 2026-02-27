@@ -1,0 +1,43 @@
+/* Observation Score Card — AI scoring display */
+
+.ai-score-card {
+  background-color: rgba(30, 30, 50, 0.6);
+  font-size: 0.85rem;
+}
+
+.ai-score-badge {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #fff;
+}
+
+.ai-score-good { background-color: #198754; }
+.ai-score-moderate { background-color: #ffc107; color: #000; }
+.ai-score-poor { background-color: #dc3545; }
+
+.ai-score-label {
+  width: 80px;
+  flex-shrink: 0;
+  margin-right: 6px;
+}
+
+.ai-score-bar {
+  height: 6px;
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.ai-score-value {
+  width: 28px;
+  text-align: right;
+  margin-left: 6px;
+}
+
+.progress-bar.ai-score-good { background-color: #198754; }
+.progress-bar.ai-score-moderate { background-color: #ffc107; }
+.progress-bar.ai-score-poor { background-color: #dc3545; }

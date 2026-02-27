@@ -413,5 +413,22 @@
   "cObjectsRemovePersonal": "マイライブラリからこの天体を削除しますか？",
   "cRemoveFromPersonalListTitle": "マイライブラリから天体を削除",
   "cRemoveFromPersonalListConfirm": "本当にこの天体を削除しますか？",
-  "cRemoveFromPersonalListButton": "天体を削除"
+  "cRemoveFromPersonalListButton": "天体を削除",
+  "cAiScoreTitle": "観測スコア",
+  "cAiScoreLoading": "条件を読み込み中...",
+  "cAiScoreAltitude": "高度",
+  "cAiScoreWeather": "天候",
+  "cAiScoreMoon": "月明かり",
+  "cAiScoreDifficulty": "難易度",
+  "cAiRecExcellent": "絶好の条件です。強くおすすめします。",
+  "cAiRecWeatherIssue": "良い対象ですが、天候が影響する可能性があります。",
+  "cAiRecMoonIssue": "良い対象ですが、月明かりでコントラストが低下します。",
+  "cAiRecLowAlt": "良い対象です。高度が上がるまでお待ちください。",
+  "cAiRecGood": "観測に適した条件です。",
+  "cAiRecChallenging": "この機材では難しい対象です。",
+  "cAiRecBelowHorizon": "対象は地平線の下にあります。",
+  "cAiRecPoorWeather": "天候不良です。延期を検討してください。",
+  "cAiRecMarginal": "条件は限界的です。結果にばらつきが出る可能性があります。",
+  "cAiRecTooFaint": "この機材では暗すぎる対象です。",
+  "cAiRecPoor": "条件が悪いです。おすすめしません。"
 }

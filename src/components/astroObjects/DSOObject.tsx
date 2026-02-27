@@ -23,6 +23,7 @@ import {
 } from "@/db/db_utils";
 import RemoveFromPersonalLibrary from "@/components/RemoveFromPersonalLibModal";
 import GotoModal from "./GotoModal";
+import ObservationScoreCard from "@/components/ai/ObservationScoreCard";
 
 type AstronomyObjectPropType = {
   object: AstroObject;
@@ -382,6 +383,7 @@ export default function DSOObject(props: AstronomyObjectPropType) {
               />
             </div>
           </div>
+          <ObservationScoreCard object={object} />
           <RemoveFromPersonalLibrary
             showModal={showRemoveModal}
             setShowModal={setShowRemoveModal}
