@@ -435,5 +435,13 @@
   "cAiTonightTitle": "Melhores alvos de hoje à noite",
   "cAiTonightRefresh": "Atualizar",
   "cAiTonightNoLocation": "Defina sua localização para ver os melhores alvos.",
-  "cAiTonightEmpty": "Nenhum alvo visível no momento. Tente novamente mais tarde."
+  "cAiTonightEmpty": "Nenhum alvo visível no momento. Tente novamente mais tarde.",
+  "cAstroWeatherLoading": "Carregando clima astronômico...",
+  "cAstroWeatherTitle": "Clima astronômico por hora",
+  "cAstroWeatherSelectLocation": "Selecionar localização:",
+  "cAstroWeatherCloudCover": "Cobertura de nuvens:",
+  "cAstroWeatherTemperature": "Temperatura:",
+  "cAstroWeatherWindSpeed": "Velocidade do vento:",
+  "cAstroWeatherHumidity": "Umidade:",
+  "cAstroWeatherDewPoint": "Ponto de orvalho:"
 }

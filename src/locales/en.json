@@ -435,5 +435,13 @@
   "cAiTonightTitle": "Tonight's Best Targets",
   "cAiTonightRefresh": "Refresh",
   "cAiTonightNoLocation": "Set your location to see tonight's best targets.",
-  "cAiTonightEmpty": "No targets are currently visible. Try again later."
+  "cAiTonightEmpty": "No targets are currently visible. Try again later.",
+  "cAstroWeatherLoading": "Loading astronomical weather...",
+  "cAstroWeatherTitle": "Hourly Astronomical Weather",
+  "cAstroWeatherSelectLocation": "Select a location:",
+  "cAstroWeatherCloudCover": "Cloud cover:",
+  "cAstroWeatherTemperature": "Temperature:",
+  "cAstroWeatherWindSpeed": "Wind speed:",
+  "cAstroWeatherHumidity": "Humidity:",
+  "cAstroWeatherDewPoint": "Dew point:"
 }

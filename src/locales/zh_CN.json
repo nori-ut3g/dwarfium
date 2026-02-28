@@ -435,5 +435,13 @@
   "cAiTonightTitle": "今晚最佳观测目标",
   "cAiTonightRefresh": "刷新",
   "cAiTonightNoLocation": "请设置您的位置以查看推荐目标。",
-  "cAiTonightEmpty": "当前没有可见目标，请稍后再试。"
+  "cAiTonightEmpty": "当前没有可见目标，请稍后再试。",
+  "cAstroWeatherLoading": "正在加载天文气象数据...",
+  "cAstroWeatherTitle": "逐时天文气象",
+  "cAstroWeatherSelectLocation": "选择位置：",
+  "cAstroWeatherCloudCover": "云量：",
+  "cAstroWeatherTemperature": "温度：",
+  "cAstroWeatherWindSpeed": "风速：",
+  "cAstroWeatherHumidity": "湿度：",
+  "cAstroWeatherDewPoint": "露点："
 }

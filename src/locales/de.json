@@ -435,5 +435,13 @@
   "cAiTonightTitle": "Beste Ziele für heute Nacht",
   "cAiTonightRefresh": "Aktualisieren",
   "cAiTonightNoLocation": "Standort festlegen, um die besten Ziele zu sehen.",
-  "cAiTonightEmpty": "Derzeit sind keine Ziele sichtbar. Versuchen Sie es später erneut."
+  "cAiTonightEmpty": "Derzeit sind keine Ziele sichtbar. Versuchen Sie es später erneut.",
+  "cAstroWeatherLoading": "Astronomisches Wetter wird geladen...",
+  "cAstroWeatherTitle": "Stündliches astronomisches Wetter",
+  "cAstroWeatherSelectLocation": "Standort wählen:",
+  "cAstroWeatherCloudCover": "Bewölkung:",
+  "cAstroWeatherTemperature": "Temperatur:",
+  "cAstroWeatherWindSpeed": "Windgeschwindigkeit:",
+  "cAstroWeatherHumidity": "Luftfeuchtigkeit:",
+  "cAstroWeatherDewPoint": "Taupunkt:"
 }

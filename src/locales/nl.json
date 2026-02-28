@@ -435,5 +435,13 @@
   "cAiTonightTitle": "Beste objecten vanavond",
   "cAiTonightRefresh": "Vernieuwen",
   "cAiTonightNoLocation": "Stel uw locatie in om de beste objecten te zien.",
-  "cAiTonightEmpty": "Momenteel geen zichtbare objecten. Probeer het later opnieuw."
+  "cAiTonightEmpty": "Momenteel geen zichtbare objecten. Probeer het later opnieuw.",
+  "cAstroWeatherLoading": "Astronomisch weer laden...",
+  "cAstroWeatherTitle": "Astronomisch weer op uurbasis",
+  "cAstroWeatherSelectLocation": "Kies een locatie:",
+  "cAstroWeatherCloudCover": "Bewolking:",
+  "cAstroWeatherTemperature": "Temperatuur:",
+  "cAstroWeatherWindSpeed": "Windsnelheid:",
+  "cAstroWeatherHumidity": "Luchtvochtigheid:",
+  "cAstroWeatherDewPoint": "Dauwpunt:"
 }
