@@ -73,7 +73,7 @@ export function rankTargetsForTonight(
 
     const raDecimal = convertHMSToDecimalDegrees(obj.ra);
     const decDecimal = convertDMSToDecimalDegrees(obj.dec);
-    if (!raDecimal || !decDecimal) continue;
+    if (isNaN(raDecimal) || isNaN(decDecimal)) continue;
 
     const altAz = computeRaDecToAltAz(
       lat,

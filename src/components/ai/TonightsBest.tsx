@@ -127,6 +127,7 @@ export default function TonightsBest(props: Props) {
             setModule={props.setModule}
             setErrors={props.setErrors}
             setSuccess={props.setSuccess}
+            showScoreCard={false}
           />
         </div>
       ))}

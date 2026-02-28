@@ -35,6 +35,7 @@ type AstronomyObjectPropType = {
   setModule: Dispatch<SetStateAction<string | undefined>>;
   setErrors: Dispatch<SetStateAction<string | undefined>>;
   setSuccess: Dispatch<SetStateAction<string | undefined>>;
+  showScoreCard?: boolean;
 };
 type Message = {
   [k: string]: string;
@@ -383,7 +384,7 @@ export default function DSOObject(props: AstronomyObjectPropType) {
               />
             </div>
           </div>
-          <ObservationScoreCard object={object} />
+          {props.showScoreCard !== false && <ObservationScoreCard object={object} />}
           <RemoveFromPersonalLibrary
             showModal={showRemoveModal}
             setShowModal={setShowRemoveModal}
