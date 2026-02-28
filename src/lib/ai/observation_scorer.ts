@@ -279,5 +279,11 @@ export function calculateObservationScore(
     position.altitudeDeg
   );
 
-  return { overall, factors, recommendation, recommendationCode };
+  // Clamp overall for hard-stop conditions so UI colors match recommendation
+  const displayOverall =
+    recommendationCode === "below_horizon" || recommendationCode === "too_faint"
+      ? 0
+      : overall;
+
+  return { overall: displayOverall, factors, recommendation, recommendationCode };
 }
