@@ -4,7 +4,7 @@
  */
 
 import { useTranslation } from "react-i18next";
-import { useMemo, useContext } from "react";
+import { useContext } from "react";
 
 import { ConnectionContext } from "@/stores/ConnectionContext";
 import { AstroObject } from "@/types";
@@ -58,8 +58,8 @@ export default function ObservationScoreCard({ object }: Props) {
   const connectionCtx = useContext(ConnectionContext);
   const { weather, moon, equipment, loading, error } = useObservationData();
 
-  // Compute current Alt/Az for this object
-  const position = useMemo(() => {
+  // Compute current Alt/Az — no memoization so time-dependent values stay fresh
+  const position = (() => {
     if (
       !object.ra ||
       !object.dec ||
@@ -82,16 +82,10 @@ export default function ObservationScoreCard({ object }: Props) {
     );
 
     return results ? { altitudeDeg: results.alt, azimuthDeg: results.az } : null;
-  }, [
-    object.ra,
-    object.dec,
-    connectionCtx.latitude,
-    connectionCtx.longitude,
-    connectionCtx.timezone,
-  ]);
+  })();
 
   // Calculate score when all data is available
-  const score = useMemo(() => {
+  const score = (() => {
     if (!weather || !moon || !equipment || !position) return null;
 
     const magnitude =
@@ -112,7 +106,7 @@ export default function ObservationScoreCard({ object }: Props) {
       weather,
       equipment
     );
-  }, [weather, moon, equipment, position, object]);
+  })();
 
   // Don't render if location not set
   if (connectionCtx.latitude == null || connectionCtx.longitude == null) return null;

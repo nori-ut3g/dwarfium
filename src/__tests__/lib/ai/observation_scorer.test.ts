@@ -352,6 +352,26 @@ describe("generateRecommendation", () => {
     expect(result.text).toContain("too faint");
     expect(result.code).toBe("too_faint");
   });
+
+  it("prioritizes below_horizon even when overall is high", () => {
+    // alt=0 but other factors give overall ~70 — should still say below horizon
+    const result = generateRecommendation(
+      70,
+      { altitude: 0, moonImpact: 100, weather: 100, targetDifficulty: 100 },
+      -5
+    );
+    expect(result.code).toBe("below_horizon");
+  });
+
+  it("prioritizes too_faint even when overall is high", () => {
+    // targetDifficulty=0 but other factors give overall ~80
+    const result = generateRecommendation(
+      80,
+      { altitude: 100, moonImpact: 100, weather: 100, targetDifficulty: 0 },
+      60
+    );
+    expect(result.code).toBe("too_faint");
+  });
 });
 
 // ---- calculateObservationScore (integration) ----
