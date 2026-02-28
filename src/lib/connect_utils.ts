@@ -46,7 +46,10 @@ function updateAstroCamera(connectionCtx: ConnectionContextType, cmd) {
 }
 
 function getDeviceName(deviceId) {
-  return deviceId === 1 ? "Dwarf II" : deviceId === 2 ? "Dwarf3" : "Dwarf";
+  if (deviceId === 1) return "Dwarf II";
+  if (deviceId === 2) return "Dwarf3";
+  if (deviceId === 4) return "Dwarf Mini";
+  return "Dwarf";
 }
 
 export async function connectionHandler(
@@ -299,11 +302,13 @@ export async function connectionHandler(
       if (result_data.data.camId == 0) {
         connectionCtx.setTypeIdDwarf(2);
         connectionCtx.setTypeNameDwarf("Dwarf3");
+        webSocketHandler.setDeviceIdDwarf(2);
         connectionCtx.setStreamTypeTeleDwarf(result_data.data.streamType);
         console.log("C setStreamTypeTeleDwarf: ", result_data.data.streamType);
       } else if (result_data.data.camId == 1) {
         connectionCtx.setTypeIdDwarf(2);
         connectionCtx.setTypeNameDwarf("Dwarf3");
+        webSocketHandler.setDeviceIdDwarf(2);
         connectionCtx.setStreamTypeWideDwarf(result_data.data.streamType);
         console.log("C setStreamTypeWideDwarf: ", result_data.data.streamType);
       }
