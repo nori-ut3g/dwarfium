@@ -301,14 +301,18 @@ export async function connectionHandler(
     } else if (result_data.cmd == Dwarfii_Api.DwarfCMD.CMD_NOTIFY_STREAM_TYPE) {
       if (result_data.data.camId == 0) {
         connectionCtx.setTypeIdDwarf(2);
-        connectionCtx.setTypeNameDwarf("Dwarf3");
-        webSocketHandler.setDeviceIdDwarf(2);
+        connectionCtx.setTypeNameDwarf(getDeviceName(2));
+        if (!webSocketHandler.setDeviceIdDwarf(2)) {
+          console.error("Failed to set device ID to 2 in CMD_NOTIFY_STREAM_TYPE (camId 0)");
+        }
         connectionCtx.setStreamTypeTeleDwarf(result_data.data.streamType);
         console.log("C setStreamTypeTeleDwarf: ", result_data.data.streamType);
       } else if (result_data.data.camId == 1) {
         connectionCtx.setTypeIdDwarf(2);
-        connectionCtx.setTypeNameDwarf("Dwarf3");
-        webSocketHandler.setDeviceIdDwarf(2);
+        connectionCtx.setTypeNameDwarf(getDeviceName(2));
+        if (!webSocketHandler.setDeviceIdDwarf(2)) {
+          console.error("Failed to set device ID to 2 in CMD_NOTIFY_STREAM_TYPE (camId 1)");
+        }
         connectionCtx.setStreamTypeWideDwarf(result_data.data.streamType);
         console.log("C setStreamTypeWideDwarf: ", result_data.data.streamType);
       }
