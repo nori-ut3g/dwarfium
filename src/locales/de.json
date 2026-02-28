@@ -430,5 +430,13 @@
   "cAiRecPoorWeather": "Schlechte Wetterbedingungen. Verschiebung empfohlen.",
   "cAiRecMarginal": "Grenzwertige Bedingungen. Ergebnisse können variieren.",
   "cAiRecTooFaint": "Ziel ist zu lichtschwach für diese Ausrüstung.",
-  "cAiRecPoor": "Schlechte Bedingungen. Nicht empfohlen."
+  "cAiRecPoor": "Schlechte Bedingungen. Nicht empfohlen.",
+  "cAstroWeatherLoading": "Astronomisches Wetter wird geladen...",
+  "cAstroWeatherTitle": "Stündliches astronomisches Wetter",
+  "cAstroWeatherSelectLocation": "Standort wählen:",
+  "cAstroWeatherCloudCover": "Bewölkung:",
+  "cAstroWeatherTemperature": "Temperatur:",
+  "cAstroWeatherWindSpeed": "Windgeschwindigkeit:",
+  "cAstroWeatherHumidity": "Luftfeuchtigkeit:",
+  "cAstroWeatherDewPoint": "Taupunkt:"
 }

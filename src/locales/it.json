@@ -430,5 +430,13 @@
   "cAiRecPoorWeather": "Cattive condizioni meteo. Considerare di rimandare.",
   "cAiRecMarginal": "Condizioni marginali. I risultati possono variare.",
   "cAiRecTooFaint": "Obiettivo troppo debole per questa attrezzatura.",
-  "cAiRecPoor": "Cattive condizioni. Non raccomandato."
+  "cAiRecPoor": "Cattive condizioni. Non raccomandato.",
+  "cAstroWeatherLoading": "Caricamento meteo astronomico...",
+  "cAstroWeatherTitle": "Meteo astronomico orario",
+  "cAstroWeatherSelectLocation": "Seleziona una località:",
+  "cAstroWeatherCloudCover": "Copertura nuvolosa:",
+  "cAstroWeatherTemperature": "Temperatura:",
+  "cAstroWeatherWindSpeed": "Velocità del vento:",
+  "cAstroWeatherHumidity": "Umidità:",
+  "cAstroWeatherDewPoint": "Punto di rugiada:"
 }

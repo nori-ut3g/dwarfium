@@ -430,5 +430,13 @@
   "cAiRecPoorWeather": "天气条件差，建议推迟。",
   "cAiRecMarginal": "边际条件，结果可能有差异。",
   "cAiRecTooFaint": "目标对该设备来说太暗。",
-  "cAiRecPoor": "条件差，不推荐。"
+  "cAiRecPoor": "条件差，不推荐。",
+  "cAstroWeatherLoading": "正在加载天文气象数据...",
+  "cAstroWeatherTitle": "逐时天文气象",
+  "cAstroWeatherSelectLocation": "选择位置：",
+  "cAstroWeatherCloudCover": "云量：",
+  "cAstroWeatherTemperature": "温度：",
+  "cAstroWeatherWindSpeed": "风速：",
+  "cAstroWeatherHumidity": "湿度：",
+  "cAstroWeatherDewPoint": "露点："
 }

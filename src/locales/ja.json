@@ -430,5 +430,13 @@
   "cAiRecPoorWeather": "天候不良です。延期を検討してください。",
   "cAiRecMarginal": "条件は限界的です。結果にばらつきが出る可能性があります。",
   "cAiRecTooFaint": "この機材では暗すぎる対象です。",
-  "cAiRecPoor": "条件が悪いです。おすすめしません。"
+  "cAiRecPoor": "条件が悪いです。おすすめしません。",
+  "cAstroWeatherLoading": "天文気象データを読み込み中...",
+  "cAstroWeatherTitle": "1時間ごとの天文気象",
+  "cAstroWeatherSelectLocation": "観測地を選択:",
+  "cAstroWeatherCloudCover": "雲量:",
+  "cAstroWeatherTemperature": "気温:",
+  "cAstroWeatherWindSpeed": "風速:",
+  "cAstroWeatherHumidity": "湿度:",
+  "cAstroWeatherDewPoint": "露点:"
 }

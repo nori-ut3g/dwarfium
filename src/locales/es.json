@@ -430,5 +430,13 @@
   "cAiRecPoorWeather": "Malas condiciones climáticas. Considere posponer.",
   "cAiRecMarginal": "Condiciones marginales. Los resultados pueden variar.",
   "cAiRecTooFaint": "Objetivo demasiado tenue para este equipo.",
-  "cAiRecPoor": "Malas condiciones. No recomendado."
+  "cAiRecPoor": "Malas condiciones. No recomendado.",
+  "cAstroWeatherLoading": "Cargando clima astronómico...",
+  "cAstroWeatherTitle": "Clima astronómico por hora",
+  "cAstroWeatherSelectLocation": "Seleccionar ubicación:",
+  "cAstroWeatherCloudCover": "Nubosidad:",
+  "cAstroWeatherTemperature": "Temperatura:",
+  "cAstroWeatherWindSpeed": "Velocidad del viento:",
+  "cAstroWeatherHumidity": "Humedad:",
+  "cAstroWeatherDewPoint": "Punto de rocío:"
 }

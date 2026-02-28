@@ -430,5 +430,13 @@
   "cAiRecPoorWeather": "Más condições climáticas. Considere adiar.",
   "cAiRecMarginal": "Condições marginais. Os resultados podem variar.",
   "cAiRecTooFaint": "Alvo muito fraco para este equipamento.",
-  "cAiRecPoor": "Más condições. Não recomendado."
+  "cAiRecPoor": "Más condições. Não recomendado.",
+  "cAstroWeatherLoading": "Carregando clima astronômico...",
+  "cAstroWeatherTitle": "Clima astronômico por hora",
+  "cAstroWeatherSelectLocation": "Selecionar localização:",
+  "cAstroWeatherCloudCover": "Cobertura de nuvens:",
+  "cAstroWeatherTemperature": "Temperatura:",
+  "cAstroWeatherWindSpeed": "Velocidade do vento:",
+  "cAstroWeatherHumidity": "Umidade:",
+  "cAstroWeatherDewPoint": "Ponto de orvalho:"
 }

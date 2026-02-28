@@ -430,5 +430,13 @@
   "cAiRecPoorWeather": "Slechte weersomstandigheden. Overweeg uitstel.",
   "cAiRecMarginal": "Marginale omstandigheden. Resultaten kunnen variëren.",
   "cAiRecTooFaint": "Object is te zwak voor deze apparatuur.",
-  "cAiRecPoor": "Slechte omstandigheden. Niet aanbevolen."
+  "cAiRecPoor": "Slechte omstandigheden. Niet aanbevolen.",
+  "cAstroWeatherLoading": "Astronomisch weer laden...",
+  "cAstroWeatherTitle": "Astronomisch weer op uurbasis",
+  "cAstroWeatherSelectLocation": "Kies een locatie:",
+  "cAstroWeatherCloudCover": "Bewolking:",
+  "cAstroWeatherTemperature": "Temperatuur:",
+  "cAstroWeatherWindSpeed": "Windsnelheid:",
+  "cAstroWeatherHumidity": "Luchtvochtigheid:",
+  "cAstroWeatherDewPoint": "Dauwpunt:"
 }
