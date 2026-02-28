@@ -230,6 +230,10 @@ export function generateRecommendation(
   factors: ObservationScore["factors"],
   altitudeDeg: number
 ): RecommendationResult {
+  // Priority checks: these conditions override any overall score
+  if (altitudeDeg <= 0) return { text: "Target is below the horizon.", code: "below_horizon" };
+  if (factors.targetDifficulty === 0) return { text: "Target is too faint for this equipment.", code: "too_faint" };
+
   if (overall >= 80) return { text: "Excellent conditions. Highly recommended.", code: "excellent" };
   if (overall >= 60) {
     if (factors.weather < 50) return { text: "Good target, but weather may interfere.", code: "good_weather_issue" };
@@ -239,12 +243,9 @@ export function generateRecommendation(
   }
   if (overall >= 40) {
     if (factors.targetDifficulty < 30) return { text: "Challenging target for this equipment.", code: "challenging" };
-    if (altitudeDeg <= 0) return { text: "Target is below the horizon.", code: "below_horizon" };
     if (factors.weather < 30) return { text: "Poor weather conditions. Consider postponing.", code: "poor_weather" };
     return { text: "Marginal conditions. Results may vary.", code: "marginal" };
   }
-  if (altitudeDeg <= 0) return { text: "Target is below the horizon.", code: "below_horizon" };
-  if (factors.targetDifficulty === 0) return { text: "Target is too faint for this equipment.", code: "too_faint" };
   return { text: "Poor conditions. Not recommended.", code: "poor" };
 }
 
