@@ -407,7 +407,7 @@ describe("calculateObservationScore", () => {
     expect(result.recommendation).toContain("Excellent");
   });
 
-  it("returns low overall score when target is below horizon", () => {
+  it("returns 0 overall when target is below horizon", () => {
     const target: TargetInfo = {
       magnitude: 4,
       angularSizeArcmin: 30,
@@ -424,9 +424,9 @@ describe("calculateObservationScore", () => {
     );
 
     expect(result.factors.altitude).toBe(0);
-    // Altitude weight is 0.3, so even with other factors at 100,
-    // overall max = 0.7 * 100 = 70 (no altitude contribution)
-    expect(result.overall).toBeLessThanOrEqual(70);
+    // Below-horizon is a hard-stop: overall is clamped to 0
+    expect(result.overall).toBe(0);
+    expect(result.recommendationCode).toBe("below_horizon");
   });
 
   it("returns low score for poor weather", () => {
@@ -524,5 +524,27 @@ describe("calculateObservationScore", () => {
         }
       }
     }
+  });
+
+  it("clamps overall to 0 for too-faint target", () => {
+    // Magnitude 20 exceeds DWARF II limiting mag (14) → targetDifficulty=0
+    const target: TargetInfo = {
+      magnitude: 20,
+      angularSizeArcmin: 1,
+      typeCategory: "galaxies",
+    };
+    const position: TargetPosition = { altitudeDeg: 60, azimuthDeg: 180 };
+
+    const result = calculateObservationScore(
+      target,
+      position,
+      noMoon,
+      perfectWeather,
+      DWARF_II
+    );
+
+    expect(result.factors.targetDifficulty).toBe(0);
+    expect(result.overall).toBe(0);
+    expect(result.recommendationCode).toBe("too_faint");
   });
 });

@@ -4,7 +4,7 @@
  */
 
 import { useTranslation } from "react-i18next";
-import { useContext } from "react";
+import { useContext, useMemo, useState, useEffect } from "react";
 
 import { ConnectionContext } from "@/stores/ConnectionContext";
 import { AstroObject } from "@/types";
@@ -58,8 +58,15 @@ export default function ObservationScoreCard({ object }: Props) {
   const connectionCtx = useContext(ConnectionContext);
   const { weather, moon, equipment, loading, error } = useObservationData();
 
-  // Compute current Alt/Az — no memoization so time-dependent values stay fresh
-  const position = (() => {
+  // Tick every 60s so Alt/Az refreshes without running on every render
+  const [tick, setTick] = useState(0);
+  useEffect(() => {
+    const timer = setInterval(() => setTick((t) => t + 1), 60_000);
+    return () => clearInterval(timer);
+  }, []);
+
+  // Compute current Alt/Az (memoized, refreshes once per minute via tick)
+  const position = useMemo(() => {
     if (
       !object.ra ||
       !object.dec ||
@@ -82,10 +89,18 @@ export default function ObservationScoreCard({ object }: Props) {
     );
 
     return results ? { altitudeDeg: results.alt, azimuthDeg: results.az } : null;
-  })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    object.ra,
+    object.dec,
+    connectionCtx.latitude,
+    connectionCtx.longitude,
+    connectionCtx.timezone,
+    tick,
+  ]);
 
   // Calculate score when all data is available
-  const score = (() => {
+  const score = useMemo(() => {
     if (!weather || !moon || !equipment || !position) return null;
 
     const magnitude =
@@ -106,7 +121,7 @@ export default function ObservationScoreCard({ object }: Props) {
       weather,
       equipment
     );
-  })();
+  }, [weather, moon, equipment, position, object]);
 
   // Don't render if location not set
   if (connectionCtx.latitude == null || connectionCtx.longitude == null) return null;
