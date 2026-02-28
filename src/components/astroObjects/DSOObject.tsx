@@ -384,7 +384,7 @@ export default function DSOObject(props: AstronomyObjectPropType) {
               />
             </div>
           </div>
-          {props.showScoreCard !== false && <ObservationScoreCard object={object} />}
+          {props.showScoreCard === true && <ObservationScoreCard object={object} />}
           <RemoveFromPersonalLibrary
             showModal={showRemoveModal}
             setShowModal={setShowRemoveModal}
