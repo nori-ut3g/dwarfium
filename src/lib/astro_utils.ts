@@ -500,7 +500,7 @@ function calc_jd(date: string, timeZone: string = "") {
       })
       .split(/GMT/g)[1];
     console.debug("time b :" + b);
-    offsetTimeZone = Number(b) - Number(a);
+    let offsetTimeZone = Number(b) - Number(a);
     console.debug("Offset: " + offsetTimeZone);
   }
 
