@@ -46,7 +46,10 @@ function updateAstroCamera(connectionCtx: ConnectionContextType, cmd) {
 }
 
 function getDeviceName(deviceId) {
-  return deviceId === 1 ? "Dwarf II" : deviceId === 2 ? "Dwarf3" : "Dwarf";
+  if (deviceId === 1) return "Dwarf II";
+  if (deviceId === 2) return "Dwarf3";
+  if (deviceId === 4) return "Dwarf Mini";
+  return "Dwarf";
 }
 
 export async function connectionHandler(
@@ -298,12 +301,18 @@ export async function connectionHandler(
     } else if (result_data.cmd == Dwarfii_Api.DwarfCMD.CMD_NOTIFY_STREAM_TYPE) {
       if (result_data.data.camId == 0) {
         connectionCtx.setTypeIdDwarf(2);
-        connectionCtx.setTypeNameDwarf("Dwarf3");
+        connectionCtx.setTypeNameDwarf(getDeviceName(2));
+        if (!webSocketHandler.setDeviceIdDwarf(2)) {
+          console.error("Failed to set device ID to 2 in CMD_NOTIFY_STREAM_TYPE (camId 0)");
+        }
         connectionCtx.setStreamTypeTeleDwarf(result_data.data.streamType);
         console.log("C setStreamTypeTeleDwarf: ", result_data.data.streamType);
       } else if (result_data.data.camId == 1) {
         connectionCtx.setTypeIdDwarf(2);
-        connectionCtx.setTypeNameDwarf("Dwarf3");
+        connectionCtx.setTypeNameDwarf(getDeviceName(2));
+        if (!webSocketHandler.setDeviceIdDwarf(2)) {
+          console.error("Failed to set device ID to 2 in CMD_NOTIFY_STREAM_TYPE (camId 1)");
+        }
         connectionCtx.setStreamTypeWideDwarf(result_data.data.streamType);
         console.log("C setStreamTypeWideDwarf: ", result_data.data.streamType);
       }
