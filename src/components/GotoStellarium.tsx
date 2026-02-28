@@ -337,6 +337,7 @@ export default function ManualGoto(props: PropType) {
           setModule={setModule}
           setErrors={setErrors}
           setSuccess={setSuccess}
+          showScoreCard={true}
         />
       )}
       {objectNGC && <br />}

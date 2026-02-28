@@ -299,7 +299,8 @@ describe("generateRecommendation", () => {
       { altitude: 90, moonImpact: 90, weather: 80, targetDifficulty: 80 },
       60
     );
-    expect(result).toContain("Excellent");
+    expect(result.text).toContain("Excellent");
+    expect(result.code).toBe("excellent");
   });
 
   it("mentions weather for good target with poor weather", () => {
@@ -308,7 +309,8 @@ describe("generateRecommendation", () => {
       { altitude: 90, moonImpact: 90, weather: 40, targetDifficulty: 80 },
       60
     );
-    expect(result).toContain("weather");
+    expect(result.text).toContain("weather");
+    expect(result.code).toBe("good_weather_issue");
   });
 
   it("mentions moonlight for good target with bright moon", () => {
@@ -317,7 +319,8 @@ describe("generateRecommendation", () => {
       { altitude: 90, moonImpact: 40, weather: 80, targetDifficulty: 80 },
       60
     );
-    expect(result).toContain("moonlight");
+    expect(result.text).toContain("moonlight");
+    expect(result.code).toBe("good_moon_issue");
   });
 
   it("mentions altitude when target is low", () => {
@@ -326,7 +329,8 @@ describe("generateRecommendation", () => {
       { altitude: 40, moonImpact: 80, weather: 80, targetDifficulty: 80 },
       20
     );
-    expect(result).toContain("altitude");
+    expect(result.text).toContain("altitude");
+    expect(result.code).toBe("good_low_alt");
   });
 
   it("mentions below horizon when altitude <= 0", () => {
@@ -335,7 +339,8 @@ describe("generateRecommendation", () => {
       { altitude: 0, moonImpact: 90, weather: 80, targetDifficulty: 80 },
       -5
     );
-    expect(result).toContain("below the horizon");
+    expect(result.text).toContain("below the horizon");
+    expect(result.code).toBe("below_horizon");
   });
 
   it("mentions too faint when targetDifficulty is 0", () => {
@@ -344,7 +349,28 @@ describe("generateRecommendation", () => {
       { altitude: 80, moonImpact: 90, weather: 80, targetDifficulty: 0 },
       60
     );
-    expect(result).toContain("too faint");
+    expect(result.text).toContain("too faint");
+    expect(result.code).toBe("too_faint");
+  });
+
+  it("prioritizes below_horizon even when overall is high", () => {
+    // alt=0 but other factors give overall ~70 — should still say below horizon
+    const result = generateRecommendation(
+      70,
+      { altitude: 0, moonImpact: 100, weather: 100, targetDifficulty: 100 },
+      -5
+    );
+    expect(result.code).toBe("below_horizon");
+  });
+
+  it("prioritizes too_faint even when overall is high", () => {
+    // targetDifficulty=0 but other factors give overall ~80
+    const result = generateRecommendation(
+      80,
+      { altitude: 100, moonImpact: 100, weather: 100, targetDifficulty: 0 },
+      60
+    );
+    expect(result.code).toBe("too_faint");
   });
 });
 
@@ -398,9 +424,9 @@ describe("calculateObservationScore", () => {
     );
 
     expect(result.factors.altitude).toBe(0);
-    // Altitude weight is 0.3, so even with other factors at 100,
-    // overall max = 0.7 * 100 = 70 (no altitude contribution)
-    expect(result.overall).toBeLessThanOrEqual(70);
+    // Below-horizon is a hard-stop: overall is clamped to 0
+    expect(result.overall).toBe(0);
+    expect(result.recommendationCode).toBe("below_horizon");
   });
 
   it("returns low score for poor weather", () => {
@@ -498,5 +524,27 @@ describe("calculateObservationScore", () => {
         }
       }
     }
+  });
+
+  it("clamps overall to 0 for too-faint target", () => {
+    // Magnitude 20 exceeds DWARF II limiting mag (14) → targetDifficulty=0
+    const target: TargetInfo = {
+      magnitude: 20,
+      angularSizeArcmin: 1,
+      typeCategory: "galaxies",
+    };
+    const position: TargetPosition = { altitudeDeg: 60, azimuthDeg: 180 };
+
+    const result = calculateObservationScore(
+      target,
+      position,
+      noMoon,
+      perfectWeather,
+      DWARF_II
+    );
+
+    expect(result.factors.targetDifficulty).toBe(0);
+    expect(result.overall).toBe(0);
+    expect(result.recommendationCode).toBe("too_faint");
   });
 });

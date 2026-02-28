@@ -23,6 +23,7 @@ import {
 } from "@/db/db_utils";
 import RemoveFromPersonalLibrary from "@/components/RemoveFromPersonalLibModal";
 import GotoModal from "./GotoModal";
+import ObservationScoreCard from "@/components/ai/ObservationScoreCard";
 
 type AstronomyObjectPropType = {
   object: AstroObject;
@@ -34,6 +35,7 @@ type AstronomyObjectPropType = {
   setModule: Dispatch<SetStateAction<string | undefined>>;
   setErrors: Dispatch<SetStateAction<string | undefined>>;
   setSuccess: Dispatch<SetStateAction<string | undefined>>;
+  showScoreCard?: boolean;
 };
 type Message = {
   [k: string]: string;
@@ -382,6 +384,7 @@ export default function DSOObject(props: AstronomyObjectPropType) {
               />
             </div>
           </div>
+          {props.showScoreCard === true && <ObservationScoreCard object={object} />}
           <RemoveFromPersonalLibrary
             showModal={showRemoveModal}
             setShowModal={setShowRemoveModal}

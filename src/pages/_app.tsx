@@ -19,6 +19,7 @@ import "@/styles/witsensordata.css";
 import "@/styles/mosaic.css";
 import "@/styles/sheduler.css";
 import "@/styles/camera.css";
+import "@/styles/ai-score-card.css";
 
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "@/fontello/css/custom-focus.css";
