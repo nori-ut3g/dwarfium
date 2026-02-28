@@ -19,7 +19,11 @@
         "it": true,
         "test": true,
         "xit": true,
-        "jest": true
+        "jest": true,
+        "beforeEach": true,
+        "afterEach": true,
+        "beforeAll": true,
+        "afterAll": true
       }
     }
   ],
