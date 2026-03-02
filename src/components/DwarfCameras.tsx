@@ -38,6 +38,7 @@ import {
   turnOnTeleCameraFn,
   turnOnWideCameraFn,
 } from "@/lib/dwarf_utils";
+import { getDeviceName } from "@/lib/connect_utils";
 
 type PropType = {
   setExchangeCamerasStatus: Dispatch<SetStateAction<boolean>>;
@@ -194,7 +195,7 @@ export default function DwarfCameras(props: PropType) {
       }
       console.info(
         `Device type read: ${connectionCtx.typeIdDwarf} - ${
-          connectionCtx.typeIdDwarf === 1 ? "Dwarf II" : "Dwarf 3"
+          getDeviceName(connectionCtx.typeIdDwarf)
         }`
       );
       console.debug("End Of Effect DwarfCameras");
@@ -510,7 +511,7 @@ export default function DwarfCameras(props: PropType) {
     ) {
       return wideAngleURL;
     } else {
-      // wideAngleURL_D3
+      // DWARF3 and DWARF Mini use RTSP streaming
       return wideAngleURL_D3;
     }
   }
@@ -529,7 +530,7 @@ export default function DwarfCameras(props: PropType) {
     ) {
       return telePhotoURL;
     } else {
-      // telePhotoURL_D3
+      // DWARF3 and DWARF Mini use RTSP streaming
       return telePhotoURL_D3;
     }
   }

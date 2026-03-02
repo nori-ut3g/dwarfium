@@ -45,7 +45,7 @@ function updateAstroCamera(connectionCtx: ConnectionContextType, cmd) {
   }
 }
 
-function getDeviceName(deviceId) {
+export function getDeviceName(deviceId) {
   if (deviceId === 1) return "Dwarf II";
   if (deviceId === 2) return "Dwarf3";
   if (deviceId === 4) return "Dwarf Mini";
