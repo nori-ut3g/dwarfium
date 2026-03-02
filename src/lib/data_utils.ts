@@ -1,5 +1,6 @@
 import { data_dwarf2_config } from "@/lib/data_dwarf2_config";
 import { data_dwarf3_config } from "@/lib/data_dwarf3_config";
+import { data_dwarf_mini_config } from "@/lib/data_dwarf_mini_config";
 
 // Function to get the exposures from JSON data
 const getExposuresDwarf2 = () => {
@@ -26,10 +27,22 @@ const getExposuresDwarf3 = () => {
   return value ? value : false;
 };
 
+const getExposuresDwarfMini = () => {
+  let value;
+  let supportParam;
+  const camera = data_dwarf_mini_config.data.cameras.find(
+    (camera) => camera.id === 0
+  );
+  if (camera)
+    supportParam = camera.supportParams.find((param) => param.id === 0);
+  value = supportParam.gearMode;
+  return value ? value : false;
+};
+
 export const allowedExposures = {
   1: getExposuresDwarf2(),
   2: getExposuresDwarf3(),
-  4: getExposuresDwarf3(), // DWARF mini uses same sensor family as DWARF3
+  4: getExposuresDwarfMini(),
 };
 
 export const getExposureIndexDefault = (DwarfModelId = 1) => {
@@ -101,10 +114,22 @@ const getGainsDwarf3 = () => {
   return value ? value : false;
 };
 
+const getGainsDwarfMini = () => {
+  let value;
+  let supportParam;
+  const camera = data_dwarf_mini_config.data.cameras.find(
+    (camera) => camera.id === 0
+  );
+  if (camera)
+    supportParam = camera.supportParams.find((param) => param.id === 1);
+  value = supportParam.gearMode;
+  return value ? value : false;
+};
+
 export const allowedGains = {
   1: getGainsDwarf2(),
   2: getGainsDwarf3(),
-  4: getGainsDwarf3(),
+  4: getGainsDwarfMini(),
 };
 
 export const getGainNameByIndex = (index, DwarfModelId = 1) => {
@@ -152,10 +177,22 @@ const getWBColorTempDwarf3 = () => {
   return value ? value : false;
 };
 
+const getWBColorTempDwarfMini = () => {
+  let value;
+  let supportParam;
+  const camera = data_dwarf_mini_config.data.cameras.find(
+    (camera) => camera.id === 0
+  );
+  if (camera)
+    supportParam = camera.supportParams.find((param) => param.id === 2);
+  value = supportParam.gearMode;
+  return value ? value : false;
+};
+
 export const allowedWBColorTemp = {
   1: getWBColorTempDwarf2(),
   2: getWBColorTempDwarf3(),
-  4: getWBColorTempDwarf3(),
+  4: getWBColorTempDwarfMini(),
 };
 
 export const getWBColorTempValueByIndex = (index, DwarfModelId = 1) => {
@@ -197,10 +234,19 @@ const getCountBurstDwarf3 = () => {
   return value ? value : false;
 };
 
+const getCountBurstDwarfMini = () => {
+  let value;
+  const featureParam = data_dwarf_mini_config.data.featureParams.find(
+    (feature) => feature.id === 3
+  );
+  if (featureParam) value = featureParam.gearMode;
+  return value ? value : false;
+};
+
 export const allowedCountBurst = {
   1: getCountBurstDwarf2(),
   2: getCountBurstDwarf3(),
-  4: getCountBurstDwarf3(),
+  4: getCountBurstDwarfMini(),
 };
 
 export const getCountBurstValueByIndex = (index, DwarfModelId = 1) => {
@@ -242,10 +288,19 @@ const getCountIntervalDwarf3 = () => {
   return value ? value : false;
 };
 
+const getCountIntervalDwarfMini = () => {
+  let value;
+  const featureParam = data_dwarf_mini_config.data.featureParams.find(
+    (feature) => feature.id === 9
+  );
+  if (featureParam) value = featureParam.gearMode;
+  return value ? value : false;
+};
+
 export const allowedIntervalBurst = {
   1: getCountIntervalDwarf2(),
   2: getCountIntervalDwarf3(),
-  4: getCountIntervalDwarf3(),
+  4: getCountIntervalDwarfMini(),
 };
 
 export const getIntervalBurstValueByIndex = (index, DwarfModelId = 1) => {
@@ -287,10 +342,19 @@ const getIntervalTimeLapseDwarf3 = () => {
   return value ? value : false;
 };
 
+const getIntervalTimeLapseDwarfMini = () => {
+  let value;
+  const featureParam = data_dwarf_mini_config.data.featureParams.find(
+    (feature) => feature.id === 4
+  );
+  if (featureParam) value = featureParam.gearMode;
+  return value ? value : false;
+};
+
 export const allowedIntervalTimeLapse = {
   1: getIntervalTimeLapseDwarf2(),
   2: getIntervalTimeLapseDwarf3(),
-  4: getIntervalTimeLapseDwarf3(),
+  4: getIntervalTimeLapseDwarfMini(),
 };
 
 export const getIntervalTimeLapseValueByIndex = (index, DwarfModelId = 1) => {
@@ -333,10 +397,19 @@ const getTotalTimeTimeLapseDwarf3 = () => {
   return value ? value : false;
 };
 
+const getTotalTimeTimeLapseDwarfMini = () => {
+  let value;
+  const featureParam = data_dwarf_mini_config.data.featureParams.find(
+    (feature) => feature.id === 5
+  );
+  if (featureParam) value = featureParam.gearMode;
+  return value ? value : false;
+};
+
 export const allowedTotalTimeTimeLapse = {
   1: getTotalTimeTimeLapseDwarf2(),
   2: getTotalTimeTimeLapseDwarf3(),
-  4: getTotalTimeTimeLapseDwarf3(),
+  4: getTotalTimeTimeLapseDwarfMini(),
 };
 
 export const getTotalTimeTimeLapseValueByIndex = (index, DwarfModelId = 1) => {
@@ -385,10 +458,22 @@ const getIRDwarf3 = () => {
   return value ? value : false;
 };
 
+const getIRDwarfMini = () => {
+  let value;
+  let supportParam;
+  const camera = data_dwarf_mini_config.data.cameras.find(
+    (camera) => camera.id === 0
+  );
+  if (camera)
+    supportParam = camera.supportParams.find((param) => param.id === 8);
+  value = supportParam.gearMode;
+  return value ? value : false;
+};
+
 export const allowedIRs = {
   1: getIRDwarf2(),
   2: getIRDwarf3(),
-  4: getIRDwarf3(),
+  4: getIRDwarfMini(),
 };
 
 export const getIRNameByIndex = (index, DwarfModelId = 1) => {
