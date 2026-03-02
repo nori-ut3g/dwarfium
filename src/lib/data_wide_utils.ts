@@ -29,6 +29,7 @@ const getWideExposuresDwarf3 = () => {
 export const allowedWideExposures = {
   1: getWideExposuresDwarf2(),
   2: getWideExposuresDwarf3(),
+  4: getWideExposuresDwarf3(), // DWARF mini uses same sensor family as DWARF3
 };
 
 export const getWideExposureIndexDefault = (DwarfModelId = 1) => {
@@ -103,6 +104,7 @@ const getWideGainsDwarf3 = () => {
 export const allowedWideGains = {
   1: getWideGainsDwarf2(),
   2: getWideGainsDwarf3(),
+  4: getWideGainsDwarf3(),
 };
 
 export const getWideGainNameByIndex = (index, DwarfModelId = 1) => {
@@ -156,6 +158,7 @@ const getWideWBColorTempDwarf3 = () => {
 export const allowedWideWBColorTemp = {
   1: getWideWBColorTempDwarf2(),
   2: getWideWBColorTempDwarf3(),
+  4: getWideWBColorTempDwarf3(),
 };
 
 export const getWideWBColorTempValueByIndex = (index, DwarfModelId = 1) => {
