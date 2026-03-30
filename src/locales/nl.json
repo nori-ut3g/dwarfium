@@ -443,5 +443,11 @@
   "cAstroWeatherTemperature": "Temperatuur:",
   "cAstroWeatherWindSpeed": "Windsnelheid:",
   "cAstroWeatherHumidity": "Luchtvochtigheid:",
-  "cAstroWeatherDewPoint": "Dauwpunt:"
+  "cAstroWeatherDewPoint": "Dauwpunt:",
+  "pDiscoverDevices": "Apparaten detecteren",
+  "pDiscovering": "Netwerk scannen...",
+  "pDiscoverNoDevices": "Geen DWARF-apparaten gevonden. Zorg ervoor dat uw apparaat is ingeschakeld en verbonden met hetzelfde netwerk.",
+  "pDiscoverFound": "{{count}} apparaat/apparaten gevonden:",
+  "pDiscoverSelect": "Selecteren",
+  "pDiscoverError": "Detectie mislukt. Controleer uw netwerkverbinding."
 }

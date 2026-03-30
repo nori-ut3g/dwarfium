@@ -443,5 +443,11 @@
   "cAstroWeatherTemperature": "温度：",
   "cAstroWeatherWindSpeed": "风速：",
   "cAstroWeatherHumidity": "湿度：",
-  "cAstroWeatherDewPoint": "露点："
+  "cAstroWeatherDewPoint": "露点：",
+  "pDiscoverDevices": "检测设备",
+  "pDiscovering": "正在扫描网络...",
+  "pDiscoverNoDevices": "未找到DWARF设备。请确保设备已开机并连接到同一网络。",
+  "pDiscoverFound": "找到 {{count}} 个设备：",
+  "pDiscoverSelect": "选择",
+  "pDiscoverError": "检测失败。请检查网络连接。"
 }

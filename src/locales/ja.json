@@ -443,5 +443,11 @@
   "cAstroWeatherTemperature": "気温:",
   "cAstroWeatherWindSpeed": "風速:",
   "cAstroWeatherHumidity": "湿度:",
-  "cAstroWeatherDewPoint": "露点:"
+  "cAstroWeatherDewPoint": "露点:",
+  "pDiscoverDevices": "デバイスを検出",
+  "pDiscovering": "ネットワークをスキャン中...",
+  "pDiscoverNoDevices": "DWARFデバイスが見つかりませんでした。デバイスの電源が入っていて同じネットワークに接続されていることを確認してください。",
+  "pDiscoverFound": "{{count}} 台のデバイスが見つかりました:",
+  "pDiscoverSelect": "選択",
+  "pDiscoverError": "検出に失敗しました。ネットワーク接続を確認してください。"
 }

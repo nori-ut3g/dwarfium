@@ -443,5 +443,11 @@
   "cAstroWeatherTemperature": "Temperature:",
   "cAstroWeatherWindSpeed": "Wind speed:",
   "cAstroWeatherHumidity": "Humidity:",
-  "cAstroWeatherDewPoint": "Dew point:"
+  "cAstroWeatherDewPoint": "Dew point:",
+  "pDiscoverDevices": "Discover Devices",
+  "pDiscovering": "Scanning network...",
+  "pDiscoverNoDevices": "No DWARF devices found. Ensure your device is powered on and connected to the same network.",
+  "pDiscoverFound": "{{count}} device(s) found:",
+  "pDiscoverSelect": "Select",
+  "pDiscoverError": "Discovery failed. Check your network connection."
 }

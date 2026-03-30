@@ -9,6 +9,13 @@ import { ConnectionContext } from "@/stores/ConnectionContext";
 import { saveIPDwarfDB, saveIPConnectDB } from "@/db/db_utils";
 
 import { connectionHandler } from "@/lib/connect_utils";
+import { getServerUrl } from "@/lib/get_proxy_url";
+
+interface DiscoveredDevice {
+  ip: string;
+  deviceId: string;
+  deviceName: string;
+}
 
 const DwarfClientID_original = "0000DAF2-0000-1000-8000-00805F9B34FB";
 const DwarfClientID_base = "0000DAF2-0000-1000-8000-00805F9B35";
@@ -31,6 +38,13 @@ export default function ConnectDwarf() {
   const [goLive, setGoLive] = useState(false);
   const [errorTxt, setErrorTxt] = useState("");
   const [debouncedValue, setDebouncedValue] = useState(""); // Debounced value
+
+  const [discovering, setDiscovering] = useState(false);
+  const [discoveredDevices, setDiscoveredDevices] = useState<
+    DiscoveredDevice[]
+  >([]);
+  const [discoverError, setDiscoverError] = useState("");
+  const [hasDiscovered, setHasDiscovered] = useState(false);
 
   // Debouncing logic
   useEffect(() => {
@@ -216,6 +230,40 @@ export default function ConnectDwarf() {
     connectionCtx.setTypeNameDwarf("");
   };
 
+  async function handleDiscover() {
+    setDiscovering(true);
+    setDiscoverError("");
+    setDiscoveredDevices([]);
+    setHasDiscovered(false);
+
+    try {
+      const serverUrl = getServerUrl();
+      const url = serverUrl.includes("api")
+        ? "/api/discover"
+        : serverUrl + "/discover";
+
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+      const data = await response.json();
+      setDiscoveredDevices(data.devices || []);
+      setHasDiscovered(true);
+    } catch (err) {
+      console.error("Discovery failed:", err);
+      setDiscoverError((err as Error).message || "Discovery failed");
+      setHasDiscovered(true);
+    } finally {
+      setDiscovering(false);
+    }
+  }
+
+  function selectDevice(device: DiscoveredDevice) {
+    setIpValue(device.ip);
+    connectionCtx.setIPDwarf(device.ip);
+    saveIPDwarfDB(device.ip);
+  }
+
   const { t } = useTranslation();
   // eslint-disable-next-line no-unused-vars
   const [selectedLanguage, setSelectedLanguage] = useState<string>("en");
@@ -325,8 +373,62 @@ export default function ConnectDwarf() {
               onChange={(e) => ipHandler(e)}
               disabled={ipAuto}
             />
+            <button
+              type="button"
+              className="btn btn-more02 ms-2"
+              onClick={handleDiscover}
+              disabled={discovering}
+            >
+              <i className="bi bi-search" />{" "}
+              {discovering ? t("pDiscovering") : t("pDiscoverDevices")}
+            </button>
           </div>
         </div>
+        {hasDiscovered && !discoverError && discoveredDevices.length === 0 && (
+          <div className="row mb-3">
+            <div className="col-lg-2 col-md-3"></div>
+            <div className="col">
+              <span className="text-warning">{t("pDiscoverNoDevices")}</span>
+            </div>
+          </div>
+        )}
+        {discoverError && (
+          <div className="row mb-3">
+            <div className="col-lg-2 col-md-3"></div>
+            <div className="col">
+              <span className="text-danger">{t("pDiscoverError")}</span>
+            </div>
+          </div>
+        )}
+        {discoveredDevices.length > 0 && (
+          <div className="row mb-3">
+            <div className="col-lg-2 col-md-3"></div>
+            <div className="col">
+              <p>
+                {t("pDiscoverFound", { count: discoveredDevices.length })}
+              </p>
+              <ul className="list-group">
+                {discoveredDevices.map((device) => (
+                  <li
+                    key={device.ip}
+                    className="list-group-item d-flex justify-content-between align-items-center"
+                  >
+                    <span>
+                      <strong>{device.deviceName}</strong> — {device.ip}
+                    </span>
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-more02"
+                      onClick={() => selectDevice(device)}
+                    >
+                      {t("pDiscoverSelect")}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        )}
         <button type="submit" className="btn btn-more02 me-3">
           <i className="icon-wifi" /> {t("pConnect")}
         </button>{" "}

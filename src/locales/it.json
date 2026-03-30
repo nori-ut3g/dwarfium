@@ -443,5 +443,11 @@
   "cAstroWeatherTemperature": "Temperatura:",
   "cAstroWeatherWindSpeed": "Velocità del vento:",
   "cAstroWeatherHumidity": "Umidità:",
-  "cAstroWeatherDewPoint": "Punto di rugiada:"
+  "cAstroWeatherDewPoint": "Punto di rugiada:",
+  "pDiscoverDevices": "Rileva dispositivi",
+  "pDiscovering": "Scansione della rete...",
+  "pDiscoverNoDevices": "Nessun dispositivo DWARF trovato. Assicurati che il dispositivo sia acceso e connesso alla stessa rete.",
+  "pDiscoverFound": "{{count}} dispositivo/i trovato/i:",
+  "pDiscoverSelect": "Seleziona",
+  "pDiscoverError": "Rilevamento fallito. Controlla la connessione di rete."
 }
