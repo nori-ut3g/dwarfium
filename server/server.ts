@@ -602,8 +602,11 @@ app.get("/discover", async (req, res) => {
       });
       if (!response.ok) return null;
       const data = (await response.json()) as Record<string, unknown>;
-      const deviceId = data.id ?? data.deviceId ?? "";
-      const deviceName = data.name ?? data.deviceName ?? ip;
+      // DWARF API returns { code, data: { deviceId, deviceName, ... } }
+      const inner = data?.data as Record<string, unknown> | undefined;
+      if (!inner) return null;
+      const deviceId = inner.deviceId ?? inner.id ?? "";
+      const deviceName = inner.deviceName ?? inner.name ?? ip;
       return {
         ip,
         deviceId: String(deviceId),

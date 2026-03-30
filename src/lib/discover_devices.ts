@@ -41,9 +41,12 @@ export async function probeDevice(
     if (!res.ok) return null;
 
     const data = await res.json();
-    // DWARF devices return an object with id/name fields
-    const deviceId = data.id ?? data.deviceId ?? "";
-    const deviceName = data.name ?? data.deviceName ?? ip;
+    // DWARF API returns { code, data: { deviceId, deviceName, ... } }
+    const inner = data?.data;
+    if (!inner) return null;
+
+    const deviceId = inner.deviceId ?? inner.id ?? "";
+    const deviceName = inner.deviceName ?? inner.name ?? ip;
 
     return { ip, deviceId: String(deviceId), deviceName: String(deviceName) };
   } catch {

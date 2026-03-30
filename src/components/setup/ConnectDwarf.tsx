@@ -9,7 +9,7 @@ import { ConnectionContext } from "@/stores/ConnectionContext";
 import { saveIPDwarfDB, saveIPConnectDB } from "@/db/db_utils";
 
 import { connectionHandler } from "@/lib/connect_utils";
-import { getServerUrl } from "@/lib/get_proxy_url";
+import { getProxyUrl } from "@/lib/get_proxy_url";
 
 interface DiscoveredDevice {
   ip: string;
@@ -237,10 +237,10 @@ export default function ConnectDwarf() {
     setHasDiscovered(false);
 
     try {
-      const serverUrl = getServerUrl();
-      const url = serverUrl.includes("api")
+      const proxyUrl = getProxyUrl(connectionCtx);
+      const url = proxyUrl?.includes("api")
         ? "/api/discover"
-        : serverUrl + "/discover";
+        : proxyUrl + "/discover";
 
       const response = await fetch(url);
       if (!response.ok) {
