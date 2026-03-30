@@ -443,5 +443,11 @@
   "cAstroWeatherTemperature": "Temperatur:",
   "cAstroWeatherWindSpeed": "Windgeschwindigkeit:",
   "cAstroWeatherHumidity": "Luftfeuchtigkeit:",
-  "cAstroWeatherDewPoint": "Taupunkt:"
+  "cAstroWeatherDewPoint": "Taupunkt:",
+  "pDiscoverDevices": "Geräte erkennen",
+  "pDiscovering": "Netzwerk wird gescannt...",
+  "pDiscoverNoDevices": "Keine DWARF-Geräte gefunden. Stellen Sie sicher, dass Ihr Gerät eingeschaltet und mit demselben Netzwerk verbunden ist.",
+  "pDiscoverFound": "{{count}} Gerät(e) gefunden:",
+  "pDiscoverSelect": "Auswählen",
+  "pDiscoverError": "Erkennung fehlgeschlagen. Überprüfen Sie Ihre Netzwerkverbindung."
 }

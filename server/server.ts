@@ -578,6 +578,81 @@ app.get("/getLocalIP", async (req, res) => {
   res.status(200).json({ ips: getLocalIPAddress() });
 });
 
+app.get("/discover", async (req, res) => {
+  console.log("Discover devices is running");
+
+  function getSubnetBase(ip: string): string | null {
+    const parts = ip.split(".");
+    if (parts.length !== 4) return null;
+    return parts.slice(0, 3).join(".");
+  }
+
+  async function probeDevice(
+    ip: string,
+    timeout = 500
+  ): Promise<{ ip: string; deviceId: string; deviceName: string } | null> {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeout);
+    try {
+      const response = await fetch(`http://${ip}:8082/deviceInfo`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: "{}",
+        signal: controller.signal,
+      });
+      if (!response.ok) return null;
+      const data = (await response.json()) as Record<string, unknown>;
+      // DWARF API returns { code, data: { deviceId, deviceName, ... } }
+      const inner = data?.data as Record<string, unknown> | undefined;
+      if (!inner) return null;
+      const deviceId = inner.deviceId ?? inner.id ?? "";
+      const deviceName = inner.deviceName ?? inner.name ?? ip;
+      return {
+        ip,
+        deviceId: String(deviceId),
+        deviceName: String(deviceName),
+      };
+    } catch {
+      return null;
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  try {
+    const localIPs = getLocalIPAddress();
+    const subnetBase =
+      localIPs.length > 0 ? getSubnetBase(localIPs[0]) : null;
+    if (!subnetBase) {
+      return res.status(200).json({ devices: [] });
+    }
+
+    const ips = Array.from(
+      { length: 254 },
+      (_, i) => `${subnetBase}.${i + 1}`
+    );
+    const devices: { ip: string; deviceId: string; deviceName: string }[] = [];
+    const batchSize = 50;
+
+    for (let i = 0; i < ips.length; i += batchSize) {
+      const batch = ips.slice(i, i + batchSize);
+      const results = await Promise.all(
+        batch.map((ip) => probeDevice(ip, 500))
+      );
+      for (const result of results) {
+        if (result) devices.push(result);
+      }
+    }
+
+    res.status(200).json({ devices });
+  } catch (error) {
+    console.error("Discovery failed:", error);
+    res
+      .status(500)
+      .json({ error: (error as Error).message || "Discovery failed" });
+  }
+});
+
 app.use((req, res, next) => {
   console.debug(`📥 Incoming Request: ${req.method} ${req.originalUrl}`);
   next();

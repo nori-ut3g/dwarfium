@@ -443,5 +443,11 @@
   "cAstroWeatherTemperature": "Température :",
   "cAstroWeatherWindSpeed": "Vitesse du vent :",
   "cAstroWeatherHumidity": "Humidité :",
-  "cAstroWeatherDewPoint": "Point de rosée :"
+  "cAstroWeatherDewPoint": "Point de rosée :",
+  "pDiscoverDevices": "Détecter les appareils",
+  "pDiscovering": "Scan du réseau...",
+  "pDiscoverNoDevices": "Aucun appareil DWARF trouvé. Vérifiez que votre appareil est allumé et connecté au même réseau.",
+  "pDiscoverFound": "{{count}} appareil(s) trouvé(s) :",
+  "pDiscoverSelect": "Sélectionner",
+  "pDiscoverError": "La détection a échoué. Vérifiez votre connexion réseau."
 }
