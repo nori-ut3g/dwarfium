@@ -1,5 +1,6 @@
 import { data_dwarf2_config } from "@/lib/data_dwarf2_config";
 import { data_dwarf3_config } from "@/lib/data_dwarf3_config";
+import { data_dwarf_mini_config } from "@/lib/data_dwarf_mini_config";
 
 // Function to get the exposures from JSON data
 const getWideExposuresDwarf2 = () => {
@@ -26,9 +27,22 @@ const getWideExposuresDwarf3 = () => {
   return value ? value : false;
 };
 
+const getWideExposuresDwarfMini = () => {
+  let value;
+  let supportParam;
+  const camera = data_dwarf_mini_config.data.cameras.find(
+    (camera) => camera.id === 1
+  );
+  if (camera)
+    supportParam = camera.supportParams.find((param) => param.id === 0);
+  if (supportParam) value = supportParam.gearMode;
+  return value ? value : false;
+};
+
 export const allowedWideExposures = {
   1: getWideExposuresDwarf2(),
   2: getWideExposuresDwarf3(),
+  4: getWideExposuresDwarfMini(),
 };
 
 export const getWideExposureIndexDefault = (DwarfModelId = 1) => {
@@ -100,9 +114,22 @@ const getWideGainsDwarf3 = () => {
   return value ? value : false;
 };
 
+const getWideGainsDwarfMini = () => {
+  let value;
+  let supportParam;
+  const camera = data_dwarf_mini_config.data.cameras.find(
+    (camera) => camera.id === 1
+  );
+  if (camera)
+    supportParam = camera.supportParams.find((param) => param.id === 1);
+  if (supportParam) value = supportParam.gearMode;
+  return value ? value : false;
+};
+
 export const allowedWideGains = {
   1: getWideGainsDwarf2(),
   2: getWideGainsDwarf3(),
+  4: getWideGainsDwarfMini(),
 };
 
 export const getWideGainNameByIndex = (index, DwarfModelId = 1) => {
@@ -153,9 +180,22 @@ const getWideWBColorTempDwarf3 = () => {
   return value ? value : false;
 };
 
+const getWideWBColorTempDwarfMini = () => {
+  let value;
+  let supportParam;
+  const camera = data_dwarf_mini_config.data.cameras.find(
+    (camera) => camera.id === 1
+  );
+  if (camera)
+    supportParam = camera.supportParams.find((param) => param.id === 2);
+  value = supportParam.gearMode;
+  return value ? value : false;
+};
+
 export const allowedWideWBColorTemp = {
   1: getWideWBColorTempDwarf2(),
   2: getWideWBColorTempDwarf3(),
+  4: getWideWBColorTempDwarfMini(),
 };
 
 export const getWideWBColorTempValueByIndex = (index, DwarfModelId = 1) => {

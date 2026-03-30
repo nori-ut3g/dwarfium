@@ -53,6 +53,7 @@ const getDeviceInfo = async (
         if (result && result.data) {
           const id = result.data.deviceId;
           const uid = result.data.deviceName
+            .replace("DWARF_MINI_", "")
             .replace("DWARF3_", "")
             .replace("DWARF_", "");
 
@@ -193,6 +194,7 @@ const getDwarfType = async (
   let folderResponse;
   const dwarfIIUrl = `http://${IPDwarf}/sdcard/DWARF_II/Astronomy/`;
   const dwarf3Url = `http://${IPDwarf}/DWARF3/Astronomy/`;
+  const dwarfMiniUrl = `http://${IPDwarf}/DWARF_mini/Astronomy/`;
 
   try {
     // First attempt to fetch Dwarf II
@@ -211,30 +213,47 @@ const getDwarfType = async (
       // Dwarf II found
       console.log("Detected device type: Dwarf II");
       return 1;
-    } else {
-      // If not OK, try Dwarf 3
-      proxyUrl = `${getProxyUrl(connectionCtx)}?target=${encodeURIComponent(
-        dwarf3Url
-      )}`;
-      folderResponse = await fetch(proxyUrl, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        redirect: "follow",
-      });
-
-      if (folderResponse.ok) {
-        // Dwarf 3 found
-        console.log("Detected device type: Dwarf 3");
-        return 2;
-      } else {
-        console.error(
-          "Error fetching folder from both Dwarf II and Dwarf 3:",
-          folderResponse.statusText
-        );
-      }
     }
+
+    // Try Dwarf 3
+    proxyUrl = `${getProxyUrl(connectionCtx)}?target=${encodeURIComponent(
+      dwarf3Url
+    )}`;
+    folderResponse = await fetch(proxyUrl, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      redirect: "follow",
+    });
+
+    if (folderResponse.ok) {
+      // Dwarf 3 found
+      console.log("Detected device type: Dwarf 3");
+      return 2;
+    }
+
+    // Try Dwarf Mini
+    proxyUrl = `${getProxyUrl(connectionCtx)}?target=${encodeURIComponent(
+      dwarfMiniUrl
+    )}`;
+    folderResponse = await fetch(proxyUrl, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      redirect: "follow",
+    });
+
+    if (folderResponse.ok) {
+      console.log("Detected device type: Dwarf Mini");
+      return 4;
+    }
+
+    console.error(
+      "Error fetching folder from Dwarf II, Dwarf 3, and Dwarf Mini:",
+      folderResponse.statusText
+    );
   } catch (error) {
     if (error instanceof Error) {
       console.error("Error checking dwarf info:", error.message);
